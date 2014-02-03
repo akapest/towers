@@ -1,1 +1,1 @@
-web:    play run --http.port=9000
+web:    play run  --%prod
