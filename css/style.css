@@ -1,0 +1,57 @@
+.clb{
+  clear:both;
+}
+
+.action:hover{
+  border: 1px dotted green;
+
+}
+
+.action{
+  border-bottom: 1px dotted black;
+  color:black;
+  cursor:pointer;
+}
+
+.action.main{
+  font-size:16px;
+}
+.action-wrap.active{
+  background: #67b168;
+}
+
+.action-wrap{
+  background: #c9eaa2;
+  padding:15px 0;
+  min-width:300px;
+}
+
+
+.actions{
+  float:left;
+  z-index:100;
+  position:relative;
+}
+
+.actions span, .actions form{
+  margin: 0 15px 25px 15px;
+}
+
+span,input,label{
+}
+
+
+form label, form input{
+  float:left;
+}
+
+.map{
+  position:absolute;
+  z-index:1;
+  width:100%;
+  height:100%;
+  /*margin-left:300px;*/
+}
+.map.edit{
+  cursor:default;
+}

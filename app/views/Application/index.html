@@ -1,4 +1,51 @@
-#{extends 'main.html' /}
+#{extends 'Application/base.html' /}
 #{set title:'First page' /}
 
-#{welcome /}
+<div class="actions accordion">
+	<div class="action-wrap">
+		<span class="add_base action main">Добавить базовку</span>
+		<form class="base" style="display:none;" role="form">
+			<div class="form-group"><label>Название</label><input class="name form-control" type="text"/></div>
+			<div class="form-group"><label>Частота</label><input class="freq form-control" type="text"/></div>
+			<div class="form-group"><label>Угол направленности</label>
+				<select class="angle form-control">
+					<option value="60">60</option>
+					<option value="90">90</option>
+					<option value="120">120</option>
+				</select>
+			</div>
+		</form>
+	</div>
+	<div class="clb"></div>
+	<div class="action-wrap">
+		<span class="add_m action main">Добавить точку-точку</span>
+		<form class="" style="display:none;" role="form">
+			<div class="form-group"><label>Название</label><input class="name form-control" type="text"/></div>
+			<div class="form-group"><label>Частота</label><input class="freq form-control" type="text"/></div>
+			<div class="form-group"><label>Угол направленности</label>
+				<select class="angle form-control">
+				</select>
+			</div>
+		</form>
+	</div>
+</div>
+
+<form class="base" name="base" style="display:none;" role="form" style="display:none;">
+
+</form>
+
+<form class="m" name="m" style="display:none;" role="form" style="display:none;">
+	<div class="form-group"><label>Название</label><input class="name form-control" type="text"/></div>
+	<div class="form-group"><label>Частота</label><input class="freq form-control" type="text"/></div>
+	<div class="form-group"><label>Угол направленности</label>
+		<select class="angle form-control">
+		</select>
+	</div>
+</form>
+
+<div id="map" class="map edit"></div>
+
+
+#{include 'Towers/create.html'/}
+
+

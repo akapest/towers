@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title>#{get 'title' /}</title>
+	<meta charset="${_response_encoding}">
+	<link rel="stylesheet" media="screen" href="@{'/public/stylesheets/style.css'}">
+	<link rel="stylesheet" media="screen" href="@{'/public/stylesheets/bootstrap.css'}">
+
+	<script src="http://api-maps.yandex.ru/2.0/?load=package.full&lang=ru-RU" type="text/javascript"></script>
+	#{get 'moreStyles' /}
+	<link rel="shortcut icon" type="image/png" href="@{'/public/images/favicon.png'}">
+	<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+	<script src="@{'/client/vendor/bootstrap.js'}" type="text/javascript" charset="${_response_encoding}"></script>
+	<script src="@{'/client/vendor/lodash.min.js'}" type="text/javascript" charset="${_response_encoding}"></script>
+	<script src="@{'/client/vendor/backbone.js'}" type="text/javascript" charset="${_response_encoding}"></script>
+	<script src="@{'/client/view/Geo.js'}" type="text/javascript" charset="${_response_encoding}"></script>
+	<script src="@{'/client/view/TriangleSector.js'}" type="text/javascript" charset="${_response_encoding}"></script>
+	<script src="@{'/client/view/YandexMapView.js'}" type="text/javascript" charset="${_response_encoding}"></script>
+	<script src="@{'/client/view/Main.js'}" type="text/javascript" charset="${_response_encoding}"></script>
+	<script src="@{'/client/api.js'}" type="text/javascript" charset="${_response_encoding}"></script>
+	#{get 'moreScripts' /}
+</head>
+<body>
+	#{doLayout /}
+</body>
+</html>
