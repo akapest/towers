@@ -1,51 +1,35 @@
-#{extends 'Application/base.html' /}
-#{set title:'First page' /}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Вышки</title>
+	<meta charset="${_response_encoding}">
+	<link rel="stylesheet" media="screen" href="@{'/css/style.css'}">
+	<link rel="stylesheet" media="screen" href="@{'/css/bootstrap.css'}">
+	#{get 'moreStyles' /}
+	<link rel="shortcut icon" type="image/png" href="@{'/public/images/favicon.png'}">
 
-<div class="actions accordion">
-	<div class="action-wrap">
-		<span class="add_base action main">Добавить базовку</span>
-		<form class="base" style="display:none;" role="form">
-			<div class="form-group"><label>Название</label><input class="name form-control" type="text"/></div>
-			<div class="form-group"><label>Частота</label><input class="freq form-control" type="text"/></div>
-			<div class="form-group"><label>Угол направленности</label>
-				<select class="angle form-control">
-					<option value="60">60</option>
-					<option value="90">90</option>
-					<option value="120">120</option>
-				</select>
-			</div>
-		</form>
+	<script src="http://api-maps.yandex.ru/2.0/?load=package.full&lang=ru-RU" type="text/javascript"></script>
+	<script src="http://code.jquery.com/jquery-2.1.0.js"></script>
+
+	#{list items = new sp.Packer(play.Play.applicationPath, 'js').getFilesSequence('client'), as: 'filename' }
+		<script type="text/javascript" src="${filename}"  charset="utf-8"></script>
+	#{/list}
+</head>
+<body>
+	<div class="actions accordion">
+		<div class="action tower" data-type="tower" style="display:none;">
+		</div>
+		<div class="clb"></div>
+		<div class="action highway" data-type="highway" style="display:none;">
+		</div>
+		<div class="clb"></div>
+		<div class="action toggle">
+			<span class="view action-name main big" data-action="view">◀</span>
+		</div>
 	</div>
-	<div class="clb"></div>
-	<div class="action-wrap">
-		<span class="add_m action main">Добавить точку-точку</span>
-		<form class="" style="display:none;" role="form">
-			<div class="form-group"><label>Название</label><input class="name form-control" type="text"/></div>
-			<div class="form-group"><label>Частота</label><input class="freq form-control" type="text"/></div>
-			<div class="form-group"><label>Угол направленности</label>
-				<select class="angle form-control">
-				</select>
-			</div>
-		</form>
-	</div>
-</div>
+	<div id="map" class="map edit"></div>
+	#{include 'Application/legend.html'/}
 
-<form class="base" name="base" style="display:none;" role="form" style="display:none;">
-
-</form>
-
-<form class="m" name="m" style="display:none;" role="form" style="display:none;">
-	<div class="form-group"><label>Название</label><input class="name form-control" type="text"/></div>
-	<div class="form-group"><label>Частота</label><input class="freq form-control" type="text"/></div>
-	<div class="form-group"><label>Угол направленности</label>
-		<select class="angle form-control">
-		</select>
-	</div>
-</form>
-
-<div id="map" class="map edit"></div>
-
-
-#{include 'Towers/create.html'/}
-
-
+	<div style="display:none;" data-template="tower">#{include 'Application/tower.html'/}</div>
+</body>
+</html>

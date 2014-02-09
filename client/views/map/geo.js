@@ -32,7 +32,7 @@
         var delta = [sin(azimuth), cos(azimuth)]
       }
       return delta;
-    },
+    }
 
   }
 

@@ -1,0 +1,56 @@
+/**
+ * require(views/base/view)
+ */
+(function(){
+
+  var t = '<li class="freq list-item"><input class="color" type="color" data-freq="${value}" value="${color}"></div><label>${value} Mhz</label></li>'
+
+  window.LegendView = View.extend({
+
+    events:{
+      'click .toggle': function(){
+        this.$('.list').toggle();
+      },
+      'change .color': 'onColorChange'
+    },
+
+    initialize: function(options){
+      _.bindAll(this)
+      this.setElement(options.$el);
+      this.freqs = options.freqs;
+      if (!this.freqs.length){
+        this.$el.hide();
+      }
+      _.each(['reset', 'add', 'remove'], _.bind(function(event){
+        this.freqs.on(event, this.render, this)
+      }, this));
+    },
+
+    render: function(){
+      if (this.freqs.length){
+        this.$el.show();
+      }
+      var $ul = this.$el.find('ul');
+      $ul.html('');
+      this.freqs.sort()
+      this.freqs.each(function(freq){
+        var html = _.template(t, freq.attributes, {interpolate:/\$\{(.+?)\}/g})
+        //$(html).find('.color').val(freq.get('color'))
+        $ul.append(html);
+      })
+      return this;
+    },
+
+    onColorChange: function(e){
+      var $el = $(e.currentTarget);
+      var freq = $el.data('freq')
+      var model = this.freqs.findWhere({value:''+freq})
+      model.set('color', $el.val())
+    }
+
+
+
+  });
+
+
+}());

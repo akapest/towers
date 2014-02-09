@@ -2,3 +2,13 @@
 
 require:
     - play 1.2.4
+    - sp-modules -> packer 0.4
+    - com.google.guava -> guava 13.0.1
+
+repositories:
+    - spPlayModules: # модули play
+       type: http
+       artifact: http://sprpro.ru/sp/[module]-[revision].zip
+       contains:
+         - sp-modules -> *
+

@@ -31,9 +31,6 @@ public class Towers extends Controller {
 
     public static void create(@Valid Tower tower) {
         try {
-            if (tower.sector != null){
-                tower.sector.validateAndCreate();
-            }
             tower.validateAndCreate();
             renderJSON(String.format("{id:%d}", tower.id));
 
@@ -68,7 +65,6 @@ public class Towers extends Controller {
             Logger.error(e, "Failed to delete object Tower. Query: %s", request.querystring);
             error();
         }
-
     }
 
 

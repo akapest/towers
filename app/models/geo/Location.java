@@ -1,6 +1,5 @@
 package models.geo;
 
-import models.geo.primitives.Length;
 import models.geo.primitives.Point;
 import play.db.jpa.Model;
 
@@ -18,6 +17,6 @@ public class Location extends Model {
 
     public Point center;
 
-    public Length radius;
+    public float radius;
 
 }
