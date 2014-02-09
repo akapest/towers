@@ -1,5 +1,5 @@
 /**
- * require(lib/backbone)
+ * require(vendor/backbone)
  * require(models/freq)
  */
 (function(){

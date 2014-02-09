@@ -1,5 +1,5 @@
 /**
- * require(lib/backbone)
+ * require(vendor/backbone)
  */
 (function(){
 
@@ -14,7 +14,7 @@
     save: function(){
       var url = this.url + $.param({freq:this.toJSON()});
       Backbone.Model.prototype.save.call(this,null, {url:url})
-    },
+    }
   });
 
 

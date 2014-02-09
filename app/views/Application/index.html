@@ -11,24 +11,9 @@
 	<script src="http://api-maps.yandex.ru/2.0/?load=package.full&lang=ru-RU" type="text/javascript"></script>
 	<script src="http://code.jquery.com/jquery-2.1.0.js"></script>
 
-	*{#{list items = new sp.Packer(play.Play.applicationPath, 'js').getFilesSequence('client'), as: 'filename' }}*
-		*{<script type="text/javascript" src="${filename}"  charset="utf-8"></script>}*
-	*{#{/list}}*
-	<script type="text/javascript" src="client/components/accordion.js"  charset="utf-8"></script>
-	<script type="text/javascript" src="client/lib/lodash.js"  charset="utf-8"></script>
-	<script type="text/javascript" src="client/lib/backbone.js"  charset="utf-8"></script>
-	<script type="text/javascript" src="client/lib/bootstrap.js"  charset="utf-8"></script>
-	<script type="text/javascript" src="client/models/freq.js"  charset="utf-8"></script>
-	<script type="text/javascript" src="client/models/tower.js"  charset="utf-8"></script>
-	<script type="text/javascript" src="client/models/state.js"  charset="utf-8"></script>
-	<script type="text/javascript" src="client/views/base/view.js"  charset="utf-8"></script>
-	<script type="text/javascript" src="client/views/map/geo.js"  charset="utf-8"></script>
-	<script type="text/javascript" src="client/views/map/triangle-sector.js"  charset="utf-8"></script>
-	<script type="text/javascript" src="client/views/map/pretty-sector.js"  charset="utf-8"></script>
-	<script type="text/javascript" src="client/views/legend-view.js"  charset="utf-8"></script>
-	<script type="text/javascript" src="client/views/tower-view.js"  charset="utf-8"></script>
-	<script type="text/javascript" src="client/views/map-view.js"  charset="utf-8"></script>
-	<script type="text/javascript" src="client/views/face.js"  charset="utf-8"></script>
+	#{list items = new sp.Packer(play.Play.applicationPath, 'js').getFilesSequence('client'), as: 'filename' }
+		<script type="text/javascript" src="${filename}"  charset="utf-8"></script>
+	#{/list}
 </head>
 <body>
 	<div class="actions accordion">
