@@ -1,6 +1,5 @@
-package models.geo;
+package models;
 
-import models.geo.primitives.Point;
 import play.db.jpa.Model;
 
 import javax.persistence.Entity;

@@ -71,11 +71,13 @@
         interactivityModel: 'default#transparent',
         fillColor: yColor,
         strokeWidth: 0,
-        opacity: 0.2
+        opacity: 0.8
       })
       return poly;
     }
+
   });
+
 
   function digitToLetter(d){
     if (d > 15 || d < 0){

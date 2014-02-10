@@ -19,7 +19,7 @@
       var self = this;
       _.each(this.model.fields || fields, function(fName){
 
-        var $el = this.$('.'  + fName)
+        var $el = self.$('.'  + fName)
         if (!$el.length){
           console.warn("No input found for field `" + fName + "`")
           return;

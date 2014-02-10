@@ -4,7 +4,7 @@
 (function(){
 
   window.Freq = Backbone.Model.extend({
-    url:'freq',
+    url:'freqs',
     fields:[
       'value',
       'color',
@@ -12,7 +12,7 @@
     initialize: function(){
     },
     save: function(){
-      var url = this.url + $.param({freq:this.toJSON()});
+      var url = this.url + '?' + $.param({freq:this.toJSON()});
       Backbone.Model.prototype.save.call(this,null, {url:url})
     }
   });

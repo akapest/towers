@@ -9,12 +9,14 @@ import play.Logger;
 import play.data.validation.Valid;
 import play.db.jpa.JPA;
 import play.mvc.Controller;
+import play.mvc.With;
 
 import java.util.List;
 
 /**
  * @author kpestov
  */
+@With(Secure.class)
 public class Towers extends Controller {
 
     private static Gson gson = new Gson();
@@ -32,7 +34,7 @@ public class Towers extends Controller {
     public static void create(@Valid Tower tower) {
         try {
             tower.validateAndCreate();
-            renderJSON(String.format("{id:%d}", tower.id));
+            renderJSON(String.format("{\"id\":%d}", tower.id));
 
         } catch (Exception e) {
             Logger.error(e, "Failed to create object Tower. Query: %s", request.querystring);

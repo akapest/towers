@@ -16,6 +16,7 @@ $(function(){
       this.start = null;
       this.end = null;
       this.angle = options.angle || angle;
+      this.freqs = options.freqs;
       var self = this;
       if (map){
         throw new Error("Map already initialized!")
@@ -41,7 +42,7 @@ $(function(){
         self.angle = value.get('angle');
       })
 
-      this.sectors = [];
+      this.towers = [];
     },
 
     reset: function(){
@@ -119,21 +120,37 @@ $(function(){
         console.log('no cid!')
         return;
       }
-      this.sectors[cid].remove();
+      this.towers[cid].remove();
     },*/
 
     drawTower: function(tower){
       console.log('draw tower ' + tower.get('start'))
 
       if (tower.is('highway')){
-        this.sectors[tower.cid + '0'] = new TriangleSector(tower.get('start'), tower.attributes, map, Geo).render();
+        this.towers[tower.cid + '0'] = new TriangleSector(tower.get('start'), tower.attributes, map, Geo).render();
         var attrs = _.clone(tower.attributes),
             a = attrs.azimuth;
         attrs.azimuth = a > 0  ? a - Math.PI : Math.PI + a;
-        this.sectors[tower.cid + '1'] = new TriangleSector(tower.get('end'), attrs, map, Geo).render();
+        this.towers[tower.cid + '1'] = new TriangleSector(tower.get('end'), attrs, map, Geo).render();
       } else {
-        this.sectors[tower.cid] = new PrettySector(tower.attributes, map, Geo).render();
+        this.towers[tower.cid] = new PrettySector(tower.attributes, map, Geo).render();
       }
+    },
+
+    drawTowers:function(towers){
+      var self = this;
+      towers.each(function(tower){
+        var model = self.freqs.findWhere({value:parseFloat(tower.get('freq'))})
+        tower.set('color', model.get('color'))
+        self.drawTower(tower);
+      })
+    },
+    
+    removeAll:function(){
+      _.forOwn(this.towers, function(t){
+        t.remove();
+      })
+      this.towers = [];
     },
 
     _createBase: function(){

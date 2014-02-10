@@ -9,6 +9,11 @@
  */
 $(function(){
 
+  function freqModels(){
+    var rslt = $('.data-holder.freqs').html();
+    return JSON.parse(rslt)
+  }
+
   var towers = new (Backbone.Collection.extend({
     url:'towers',
     model:Tower
@@ -16,19 +21,18 @@ $(function(){
   var freqs = new (Backbone.Collection.extend({
     url:'freqs',
     model:Freq
-  }))([], {
+  }))(freqModels(), {
     comparator:function(el){return parseFloat(el.get('value'))}
   });
 
   ymaps.ready(function(){
 
     var state = new State();
-
-    var map = new MapView({model:state});
+    var map = new MapView({model:state, freqs:freqs});
     var views = {
       'tower': new TowerView({model:state, freqs:freqs, type:'tower'  }),
       'highway': new HighwayView({model:state, freqs:freqs, type:'highway' }),
-      'legend': new LegendView({freqs:freqs, $el:$('.legend')})
+      'legend': new LegendView({freqs:freqs, $el:$('.legend')}).render()
     }
 
     $('.action.tower').html(views.tower.render().$el)
@@ -37,10 +41,13 @@ $(function(){
     initAccordion();
 
     towers.fetch({success:function(){
-      towers.each(function(tower){
-        map.drawTower(tower);
-      })
+      map.drawTowers(towers)
     }});
+
+    freqs.on('change', function(){
+      map.removeAll();
+      map.drawTowers(towers)
+    })
 
     map.on('create', function(){
       console.log('event:map.create')
@@ -53,7 +60,6 @@ $(function(){
       } else {
         alert('Необходимо задать частоту!')
       }
-
     })
 
     map.on('click', function(){

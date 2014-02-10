@@ -32,10 +32,8 @@
       }
       var $ul = this.$el.find('ul');
       $ul.html('');
-      this.freqs.sort()
       this.freqs.each(function(freq){
         var html = _.template(t, freq.attributes, {interpolate:/\$\{(.+?)\}/g})
-        //$(html).find('.color').val(freq.get('color'))
         $ul.append(html);
       })
       return this;
@@ -44,8 +42,10 @@
     onColorChange: function(e){
       var $el = $(e.currentTarget);
       var freq = $el.data('freq')
-      var model = this.freqs.findWhere({value:''+freq})
+      var model = this.freqs.findWhere({value:freq})
       model.set('color', $el.val())
+      model.save()
+      this.freqs.trigger('change')
     }
 
 

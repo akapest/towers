@@ -8,7 +8,7 @@
       draggable: false
     });
     this.center = towerAttrs.start;
-    this.sector = towerAttrs;
+    this.sector = this.attrs = towerAttrs;
     this.gradientSteps = 5;
     this.angleSteps = Math.floor(this.sector.angle * 10);
     this.geo = geo;
@@ -55,6 +55,7 @@
         }
       }
       this.geoObjects.add(this.parts);
+      this.renderBase();
       return this;
     },
 
@@ -79,9 +80,27 @@
         interactivityModel: 'default#transparent',
         fillColor: yColor,
         strokeWidth: 0,
-        opacity: 0.2
+        opacity: 0.8
       })
       return poly;
+    },
+
+    renderBase: function(){
+      var circle = new ymaps.Circle([this.center, 10], {}, {
+        draggable: true,
+        fill:false,
+        strokeWidth:0
+      });
+      this.geoObjects.add(circle);
+      var rectangle = new ymaps.Rectangle(circle.geometry.getBounds(), {
+        balloonContent:this.attrs.name + '<br/>' + this.attrs.comment
+      }, {
+        fillColor: this.sector.color,
+        coordRendering: "boundsPath",
+        strokeWidth: 0
+      });
+      this.geoObjects.add(rectangle);
+      rectangle.balloon.open();
     }
   });
 

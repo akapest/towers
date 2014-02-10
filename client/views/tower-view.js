@@ -31,6 +31,7 @@
     initialize: function(options){
       this.options = options;
       this.freqs = options.freqs;
+      this.freq = null;
       this.model = options.model;
       this.template = $('[data-template="tower"]').html().replace(/&lt;%/g, '<%').replace(/%&gt;/g, '%>')
     },
@@ -51,13 +52,21 @@
         if (!model.get('freq')) return;
         self.$('.bind-color').show();
       })
+      var $color = this.$('.color');
       this.model.on('change:freq', function(model, freq){
         if (!freq){
           self.$('.bind-color').hide();
           return;
         }
-        var found = self.freqs.findWhere({value: freq});
+        if (self.freq){
+          self.stopListening(self.freq)
+        }
+        var found = self.freqs.findWhere({value: parseFloat(freq)});
         if (found){
+          self.freq = found;
+          self.listenTo(self.freq, 'change:color', function(m, color){
+            $color.val(color)
+          });
           self.model.set('color', found.get('color'))
           self.$('.color').attr('disabled', 'disabled')
           self.$('.bind-color').hide();
@@ -68,19 +77,23 @@
       })
     },
 
-    create: function(){
-    },
-
     bindColor: function(){
+      var $color = this.$('.color');
       var freq = new Freq({
-        value: this.model.get('freq'),
+        value: parseFloat(this.model.get('freq')),
         color: this.model.get('color')
       })
+      this.freq = freq;
+      this.listenTo(freq, 'change:color', function(m, color){
+        $color.val(color)
+      });
       this.freqs.add(freq);
       freq.save();
-      console.log('bind color to freq ' + freq.get('value'));
+
       this.$('.bind-color').hide();
-      this.$('.color').attr('disabled', 'disabled')
+      $color.attr('disabled', 'disabled')
+
+      console.log('bind color to freq ' + freq.get('value'));
     },
 
     //called by View.parseValue

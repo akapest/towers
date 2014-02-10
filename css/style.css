@@ -58,6 +58,7 @@ span.big{
 	float: right;
 	z-index: 100;
 	position: relative;
+	margin: 20px -55px 0 0;
 }
 
 .actions span, .actions form {
@@ -150,4 +151,10 @@ ul{
 	/*color:white;*/
 	float:right;
 	cursor:pointer;
+}
+
+.user{
+	float:right;
+	position: relative;
+	z-index: 100;
 }

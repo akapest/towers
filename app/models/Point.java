@@ -1,4 +1,4 @@
-package models.geo.primitives;
+package models;
 
 import play.data.validation.Max;
 import play.data.validation.Min;
