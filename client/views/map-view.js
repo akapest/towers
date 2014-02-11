@@ -1,6 +1,5 @@
 /**
- * require(views/map/triangle-sector)
- * require(views/map/pretty-sector)
+ * require(views/map/sector)
  */
 $(function(){
 
@@ -82,7 +81,7 @@ $(function(){
       this.end = end;
       this.model.set(this.getSector())
 
-      var newSector = this._createSector();
+      var newSector = this._createRawSector();
       newSector.render();
       if (this.sector){
         this.sector.remove();
@@ -109,8 +108,8 @@ $(function(){
       return sector;
     },
 
-    _createSector: function(){
-      var sector = new TriangleSector(this.model.get('start'), this.model.attributes, map, Geo);
+    _createRawSector: function(){
+      var sector = new Sector(this.model.get('start'), this.model.attributes, map, Geo, true);
       sector.render();
       return sector;
     },
@@ -127,13 +126,13 @@ $(function(){
       console.log('draw tower ' + tower.get('start'))
 
       if (tower.is('highway')){
-        this.towers[tower.cid + '0'] = new TriangleSector(tower.get('start'), tower.attributes, map, Geo).render();
+        this.towers[tower.cid + '0'] = new Sector(tower.get('start'), tower.attributes, map, Geo).render();
         var attrs = _.clone(tower.attributes),
             a = attrs.azimuth;
         attrs.azimuth = a > 0  ? a - Math.PI : Math.PI + a;
-        this.towers[tower.cid + '1'] = new TriangleSector(tower.get('end'), attrs, map, Geo).render();
+        this.towers[tower.cid + '1'] = new Sector(tower.get('end'), attrs, map, Geo).render();
       } else {
-        this.towers[tower.cid] = new PrettySector(tower.attributes, map, Geo).render();
+        this.towers[tower.cid] = new Sector(tower.get('start'), tower.attributes, map, Geo).render();
       }
     },
 

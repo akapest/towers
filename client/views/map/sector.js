@@ -3,20 +3,21 @@
  */
 (function(){
 
-  window.PrettySector = function(towerAttrs, map, geo){
+  window.Sector = function(center, towerAttrs, map, geo, raw){
     this.parts =  new ymaps.GeoObjectCollection({}, {
       draggable: false
     });
-    this.center = towerAttrs.start;
+    this.raw = raw;
+    this.center = center;
     this.sector = this.attrs = towerAttrs;
-    this.gradientSteps = 5;
-    this.angleSteps = Math.floor(this.sector.angle * 10);
+    this.angleSteps = this.sector.type == 'highway' || raw ?  0.5 : Math.floor(this.sector.angle * 10);
+    this.gradientSteps = this.sector.type == 'highway'? 1 : 5;
     this.geo = geo;
     this.map = map;
     this.geoObjects = map.geoObjects;
   }
 
-  $.extend(PrettySector.prototype, {
+  $.extend(Sector.prototype, {
 
     render: function(){
       var previous = null,//triangle
@@ -55,7 +56,9 @@
         }
       }
       this.geoObjects.add(this.parts);
-      this.renderBase();
+      if (!this.raw){
+        this.renderBase();
+      }
       return this;
     },
 
@@ -79,6 +82,7 @@
       ],{}, {
         interactivityModel: 'default#transparent',
         fillColor: yColor,
+        strokeColor: yColor,
         strokeWidth: 0,
         opacity: 0.8
       })
@@ -86,8 +90,7 @@
     },
 
     renderBase: function(){
-      var circle = new ymaps.Circle([this.center, 10], {}, {
-        draggable: true,
+      var circle = new ymaps.Circle([this.center, 20], {}, {
         fill:false,
         strokeWidth:0
       });
@@ -95,7 +98,7 @@
       var rectangle = new ymaps.Rectangle(circle.geometry.getBounds(), {
         balloonContent:this.attrs.name + '<br/>' + this.attrs.comment
       }, {
-        fillColor: this.sector.color,
+        fillColor: this.sector.color || '#fff',
         coordRendering: "boundsPath",
         strokeWidth: 0
       });

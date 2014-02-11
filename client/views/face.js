@@ -53,10 +53,10 @@ $(function(){
       console.log('event:map.create')
       var tower = new Tower(state)
       if (tower.validate()){
+        currentView().bindColor();
         towers.add(tower)
         tower.save();
         map.drawTower(tower)
-        state.reset();
       } else {
         alert('Необходимо задать частоту!')
       }
@@ -79,6 +79,10 @@ $(function(){
       e.preventDefault();
       return false;
     });
+
+    function currentView(){
+      return views[state.get('type')];
+    }
 
   })
 

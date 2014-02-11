@@ -78,6 +78,7 @@
     },
 
     bindColor: function(){
+      if (this.freq) return;
       var $color = this.$('.color');
       var freq = new Freq({
         value: parseFloat(this.model.get('freq')),
