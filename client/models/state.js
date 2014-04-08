@@ -6,11 +6,11 @@
 
   window.State = Backbone.Model.extend({
     fields:['type',
-            'angle',
-            'freq',
-            'color',
-            'comment',
-            'name'],
+      'angle',
+      { name:'freq', type:'float' },
+      'color',
+      'comment',
+      'name'],
 
     initialize: function(){
       this.set("type", 'tower')

@@ -17,7 +17,9 @@
         throw new Error("no fields to bind to!")
       }
       var self = this;
-      _.each(this.model.fields || fields, function(fName){
+      _.each(this.model.fields || fields, function(field){
+
+        var fName = _.isString(field) ? field : field.name;
 
         var $el = self.$('.'  + fName)
         if (!$el.length){
@@ -29,11 +31,14 @@
         //привязываем изменение модели при изменении поля
         var property = self.getPropertyToListenTo($el, fName)
         $el.on(property, function(){
-          var rawValue = self.getValue($(this)),
-              parsedValue = self.parseValue(fName, rawValue);
-          changing = true;
-          self.model.set(fName, parsedValue)
-          changing = false
+          var value = self.getValue($(this));
+          if (self.isValid(field, value)){
+            changing = true;
+            self.model.set(fName, self.parseValue(fName, value))
+            changing = false
+          } else {
+            self.setValue($el, fName, self.model.get(fName))
+          }
         })
         //привязываем изменение поля при изменении модели
         self.model.on('change:'+ fName, function(model){
@@ -96,6 +101,16 @@
         default:
           throw new Error("Cant set value to `" + $el.selector + '`')
       }
+    },
+
+    isValid: function(field, value){
+      if (field.type){
+        switch (field.type){
+          case 'float': return !isNaN(value) || value.replace && !isNaN(value.replace(',','.'));
+          case 'int' : return !isNaN(value)
+        }
+      }
+      return true;
     }
 
   });
