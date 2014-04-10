@@ -6,9 +6,12 @@
   window.Freq = Backbone.Model.extend({
     url:'freqs',
     fields:[
-      'value',
-      'color',
-      'type'],
+      { name:'value',
+        label: 'Частота' },
+      { name:'color',
+        label: 'Цвет' },
+      { name:'type',
+        label: 'Тип' }],
     initialize: function(){
     },
     save: function(){

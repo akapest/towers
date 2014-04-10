@@ -33,17 +33,23 @@
       this.freqs = options.freqs;
       this.freq = null;
       this.model = options.model;
-      this.template = $('[data-template="tower"]').html().replace(/&lt;%/g, '<%').replace(/%&gt;/g, '%>')
+      this.template = getTemplate('tower');
     },
 
     render: function(){
-      var type = types[this.options.type];
-      var html = _.template(this.template, type, {interpolate: /\!\{(.+?)\}/g})
-      this.$el = $(html)
-      this.delegateEvents()
-      this.bindFields();
-      this.initFreqColor();
+      this.renderAsync();
       return this;
+    },
+
+    renderAsync: function(){
+      this.template.done(_.bind(function(t){
+        var type = types[this.options.type];
+        var html = _.template(t, type, {interpolate: /\!\{(.+?)\}/g})
+        this.$el = $(html)
+        this.delegateEvents()
+        this.bindFields();
+        this.initFreqColor();
+      }, this));
     },
 
     initFreqColor: function(){
@@ -97,29 +103,6 @@
       console.log('bind color to freq ' + freq.get('value'));
     },
 
-    //called by View.parseValue
-    parseAngle: function(str){
-      if (!str){
-        return 0;
-      }
-      function convert(value, unit){
-        switch (unit){
-          case '':
-            return value * Math.PI / 360
-          case "m":
-            return value * Math.PI / 360 / 60
-          case 's':
-            return value * Math.PI / 360 / 3600
-        }
-        throw new Error("Unit not found - " + unit)
-      }
-
-      var result = null;
-      str.replace(anglePattern, function(m, value, unit){
-        result = convert(value, unit);
-      })
-      return result;
-    },
 
     getAngle: function(){
       return this.parseAngle(this.$('.angle').val())
