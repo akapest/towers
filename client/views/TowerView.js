@@ -27,6 +27,7 @@
     },
 
     initialize: function(options){
+      _.bindAll(this);
       this.options = options;
       this.freqs = options.freqs;
       this.freq = null;
