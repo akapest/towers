@@ -1,6 +1,6 @@
 /**
- * require(models/freq)
- * require(views/base/view)
+ * require(models/Freq)
+ * require(views/base/View)
  */
 (function(){
 

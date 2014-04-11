@@ -1,5 +1,5 @@
 /**
- * require(views/map/sector)
+ * require(views/map/Sector)
  */
 $(function(){
 

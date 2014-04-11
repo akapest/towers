@@ -1,11 +1,11 @@
 /**
  * require(components/accordion)
- * require(models/state)
- * require(models/tower)
- * require(models/freq)
- * require(views/tower-view)
- * require(views/legend-view)
- * require(views/map-view)
+ * require(models/State)
+ * require(models/Tower)
+ * require(models/Freq)
+ * require(views/TowerView)
+ * require(views/LegendView)
+ * require(views/MapView)
  */
 $(function(){
 

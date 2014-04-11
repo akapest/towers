@@ -1,6 +1,6 @@
 /**
  * require(vendor/backbone)
- * require(models/freq)
+ * require(models/Freq)
  */
 (function(){
 

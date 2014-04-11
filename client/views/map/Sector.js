@@ -1,5 +1,5 @@
 /**
- * require(views/map/geo)
+ * require(views/map/Geo)
  */
 (function(){
 

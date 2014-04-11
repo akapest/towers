@@ -1,7 +1,7 @@
 /**
- * require(views/base/view)
- * require(views/base/field-view)
- * require(models/freq)
+ * require(views/base/View)
+ * require(views/base/FieldView)
+ * require(models/Freq)
  */
 (function(){
 
