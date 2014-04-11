@@ -16,7 +16,6 @@
 
     initialize: function(options){
       _.bindAll(this)
-      this.setElement(options.$el);
       this.freqs = options.freqs;
       if (!this.freqs.length){
         this.$el.hide();

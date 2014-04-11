@@ -59,30 +59,6 @@
       return tower;
     },
 
-    //called by EditableField
-    parseAngle: function(str){
-      if (!str){
-        return 0;
-      }
-      function convert(value, unit){
-        switch (unit){
-          case '':
-            return value * Math.PI / 360
-          case "m":
-            return value * Math.PI / 360 / 60
-          case 's':
-            return value * Math.PI / 360 / 3600
-        }
-        throw new Error("Unit not found - " + unit)
-      }
-
-      var result = null;
-      str.replace(anglePattern, function(m, value, unit){
-        result = convert(value, unit);
-      })
-      return result;
-    },
-
     is: function(type){
       switch (type){
         case 'tower': return this.get('end') == null;

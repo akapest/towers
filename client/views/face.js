@@ -30,15 +30,23 @@ $(function(){
     var state = new State();
     var map = new MapView({model:state, freqs:freqs});
     var views = {
-      'tower': new TowerView({model:state, freqs:freqs, type:'tower'  }),
-      'highway': new HighwayView({model:state, freqs:freqs, type:'highway' }),
-      'legend': new LegendView({freqs:freqs, $el:$('.legend')}).render()
+      'tower': new TowerView({el: '.action.tower', model:state, freqs:freqs, type:'tower'  }),
+      'highway': new HighwayView({el: '.action.highway', model:state, freqs:freqs, type:'highway' }),
+      'legend': new LegendView({freqs:freqs, el:'.legend'})
     }
 
-    $('.action.tower').html(views.tower.render().$el)
-    $('.action.highway').html(views.highway.render().$el)
+    var promises = [];
+    _.each(views, function(view){
+      if (view.render) view.render();
+      if (view.renderAsync){
+        promises.push(view.renderAsync());
+      }
+    });
 
-    initAccordion();
+    $.when.apply($, promises).then(function(){
+      initAccordion();
+    })
+
 
     towers.fetch({success:function(){
       map.drawTowers(towers)
@@ -83,6 +91,11 @@ $(function(){
     function currentView(){
       return views[state.get('type')];
     }
+
+    new TableView({
+      el: $('#list'),
+      collection: freqs
+    }).render();
 
   })
 

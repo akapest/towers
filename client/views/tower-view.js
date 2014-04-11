@@ -4,8 +4,6 @@
  */
 (function(){
 
-  var anglePattern = /(\d+)([^\d]*)/;
-
   var types = {
     tower: {
       name: 'Новая вышка',//Редактировать вышку
@@ -36,16 +34,11 @@
       this.template = getTemplate('tower');
     },
 
-    render: function(){
-      this.renderAsync();
-      return this;
-    },
-
     renderAsync: function(){
-      this.template.done(_.bind(function(t){
+      return this.template.done(_.bind(function(t){
         var type = types[this.options.type];
-        var html = _.template(t, type, {interpolate: /\!\{(.+?)\}/g})
-        this.$el = $(html)
+        var html = t.execute(type)
+        this.$el.html(html);
         this.delegateEvents()
         this.bindFields();
         this.initFreqColor();
@@ -105,12 +98,13 @@
 
 
     getAngle: function(){
-      return this.parseAngle(this.$('.angle').val())
+      return this.fields.angle.getValue();
     },
 
     setValue: function($el, fieldName){
+      debugger
       if (fieldName != 'angle'){
-        View.prototype.setValue.apply(this, arguments);
+        this[fieldName].setValue.apply(this, arguments);
       }
     },
 

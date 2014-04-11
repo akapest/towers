@@ -5,9 +5,6 @@
  */
 (function(){
 
-  var TableModel = Backbone.Model.extend({
-  })
-
   window.TableView = View.extend({
 
     events: {
@@ -17,10 +14,10 @@
     initialize: function(options){
       this.options = options;
       this.template = getTemplate('table');
-      this.model = new TableModel();
-      this.model.on('change:td', _.bind(function(){
-        this.openInput();
-      }, this));
+//      $('body').click(_.bind(function(){
+//        console.log('body click');
+//        this.closeInput();
+//      }, this));
     },
 
     render: function(){
@@ -29,12 +26,12 @@
     },
 
     renderAsync: function(){
-      this.template.done(_.bind(function(t){
+      return this.template.done(_.bind(function(t){
         var model = {
           fields: new Freq().fields,
           collection: this.collection.models
         };
-        var html = _.template(t, model, {interpolate: /\!\{(.+?)\}/g})
+        var html = t.execute(model);
         this.$el.html(html);
         return this;
       }, this))
@@ -43,42 +40,51 @@
     onCellClick: function(e){
       var td = $(e.currentTarget),
           field = td.data('field'),
-          cid = td.parent('tr').data('model-cid');
+          cid = td.parent('tr').data('model-cid'),
+          model = this.collection.get(cid);
 
-      this.model.set({model: this.collection.get(cid), field: field, td: td})
+      if (field && cid && this.model.cid != cid && this.field != field){
+        console.log('cell click');
+        this.closeInput();
+        this.model = model;
+        this.field = field;
+        this.td = td;
+        this.openInput();
+        e.stopPropagation();
+      }
     },
 
     openInput: function(){
-      var td = this.model.get('td'),
-        field = this.model.get('field'),
-        model = this.model.get('model'),
+      var td = this.td,
+        field = this.field,
+        model = this.model,
         value = model.get(field);
 
       var input = $('<input type="text">');
       td.html(input);
       input.val(value);
-      new FieldView({
+      this.field = new FieldView({
         $el: input,
         field: field,
         model: model
       })
+    },
 
-      //save prev model
-      var prevModel = this.model.previous('model');
-      if (prevModel){
-        model.save();
+    closeInput: function(){
+      if (this.model){
+        this.model.save();
       }
-
-      //destroy previous input
-      var previous = this.model.get('input')
-      if (previous){
-        var val = previous.val();
-        previous.parent().html(val);
-        previous.remove()
+      this.model = null;
+      this.field = null;
+      this.td = null;
+      if (this.field){
+        var input = this.field.getInput();
+        var val = input.val();
+        input.parent().html(val);
+        input.remove()
+        this.field.remove();
+        this.field = null;
       }
-
-      //set new
-      this.model.set('input', input);
     }
 
   });

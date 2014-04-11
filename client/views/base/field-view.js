@@ -9,45 +9,47 @@
       _.bindAll(this)
       var $input = this.$input = opts.$el;
       var field = this.field = _.isString(opts.field) ? opts.field : opts.field.name;
-      if (!field) console.warn('Creating FieldView for "null" field');
-      if (!$input.length) console.warn("No input found for field `" + field + "`");
-      if (!opts.model) console.warn('No model defined for field ' + field);
-      this.bindField(opts.field, opts.model);
-      this.changing = false;
+      var model = this.model = opts.model;
+      if (!field)
+        console.warn('Creating FieldView for "null" field');
+      if (!$input.length)
+        console.warn("No input found for field `" + field + "`");
+      if (!model)
+        console.warn('No model defined for field ' + field);
+      this.bindField();
     },
 
-    bindField: function(field, model){
-      this.model = model;
-      var self = this;
-      var property = this.getPropertyToListenTo() //привязываем изменение модели при изменении поля
-      this.$input.on(property, function(){
-        self.changing = true;
-        self.handleInputChange();
-        self.changing = false
-      })
-      model.on('change:' + field, function(model){ //привязываем изменение поля при изменении модели
-        if (!self.changing){
-          self.setValue(field, model.get(field))
-        } else {
-          // already changing - so do nothing
-        }
-      })
+    bindField: function(){
+      this.isChanging = false;
+      this.$input.on(this.getPropertyToListenTo(), this.inputChangeListener)
+      this.model.on('change:' + this.field, this.modelChangeListener)
     },
 
-    handleInputChange: function(){
-      var value = this.getValue();
+    inputChangeListener: function(){
+      this.isChanging = true;
+      var value = this.getRawValue();
       if (this.isValid(value)){
         this.model.set(this.field, this.parseValue(value))
       } else {
+        this.setValue(this.model.get(this.field)) //revert back to previous value
+      }
+      this.isChanging = false
+    },
+
+    modelChangeListener: function(){
+      if (!this.isChanging){
         this.setValue(this.model.get(this.field))
+      } else {
+        // already changing - so do nothing
       }
     },
 
     remove: function(){
-      this.options.$input.off()
+      this.$input.off(this.getPropertyToListenTo(), this.inputChangeListener)
+      this.model.off('change:' + this.field, this.modelChangeListener)
     },
 
-    getValue: function(){
+    getRawValue: function(){
       var $input = this.$input;
       var type = $input.prop('type');
       switch (type){
@@ -62,6 +64,11 @@
           throw new Error("Cant get value of `" + $input.selector + '`')
       }
     },
+
+    getValue: function(){
+      return this.parseValue(this.getRawValue());
+    },
+
 
     getPropertyToListenTo: function(){
       var $input = this.$input;
@@ -80,12 +87,15 @@
 
     parseValue: function(value){
       var expectedMethodName = 'parse' + this.field[0].toUpperCase() + this.field.substring(1);
-
-      if (this.model.hasOwnProperty(expectedMethodName)){
-        console.log('calling "' + expectedMethodName + '" on ' + this.toString())
-        return this[expectedMethodName].call(this, value)
+      var prop = this.model[expectedMethodName]
+      if (prop){
+        if (_.isFunction(prop)){
+          console.log('calling "' + expectedMethodName + '" on ' + this.toString())
+          return prop.call(this, value)
+        } else {
+          console.log('property "' + expectedMethodName + '" registered, but is not a function');
+        }
       }
-
       return value;
     },
 
@@ -95,6 +105,7 @@
         case 'text':
         case 'textarea':
         case 'color':
+        case 'select-one':
           this.$input.val(value);
           break;
         case 'checkbox':
@@ -115,6 +126,10 @@
         }
       }
       return true;
+    },
+
+    getInput: function(){
+      return this.$input;
     }
 
 
