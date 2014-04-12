@@ -15,9 +15,7 @@ import java.util.List;
  * @author kpestov
  */
 @With(Secure.class)
-public class Freqs extends Controller {
-
-    private static Gson gson = new Gson();
+public class Freqs extends TController {
 
     public static void all() {
         List<Freq> freqs = Freq.findAll();
@@ -67,6 +65,5 @@ public class Freqs extends Controller {
         }
 
     }
-
 
 }

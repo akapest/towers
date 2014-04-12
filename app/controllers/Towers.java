@@ -17,9 +17,7 @@ import java.util.List;
  * @author kpestov
  */
 @With(Secure.class)
-public class Towers extends Controller {
-
-    private static Gson gson = new Gson();
+public class Towers extends TController {
 
     public static void all() {
         List<Tower> towers = Tower.findAll();
