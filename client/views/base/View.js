@@ -7,6 +7,18 @@
 
     fields: [],
 
+    show: function(){
+      if (!this.rendered){
+        this.render();
+        this.rendered = true;
+      }
+      this.$el.show();
+    },
+
+    hide: function(){
+      this.$el.hide();
+    },
+
     bindFields: function(fields){
       _.bindAll(this);
 

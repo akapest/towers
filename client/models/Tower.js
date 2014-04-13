@@ -1,5 +1,5 @@
 /**
- * require(vendor/backbone)
+ * require(models/Model)
  */
 (function(){
 
@@ -15,7 +15,7 @@
     }
   }
 
-  window.Tower = Backbone.Model.extend({
+  window.Tower = Model.extend({
     url:'towers',
     fields:['angle',
             'name',
@@ -38,10 +38,6 @@
         attrs = state;
         this.set(attrs)
       }
-    },
-    save: function(){
-      var url = 'towers?' + $.param({tower:this.toJSON()});
-      Backbone.Model.prototype.save.call(this,null, {url:url})
     },
     toJSON: function(){
       var result = _.clone(this.attributes);

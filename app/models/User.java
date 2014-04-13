@@ -12,7 +12,7 @@ import javax.persistence.Table;
 @Table(name = "user_")
 public class User extends Model{
 
-    public String name;
+    public String login;
 
     public String password;
 
