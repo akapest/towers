@@ -34,13 +34,11 @@ $(function(){
       var $actions = $('.action')
       if (state){
         $actions.show();
-        $el.find('span').text('▶')
-        $el.find('span').removeClass('big')
+        $el.find('span').text('◀')
 
       } else {
         $actions.hide();
-        $el.find('span').text('◀')
-        $el.find('span').addClass('big')
+        $el.find('span').text('▶')
         $actions.css('min-width','55px')
       }
       $el.data('state', state);

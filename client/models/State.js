@@ -5,7 +5,8 @@
 (function(){
 
   window.State = Backbone.Model.extend({
-    fields:['type',
+    fields:[
+      'type',
       'angle',
       { name:'freq', type:'float' },
       'color',
@@ -48,8 +49,7 @@
         result = convert(value, unit);
       })
       return result;
-    }
-
+    },
 
   })
 

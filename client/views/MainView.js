@@ -42,6 +42,7 @@
       this.views = {
         'tower': new TowerView({el: '.action.tower', model:state, freqs:freqs, type:'tower'  }),
         'highway': new HighwayView({el: '.action.highway', model:state, freqs:freqs, type:'highway' }),
+        'location': new LocationView({el: '.action.location', model:state}),
         'legend': new LegendView({freqs:freqs, el:'.legend'})
       }
       this.towersPromise = towers.fetch();
@@ -95,8 +96,11 @@
       var self = this;
       Backbone.on('change:accordion', _.bind(function(type){
         state.set('type', type)
-        var angle = this.views[type].getAngle();
-        state.set('angle', angle);
+        var view = this.views[type]
+        if (view.getAngle){
+          state.set({angle:view.getAngle()}, {silent:true});
+        }
+
       }, this));
 
       $('.accordion').on('hover',function(e){

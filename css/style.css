@@ -21,7 +21,7 @@ form label{
 }
 
 .main {
-	font-size: 16px;
+	font-size: 20px;
 	font-weight: bold;
 }
 
@@ -34,15 +34,18 @@ span.big{
 }
 
 .action {
-	padding: 15px 0;
-	border-bottom: 1px dashed black;
+	padding: 5px 0 15px 0;
+	-moz-user-select: -moz-none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 .action.toggle {
 	/*float:right;*/
 }
 
-.action:last-of-type {
-	border-bottom: none;
+.action:first-of-type {
 	cursor: pointer;
 }
 
@@ -55,10 +58,9 @@ span.big{
 }
 
 .actions {
-	float: right;
+	float: left;
 	z-index: 100;
 	position: relative;
-	margin: 20px -55px 0 0;
 }
 
 .actions span, .actions form {

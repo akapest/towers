@@ -99,8 +99,23 @@
       return value;
     },
 
-    setValue: function(value){
-      var type = this.$input.prop('type');
+    prepareValue: function(value){
+      var expectedMethodName = 'prepare' + this.field[0].toUpperCase() + this.field.substring(1);
+      var prop = this.model[expectedMethodName]
+      if (prop){
+        if (_.isFunction(prop)){
+          console.log('calling "' + expectedMethodName + '" on ' + this.toString())
+          return prop.call(this, value)
+        } else {
+          console.log('property "' + expectedMethodName + '" registered, but is not a function');
+        }
+      }
+      return value;
+    },
+
+    setValue: function(v){
+      var value = this.prepareValue(v),
+          type = this.$input.prop('type');
       switch (type){
         case 'text':
         case 'textarea':
