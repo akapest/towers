@@ -18,15 +18,18 @@
       this.fields = this.collection.fields;
       this.tableTemplate = getTemplate('table');
       this.trTemplate = getTemplate('tr');
-      $('body').click(_.bind(function(){
-        console.log('body click');
-        this.closeInput();
-      }, this));
+      _.bindAll(this, ['inputHandler', 'closeInput']);
+
+      this.bindEvent($('body'), 'click', this.closeInput);
     },
 
     render: function(){
       this.renderAsync();
       return this;
+    },
+
+    remove: function(){
+      View.prototype.remove.call(this);
     },
 
     renderAsync: function(){
@@ -77,12 +80,16 @@
           modelChanged = model && this.model != model;
 
       if (fieldChanged || modelChanged){
-        console.log('cell click');
         this.closeInput();
         this.model = model;
         this.field = field;
         this.td = td;
         var input = this.createInput();
+        this.bindEvent(input, 'keydown', this.inputHandler);
+        setTimeout(function(){
+          input.focus();
+        })
+
       }
       e.stopPropagation();
     },
@@ -99,7 +106,15 @@
           model = this.model,
           value = model.get(field);
 
-      var input = $('<input type="text">');
+      var input = null;
+      var inputType = this._getField(field).input;
+      switch (inputType) {
+        case 'textarea':
+          input= $('<textarea>');
+          break;
+        default:
+          input = $('<input>');
+      }
       td.html(input);
       input.val(value);
       this.fieldView = new FieldView({
@@ -107,12 +122,13 @@
         field: field,
         model: model
       })
-      input.focus();
       return input;
     },
 
-    closeInput: function(){
-      this.saveModel();
+    closeInput: function(revert){
+      if (!revert){
+        this.saveModel();
+      }
       this.closeFieldView();
       this.model = null;
       this.field = null;
@@ -133,10 +149,57 @@
     _getModel: function(td){
       var cid = td.parent('tr').data('model-cid');
       return this.collection.get(cid);
-    }
+    },
 
+    inputHandler: function(e){
+      var key = e.which;
+      switch (key){
+        case ENTER:
+        {
+          this.closeInput();
+          break;
+        }
+        case ESC:
+        {
+          this.closeInput(true);
+          break;
+        }
+        case TAB:
+        {
+          var next = this._getNextCell();
+          if (next.length){
+            next.click()
+          } else {
+            this.closeInput();
+          }
+        }
+      }
+    },
+
+    _getNextCell: function(){
+      var index = this.td.index(),
+          nextIndex = index + 1,
+          editableCells = this.td.parent().children('.edit');
+      if (nextIndex < editableCells.length){
+        return $(editableCells.get(nextIndex));
+
+      } else {
+        var trIndex = this.td.parent('tr').index(),
+            nextTrIndex = trIndex + 1;
+        return this.td.parents('tbody').children(':eq(' + nextTrIndex + ')').find('.edit:first');
+      }
+    },
+
+    _getField: function(name){
+      return _.find(this.fields, function(el){
+        return el.name == name;
+      })
+    }
 
   });
 
+  var ENTER = 13,
+      ESC = 27,
+      TAB = 9;
 
 }());

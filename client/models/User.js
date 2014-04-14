@@ -16,7 +16,8 @@
       },
       {
         name: 'comment',
-        label: 'Комментарий'
+        label: 'Комментарий',
+        input: 'textarea'
       }
     ]
   });

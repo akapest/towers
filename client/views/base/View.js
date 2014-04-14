@@ -49,10 +49,23 @@
       })
     },
 
+    bindEvent: function($el, eventName, func){
+      this.inputEvents = this.inputEvents || [];
+      this.inputEvents.push({
+        input: $el,
+        name: eventName,
+        func: func
+      })
+      $el.on(eventName, func);
+    },
+
     remove: function(){
       _.each(this.fields, function(fieldView){
         fieldView.remove();
       })
+      _.each(this.inputEvents, function(el){
+        el.input.off(el.name, el.func);
+      });
       Backbone.View.prototype.remove.apply(this);
     }
 

@@ -93,11 +93,11 @@
     initAccordion: function(){
       window.initAccordion();
       var self = this;
-      Backbone.on('change:accordion', function(type){
+      Backbone.on('change:accordion', _.bind(function(type){
         state.set('type', type)
         var angle = this.views[type].getAngle();
         state.set('angle', angle);
-      });
+      }, this));
 
       $('.accordion').on('hover',function(e){
         e.preventDefault();
