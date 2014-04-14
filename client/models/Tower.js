@@ -1,5 +1,5 @@
 /**
- * require(models/Model)
+ * require(models/BaseModel)
  */
 (function(){
 
@@ -15,7 +15,7 @@
     }
   }
 
-  window.Tower = Model.extend({
+  window.Tower = BaseModel.extend({
     url:'towers',
     fields:['angle',
             'name',

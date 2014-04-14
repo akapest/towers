@@ -1,4 +1,4 @@
-<table>
+<table class="table">
 	<thead><tr>
 		<% for (var i = 0; i < fields.length; i++){
 		var f = fields[i]; %>
@@ -7,13 +7,10 @@
 	</tr></thead>
 	<tbody>
 	<% for (var i = 0; i < collection.length; i++){
-	var model = collection[i]; %>
-	<tr data-model-cid="!{model.cid}">
-		<% for (var j = 0; j < fields.length; j++){
-		var f = fields[j]; %>
-		<td data-field="!{f.name}">!{model.get(f.name)}</td>
-		<% } %>
-	</tr>
+		var model = collection[i];
+		var data = {model:model, fields: fields}; %>
+		!{trTemplate.execute(data)}
 	<% } %>
 	</tbody>
 </table>
+<button class="add">Добавить</button>

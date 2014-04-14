@@ -11,10 +11,12 @@
 
   window.createCollection = function(url, model, options){
     var models = getBootstrapData(url);
-    return new (Backbone.Collection.extend({
-      url:url,
+    var collection = new (Backbone.Collection.extend({
+      url:'rest/' + url,
       model:model
     }))(models, options)
+    collection.fields = (new model()).fields;
+    return collection;
 
     function getBootstrapData(name){
       try {

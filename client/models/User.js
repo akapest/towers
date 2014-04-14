@@ -1,9 +1,9 @@
 /**
- * require(models/Model)
+ * require(models/BaseModel)
  */
 (function(){
 
-  window.User = Model.extend({
+  window.User = BaseModel.extend({
     url: 'users',
     fields: [
       {
@@ -18,7 +18,7 @@
         name: 'comment',
         label: 'Комментарий'
       }
-    ],
+    ]
   });
 
 

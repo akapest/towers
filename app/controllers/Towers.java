@@ -1,14 +1,10 @@
 package controllers;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import models.Tower;
 import play.Logger;
 import play.data.validation.Valid;
-import play.db.jpa.JPA;
-import play.mvc.Controller;
 import play.mvc.With;
 
 import java.util.List;
@@ -17,7 +13,7 @@ import java.util.List;
  * @author kpestov
  */
 @With(Secure.class)
-public class Towers extends TController {
+public class Towers extends BaseController {
 
     public static void all() {
         List<Tower> towers = Tower.findAll();

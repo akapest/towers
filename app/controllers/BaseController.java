@@ -7,7 +7,7 @@ import play.mvc.Controller;
 /**
  * @author kpestov
  */
-public class TController extends Secure.Security {
+public class BaseController extends Secure.Security {
 
     protected static Gson gson = new Gson();
 
@@ -19,7 +19,7 @@ public class TController extends Secure.Security {
 
     static boolean check(String profile){
         String connected = connected();
-        User user = User.find("byName", connected).first();
+        User user = User.find("byLogin", connected).first();
         return user != null && user.login.equals("admin");
     }
 

@@ -8,7 +8,7 @@
 
     routes: {
       '': 'main',
-      '/users': 'users'
+      'users': 'users'
     },
 
     main: function(){
@@ -20,6 +20,9 @@
         el: $('#list'),
         collection: createCollection('users', User)
       }).show();
+
+      $('.user').hide();
+      $('.legend').hide();
     }
 
   })

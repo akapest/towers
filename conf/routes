@@ -9,15 +9,20 @@ GET     /                                       Application.index
 
 GET     /favicon.ico                            404
 
-GET     /towers                                 Towers.all
-POST    /towers                                 Towers.create
-PUT     /towers                                 Towers.edit
-DELETE  /towers/{id}                            Towers.delete
+GET     /rest/users                             Users.all
+POST    /rest/users                             Users.create
+PUT     /rest/users                             Users.edit
+DELETE  /rest/users/{id}                        Users.delete
 
-GET     /freqs                                  Freqs.all
-POST    /freqs                                  Freqs.create
-PUT     /freqs                                  Freqs.edit
-DELETE  /freqs/{id}                             Freqs.delete
+GET     /rest/towers                            Towers.all
+POST    /rest/towers                            Towers.create
+PUT     /rest/towers                            Towers.edit
+DELETE  /rest/towers/{id}                       Towers.delete
+
+GET     /rest/freqs                             Freqs.all
+POST    /rest/freqs                             Freqs.create
+PUT     /rest/freqs                             Freqs.edit
+DELETE  /rest/freqs/{id}                        Freqs.delete
 
 GET     /rest/templates/{name}                  Templates.get
 
@@ -26,3 +31,5 @@ GET     /public/                                staticDir:public
 GET     /css/                                   staticDir:css
 
 *       /{controller}/{action}                  {controller}.{action}
+
+*       /{a}                                    Application.index

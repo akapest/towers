@@ -5,15 +5,14 @@ import com.google.gson.JsonElement;
 import models.User;
 import play.Logger;
 import play.data.validation.Valid;
-import play.mvc.With;
 
 import java.util.List;
 
 /**
  * @author kpestov
  */
-@With(Secure.class)
-public class Users extends TController {
+//@With(Secure.class)
+public class Users extends BaseController {
     
     @Check(value="users")    
     public static void all() {

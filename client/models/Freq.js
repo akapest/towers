@@ -1,9 +1,9 @@
 /**
- * require(models/Model)
+ * require(models/BaseModel)
  */
 (function(){
 
-  window.Freq = Model.extend({
+  window.Freq = BaseModel.extend({
     url: 'freqs',
     fields: [
       {

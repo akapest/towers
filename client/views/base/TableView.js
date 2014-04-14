@@ -8,16 +8,20 @@
   window.TableView = View.extend({
 
     events: {
-      'click td' : 'onCellClick'
+      'click .add': 'addModel',
+      'click .remove': 'removeModel',
+      'click .edit': 'editModel'
     },
 
     initialize: function(options){
       this.options = options;
-      this.template = getTemplate('table');
-//      $('body').click(_.bind(function(){
-//        console.log('body click');
-//        this.closeInput();
-//      }, this));
+      this.fields = this.collection.fields;
+      this.tableTemplate = getTemplate('table');
+      this.trTemplate = getTemplate('tr');
+      $('body').click(_.bind(function(){
+        console.log('body click');
+        this.closeInput();
+      }, this));
     },
 
     render: function(){
@@ -26,10 +30,12 @@
     },
 
     renderAsync: function(){
-      return this.template.done(_.bind(function(t){
+      var collectionP = this.collection.fetch();
+      return $.when(this.tableTemplate, this.trTemplate, collectionP).done(_.bind(function(t, trTemplate){
         var model = {
-          fields: new Freq().fields,
-          collection: this.collection.models
+          fields: this.fields,
+          collection: this.collection.models,
+          trTemplate: trTemplate
         };
         var html = t.execute(model);
         this.$el.html(html);
@@ -37,58 +43,100 @@
       }, this))
     },
 
-    onCellClick: function(e){
+    addModel: function(e){
+      this.trTemplate.done(_.bind(function(t){
+        var model = new this.collection.model();
+        var tr = t.execute({
+          model: model,
+          fields: this.fields
+        })
+        this.collection.add(model);
+        this.$('tbody').append(tr);
+        setTimeout(_.bind(function(){
+          this.$('tbody').find('tr:last').find('td:first').click();
+        }, this))
+      }, this));
+    },
+
+    removeModel: function(e){
+      var td = $(e.currentTarget),
+          model = this._getModel(td);
+      if (model){
+        if (confirm('Действительно удалить данные?')){
+          td.parent('tr').remove();
+          model.destroy();
+        }
+      }
+    },
+
+    editModel: function(e){
       var td = $(e.currentTarget),
           field = td.data('field'),
-          cid = td.parent('tr').data('model-cid'),
-          model = this.collection.get(cid);
+          model = this._getModel(td),
+          fieldChanged = field && this.field != field,
+          modelChanged = model && this.model != model;
 
-      if (field && cid && this.model.cid != cid && this.field != field){
+      if (fieldChanged || modelChanged){
         console.log('cell click');
         this.closeInput();
         this.model = model;
         this.field = field;
         this.td = td;
-        this.openInput();
-        e.stopPropagation();
+        var input = this.createInput();
+      }
+      e.stopPropagation();
+    },
+
+    saveModel: function(){
+      if (this.model && this.model.hasChanged()){
+        this.model.save();
       }
     },
 
-    openInput: function(){
+    createInput: function(){
       var td = this.td,
-        field = this.field,
-        model = this.model,
-        value = model.get(field);
+          field = this.field,
+          model = this.model,
+          value = model.get(field);
 
       var input = $('<input type="text">');
       td.html(input);
       input.val(value);
-      this.field = new FieldView({
+      this.fieldView = new FieldView({
         $el: input,
         field: field,
         model: model
       })
+      input.focus();
+      return input;
     },
 
     closeInput: function(){
-      if (this.model){
-        this.model.save();
-      }
+      this.saveModel();
+      this.closeFieldView();
       this.model = null;
       this.field = null;
       this.td = null;
-      if (this.field){
-        var input = this.field.getInput();
+    },
+
+    closeFieldView: function(){
+      if (this.fieldView){
+        var input = this.fieldView.getInput();
         var val = input.val();
         input.parent().html(val);
         input.remove()
-        this.field.remove();
-        this.field = null;
+        this.fieldView.remove();
+        this.fieldView = null;
       }
+    },
+
+    _getModel: function(td){
+      var cid = td.parent('tr').data('model-cid');
+      return this.collection.get(cid);
     }
 
-  });
 
+  });
 
 
 }());
