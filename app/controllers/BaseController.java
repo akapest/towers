@@ -3,10 +3,12 @@ package controllers;
 import com.google.gson.Gson;
 import models.User;
 import play.mvc.Controller;
+import play.mvc.With;
 
 /**
  * @author kpestov
  */
+@With(Secure.class)
 public class BaseController extends Secure.Security {
 
     protected static Gson gson = new Gson();

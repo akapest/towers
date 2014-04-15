@@ -9,6 +9,10 @@
       return this.name || this.url.replace(/s$/, '');
     },
 
+    isValid: function(){
+      return !this.validate();
+    },
+
     save: function(){
       var data = {};
       data[this._getName()] = this.toJSON()

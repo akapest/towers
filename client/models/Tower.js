@@ -38,7 +38,10 @@
     },
 
     validate: function(){
-      return !!this.get('freq')
+      if (!this.get('freq')){
+        return 'Необходимо задать частоту!';
+      }
+      return null;
     }
 
   })

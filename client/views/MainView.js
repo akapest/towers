@@ -27,9 +27,9 @@
     }
   }
 
-  var towers = createCollection('towers', Tower);
-  var freqs = createCollection('freqs', Freq, { comparator:function(el){return parseFloat(el.get('value'))} });
-  var locations = createCollection('locations', Location);
+  var towers;
+  var freqs;
+  var locations;
   
   var mainView = null,
       state,
@@ -38,6 +38,10 @@
   window.MainView = View.extend({
     
     initialize: function(){
+      towers = createCollection('towers', Tower);
+      freqs = createCollection('freqs', Freq, { comparator:function(el){return parseFloat(el.get('value'))} });
+      locations = createCollection('locations', Location);
+
       var self = this;
       state = state = new State();
       this.views = {
@@ -53,13 +57,14 @@
           console.log('event:map.create')
           if (state.get('type') != 'location'){
             var tower = new Tower(state)
-            if (tower.validate()){
+            if (tower.isValid()){
               self.getCurrentView().bindColor();
               towers.add(tower)
+              debugger
               tower.save();
               map.drawTower(tower)
             } else {
-              alert('Необходимо задать частоту!')
+              alert(tower.validate())
             }
           } else {
             var location = new Location(state);
