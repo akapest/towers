@@ -12,7 +12,6 @@ import java.util.List;
 /**
  * @author kpestov
  */
-@With(Secure.class)
 public class Towers extends BaseController {
 
     public static void all() {

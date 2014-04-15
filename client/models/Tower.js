@@ -1,21 +1,9 @@
 /**
- * require(models/BaseModel)
+ * require(models/Location)
  */
 (function(){
 
-  function pointToArray(point){
-    if (!point) return null;
-    return [point.latitude, point.longitude]
-  }
-  function arrayToPoint(array){
-    if (!array) return {latitude:null,longitude:null}
-    return {
-      latitude: array[0],
-      longitude: array[1]
-    }
-  }
-
-  window.Tower = BaseModel.extend({
+  window.Tower = Location.extend({
     url:'towers',
     fields:['angle',
             'name',
@@ -25,6 +13,7 @@
              'radius',
              'azimuth',
              'end'],
+
     initialize: function(state){
       if (!state)
         return;
@@ -39,21 +28,6 @@
         this.set(attrs)
       }
     },
-    toJSON: function(){
-      var result = _.clone(this.attributes);
-      result.start = arrayToPoint(result.start);
-      if (result.end){
-        result.end = arrayToPoint(result.end);
-      }
-      return result;
-    },
-    parse: function(tower){
-      tower.start = pointToArray(tower.start)
-      if (tower.end){
-        tower.end = pointToArray(tower.end)
-      }
-      return tower;
-    },
 
     is: function(type){
       switch (type){
@@ -62,18 +36,11 @@
       }
       throw new Error("Cant find object type!")
     },
+
     validate: function(){
       return !!this.get('freq')
-    },
-    ensurePointsFormat:function(){
-      var self = this;
-      _.each(['start', 'end'], function(prop){
-        var value = self.get(prop)
-        if (!_.isArray(value)){
-          self.set(prop, pointToArray(value))
-        }
-      })
     }
+
   })
 
 }());

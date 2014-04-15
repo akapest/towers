@@ -11,10 +11,9 @@ import java.util.List;
 /**
  * @author kpestov
  */
-//@With(Secure.class)
 public class Users extends BaseController {
     
-    @Check(value="users")    
+    @Check(value="admin")    
     public static void all() {
         List<User> users = User.findAll();
         JsonArray array = new JsonArray();
@@ -25,7 +24,7 @@ public class Users extends BaseController {
         renderJSON(array.toString());
     }
 
-    @Check(value="users")
+    @Check(value="admin")
     public static void create(@Valid User user) {
         try {
             user.validateAndCreate();
@@ -37,7 +36,7 @@ public class Users extends BaseController {
         }
     }
 
-    @Check(value="users")
+    @Check(value="admin")
     public static void edit(@Valid User user) {
         try {
             user.validateAndSave();
@@ -49,7 +48,7 @@ public class Users extends BaseController {
         }
     }
 
-    @Check(value="users")
+    @Check(value="admin")
     public static void delete(Long id) {
         try{
             User user = User.findById(id);

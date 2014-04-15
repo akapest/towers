@@ -29,6 +29,7 @@
 
   var towers = createCollection('towers', Tower);
   var freqs = createCollection('freqs', Freq, { comparator:function(el){return parseFloat(el.get('value'))} });
+  var locations = createCollection('locations', Location);
   
   var mainView = null,
       state,
@@ -50,15 +51,22 @@
         map = new MapView({model:state, freqs:freqs});
         map.on('create', function(){
           console.log('event:map.create')
-          var tower = new Tower(state)
-          if (tower.validate()){
-            self.getCurrentView().bindColor();
-            towers.add(tower)
-            tower.save();
-            map.drawTower(tower)
+          if (state.get('type') != 'location'){
+            var tower = new Tower(state)
+            if (tower.validate()){
+              self.getCurrentView().bindColor();
+              towers.add(tower)
+              tower.save();
+              map.drawTower(tower)
+            } else {
+              alert('Необходимо задать частоту!')
+            }
           } else {
-            alert('Необходимо задать частоту!')
+            var location = new Location(state);
+            locations.add(location);
+            location.save();
           }
+
         })
         map.on('click', function(){
           console.log('event:map.click')
@@ -93,14 +101,12 @@
     
     initAccordion: function(){
       window.initAccordion();
-      var self = this;
       Backbone.on('change:accordion', _.bind(function(type){
         state.set('type', type)
         var view = this.views[type]
         if (view.getAngle){
           state.set({angle:view.getAngle()}, {silent:true});
         }
-
       }, this));
 
       $('.accordion').on('hover',function(e){

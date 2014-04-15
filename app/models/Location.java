@@ -4,6 +4,7 @@ import play.data.validation.Unique;
 import play.db.jpa.Model;
 
 import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 
 /**
  * Локация, например, Верхотурье
@@ -22,6 +23,7 @@ public class Location extends Model {
 
     public String color;
 
+    @OneToOne
     public Point center;
 
     public float radius;

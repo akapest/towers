@@ -24,6 +24,11 @@ POST    /rest/freqs                             Freqs.create
 PUT     /rest/freqs                             Freqs.edit
 DELETE  /rest/freqs/{id}                        Freqs.delete
 
+GET     /rest/locations                         Locations.all
+POST    /rest/locations                         Locations.create
+PUT     /rest/locations                         Locations.edit
+DELETE  /rest/locations/{id}                    Locations.delete
+
 GET     /rest/templates/{name}                  Templates.get
 
 GET     /client/                                staticDir:client
