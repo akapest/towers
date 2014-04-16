@@ -20,17 +20,8 @@
       'azimuth',
       'end'],
 
-    initialize: function(model){
-      if (!model)
-        return;
-      if (model.cid){
-        var attrs = _.clone(model.attributes);
-        if (attrs.type == 'tower'){
-          attrs.end = null;
-        }
-        this.attributes = attrs;
-      } else {
-        attrs = model;
+    initialize: function(attrs){
+      if (attrs){
         attrs = this.parse(attrs);
         this.set(attrs)
       }
@@ -52,11 +43,34 @@
     },
 
     validate: function(){
-      if (!this.get('freq')){
-        return 'Необходимо задать частоту!';
+      return this.__validate(['freq', 'name']);//required
+    },
+
+    parseAngle: function(str){
+      var anglePattern = /(\d+)([^\d]*)/;
+      if (!str){
+        return 0;
       }
-      return null;
+      function convert(value, unit){
+        switch (unit){
+          case '':
+            return value * Math.PI / 360
+          case "m":
+            return value * Math.PI / 360 / 60
+          case 's':
+            return value * Math.PI / 360 / 3600
+        }
+        throw new Error("Unit not found - " + unit)
+      }
+
+      var result = null;
+      str.replace(anglePattern, function(m, value, unit){
+        result = convert(value, unit);
+      })
+      return result;
     }
+
+
 
   })
 

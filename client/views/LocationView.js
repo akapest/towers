@@ -19,6 +19,10 @@
         this.delegateEvents()
         this.bindFields();
       }, this));
+    },
+
+    getModel: function(){
+      return this.model;
     }
 
   })

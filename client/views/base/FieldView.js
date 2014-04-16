@@ -23,6 +23,7 @@
       this.isChanging = false;
       this.$input.on(this.getPropertyToListenTo(), this.inputChangeListener)
       this.model.on('change:' + this.field, this.modelChangeListener)
+      this.model.on('invalid:' + this.field, this.invalidListener)
     },
 
     inputChangeListener: function(){
@@ -44,9 +45,19 @@
       }
     },
 
+    invalidListener: function(){
+      var group = this.$input.parents('.form-group')
+      group.addClass('has-error')
+      group.addClass('force')
+      setTimeout(function(){
+        group.removeClass('force')
+      })
+    },
+
     remove: function(){
       this.$input.off(this.getPropertyToListenTo(), this.inputChangeListener)
       this.model.off('change:' + this.field, this.modelChangeListener)
+      this.model.off('invalid:' + this.field, this.invalidListener)
     },
 
     getRawValue: function(){

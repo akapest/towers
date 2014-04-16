@@ -17,19 +17,15 @@
       }
     ],
 
-    initialize: function(state){
-      if (!state)
-        return;
-      var attrs = state.attributes || state;
-      delete attrs.type;
-      delete attrs.end;
-      delete attrs.azimuth;
-      delete attrs.freq;
-
-      if (!state.cid){
+    initialize: function(attrs){
+      if (attrs){
         attrs = this.parse(attrs);
       }
-      this.attributes = _.clone(attrs);
+      this.set(attrs);
+    },
+
+    isTower: function(){
+      return false;
     },
 
     toJSON: function(){
@@ -59,6 +55,23 @@
           self.set(prop, pointToArray(value))
         }
       })
+    },
+
+    validate: function(){
+      var self = this;
+      return this.__validate([
+        'name', //required
+        {
+          name: 'name',
+          validate: function(name){
+            var loc = self.collection.find(function(el){
+              return el.get('name') == name;
+            });
+            if (loc) return 'Уже существует локация с названием "' + name + '"';
+          }
+        }
+
+      ])
     }
 
   })

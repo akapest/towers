@@ -176,3 +176,22 @@ ul{
 td input{
 	width: 100%;
 }
+
+.has-error input{
+	-webkit-animation: has-error 1.5s;
+	animation: has-error 1.5s;
+}
+
+.has-error.force input{
+	background:red;
+}
+
+@-webkit-keyframes has-error{
+	from {background: red;}
+	to {background: none;}
+}
+
+@keyframes has-error{
+	from {background: red;}
+	to {background: none;}
+}

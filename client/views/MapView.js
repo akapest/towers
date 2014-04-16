@@ -1,4 +1,6 @@
 /**
+ * require(models/Tower)
+ * require(models/Location)
  * require(views/map/Sector)
  */
 $(function(){
@@ -10,9 +12,7 @@ $(function(){
 
     initialize: function(options){
       options = options || {};
-      this.state = options.model;
-      this.state.set({start: null, end: null});
-      this.state.on('change:end', this.updateObjectData, this)
+      this.model = null;
       this.freqs = options.freqs;
       this.locations = options.locations;
 
@@ -30,6 +30,10 @@ $(function(){
       this.towers = [];
     },
 
+    setModel: function(model){
+      this.model = model;
+    },
+
     keyUpListener: function(e){
       if (e.keyCode == 27){ //ESC
         this.resetObjectCreation();
@@ -37,22 +41,27 @@ $(function(){
     },
 
     resetObjectCreation: function(){
-      this.state.set({
+      if (!this.model) return;
+      this.model.set({
         start: null,
         end: null
       });
       if (this.object){
         this.object.remove();
+        this.object = null;
       }
-      this.object = null;
     },
 
     onClick: function(e){
+      if (!this.model) return;
+
       var point = e.get('coords');
-      if (!this.state.get('start')){
-        var start = point;
-        if (this.state.isTower()){
-          var locations = this.findLocations(start);
+      if (!this.model.get('start')){
+        var start = point,
+            locations = [];
+
+        if (this.model.isTower()){
+          locations = this.findLocations(start);
           if (!locations.length){
             alert('Данная точка не принаделжит ни одной локации. Сначала нужно создать локацию.')
             start = null;
@@ -61,43 +70,46 @@ $(function(){
             start = null;
           }
         }
-        this.state.set({start: start});
+        this.model.set({start: start});
 
       } else {
-        if (this.state.isTower()){
-          var locations = this.findLocations(this.state.get('start')),
-              locId = locations[0].get('id'); //перенес получение id сюда, чтобы на создание локации было чуть больше времени
+        if (this.model.isTower()){
+          locations = this.findLocations(this.model.get('start'))
+          var locId = locations[0].get('id'); //перенес получение id сюда, чтобы на создание локации было чуть больше времени
           if (!locId){
             alert('Невозможно создать вышку. Не найдена соответсвующая локации. Возможно, проблемы со связью.')
           }
-          this.state.set({
+          this.model.set({
             end: point,
             locationId: locId
           });
+          this.updateObjectData();
         }
-
-        this.trigger('create');
+        this.trigger('create', this.model);
         this.resetObjectCreation();
       }
       this.trigger('click')
     },
 
     onHover: function(e){
-      if (!this.state.get('start')) return;
+      if (!this.model) return;
+      if (!this.model.get('start')) return;
       var end = e.get('coords'),
-          _end = this.state.get('end');
+          _end = this.model.get('end');
       if (_end
           && Math.abs(_end[0] - end[0]) < 0.0001
           && Math.abs(_end[1] - end[1]) < 0.0001){
         return;
       }
-      this.state.set({end: end});
+      this.model.set({end: end});
+      this.updateObjectData();
+
       var previous = this.object;
 
-      if (this.state.isTower()){
-        this.object = new Sector(this.state.get('start'), this.state.attributes, map, Geo, true);
+      if (this.model.isTower()){
+        this.object = new Sector(this.model.get('start'), this.model.attributes, map, Geo, true);
       } else {
-        this.object = this.drawLocation(this.state);
+        this.object = this.drawLocation(this.model);
       }
       this.object.render && this.object.render();
       if (previous){
@@ -106,9 +118,9 @@ $(function(){
     },
 
     updateObjectData: function(){
-      this.state.set({
-        azimuth: Geo.getAzimuth(this.state.get('start'), this.state.get('end')),
-        radius: Geo.getDistance(this.state.get('start'), this.state.get('end'))
+      this.model.set({
+        azimuth: Geo.getAzimuth(this.model.get('start'), this.model.get('end')),
+        radius: Geo.getDistance(this.model.get('start'), this.model.get('end'))
       });
     },
 

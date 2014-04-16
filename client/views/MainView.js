@@ -1,7 +1,7 @@
 /**
  * require(components/accordion)
- * require(models/State)
  * require(models/Tower)
+ * require(models/Location)
  * require(models/Freq)
  * require(views/TowerView)
  * require(views/LegendView)
@@ -32,7 +32,7 @@
   var locations;
   
   var mainView = null,
-      state,
+      type,
       map;
 
   window.MainView = View.extend({
@@ -43,39 +43,36 @@
       locations = createCollection('locations', Location);
 
       var self = this;
-      state = state = new State();
       this.views = {
-        'tower': new TowerView({el: '.acc-item.tower', model:state, freqs:freqs, type:'tower'  }),
-        'highway': new HighwayView({el: '.acc-item.highway', model:state, freqs:freqs, type:'highway' }),
-        'location': new LocationView({el: '.acc-item.location', model:state}),
+        'tower': new TowerView({el: '.acc-item.tower', model:new Tower(), freqs:freqs, type:'tower'  }),
+        'highway': new HighwayView({el: '.acc-item.highway', model:new Tower(), freqs:freqs, type:'highway' }),
+        'location': new LocationView({el: '.acc-item.location', model:new Location()}),
         'towersList': new ListView({el: '.acc-item.towers-list', collection: towers, name:'Список вышек'}),
         'locationsList': new ListView({el: '.acc-item.locations-list', collection: locations, name:'Список локаций'}),
         'legend': new LegendView({freqs:freqs, el:'.legend'})
       }
       ymaps.ready(function(){
-        map = new MapView({model:state, freqs:freqs, locations: locations});
-        map.on('create', function(){
+        map = new MapView({freqs:freqs, locations: locations});
+        map.on('create', function(model){
           console.log('event:map.create')
-          if (state.isTower()){
-            var tower = new Tower(state)
-            if (tower.isValid()){
-              self.getCurrentView().bindColor();
-              towers.add(tower)
-              tower.save();
-              map.drawTower(tower)
+          var view = self.getCurrentView();
+          if (model.isValid()){
+            if (model.isTower()){
+              towers.add(model)
+              map.drawTower(model)
+              view.setModel(new Tower())
+
             } else {
-              alert(tower.validate())
+              locations.add(model);
+              map.drawLocation(location);
+              view.setModel(new Location())
             }
-          } else {
-            var location = new Location(state);
-            locations.add(location);
-            location.save();
-            map.drawLocation(location);
+            model.save({validate:false});
           }
         })
         map.on('click', function(){
           console.log('event:map.click')
-          accSelect(state.get('type'));
+          accSelect(type);
         })
         map.drawTowers(towers)
         map.drawLocations(locations);
@@ -105,11 +102,12 @@
     
     initAccordion: function(){
       window.initAccordion();
-      Backbone.on('change:accordion', _.bind(function(type){
-        state.set('type', type)
+      Backbone.on('change:accordion', _.bind(function(type_){
+        type = type_;
         var view = this.views[type]
+        map.setModel(view.getModel());
         if (view.getAngle){
-          state.set({angle:view.getAngle()}, {silent:true});
+          view.getModel().set({angle:view.getAngle()}, {silent:true});
         }
       }, this));
 
@@ -120,7 +118,7 @@
     },
 
     getCurrentView: function(){
-      return this.views[state.get('type')];
+      return this.views[type];
     }
 
   });

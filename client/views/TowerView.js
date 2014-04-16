@@ -46,6 +46,10 @@
       }, this));
     },
 
+    getModel: function(){
+      return this.model;
+    },
+
     initFreqColor: function(){
       var self = this;
       this.model.on('change:color', function(model, color){
