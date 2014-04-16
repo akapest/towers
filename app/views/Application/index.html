@@ -17,8 +17,8 @@
 </head>
 <body>
 	<div class="user">
-		#{if user != null}
-			<span>${user}</span>
+		#{if username != null}
+			<span>${username}</span>
 			<a href="/logout" class="action-name">Выйти</a>
 		#{/if}
 	</div>
@@ -30,12 +30,14 @@
 		<div class="acc-item locations-list" data-type="locationsList" style="display:none;"></div>
 		<div class="clb"></div>
 		<div class="acc-item towers-list" data-type="towersList" style="display:none;"></div>
-		<div class="clb"></div>
-		<div class="acc-item location" data-type="location" style="display:none;"></div>
-		<div class="clb"></div>
-		<div class="acc-item tower" data-type="tower" style="display:none;"></div>
-		<div class="clb"></div>
-		<div class="acc-item highway" data-type="highway" style="display:none;"></div>
+		#{if username == 'admin'}
+			<div class="clb"></div>
+			<div class="acc-item location" data-type="location" style="display:none;"></div>
+			<div class="clb"></div>
+			<div class="acc-item tower" data-type="tower" style="display:none;"></div>
+			<div class="clb"></div>
+			<div class="acc-item highway" data-type="highway" style="display:none;"></div>
+		#{/if}
 	</div>
 	<div id="list">
 
@@ -43,8 +45,10 @@
 	<div id="map" class="map edit"></div>
 	#{include 'elems/legend.html'/}
 
-	<div style="display:none" class="data-holder freqs">
-		${freqs}
+	<div style="display:none">
+		<div class="data-holder freqs">${freqs}</div>
+		<div class="data-holder towers">${towers}</div>
+		<div class="data-holder locations">${locations}</div>
 	</div>
 
 </body>

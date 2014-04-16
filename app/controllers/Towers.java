@@ -26,7 +26,7 @@ public class Towers extends BaseController {
 
     public static void create(@Valid Tower tower) {
         try {
-            tower.validateAndCreate();
+            tower.create();
             renderJSON(String.format("{\"id\":%d}", tower.id));
 
         } catch (Exception e) {
@@ -37,7 +37,7 @@ public class Towers extends BaseController {
 
     public static void edit(@Valid Tower tower) {
         try {
-            tower.validateAndSave();
+            tower.save();
             ok();
 
         } catch (Exception e) {

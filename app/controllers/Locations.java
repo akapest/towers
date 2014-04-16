@@ -25,7 +25,7 @@ public class Locations extends BaseController {
 
     public static void create(@Valid Location location) {
         try {
-            location.validateAndCreate();
+            location.create();
             renderJSON(String.format("{\"id\":%d}", location.id));
 
         } catch (Exception e) {
@@ -36,7 +36,7 @@ public class Locations extends BaseController {
 
     public static void edit(@Valid Location location) {
         try {
-            location.validateAndSave();
+            location.save();
             ok();
 
         } catch (Exception e) {

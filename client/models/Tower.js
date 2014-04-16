@@ -20,17 +20,18 @@
       'azimuth',
       'end'],
 
-    initialize: function(state){
-      if (!state)
+    initialize: function(model){
+      if (!model)
         return;
-      if (state.cid){
-        var attrs = _.clone(state.attributes);
+      if (model.cid){
+        var attrs = _.clone(model.attributes);
         if (attrs.type == 'tower'){
           attrs.end = null;
         }
         this.attributes = attrs;
       } else {
-        attrs = state;
+        attrs = model;
+        attrs = this.parse(attrs);
         this.set(attrs)
       }
     },

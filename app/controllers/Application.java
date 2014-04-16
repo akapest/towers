@@ -3,30 +3,24 @@ package controllers;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import play.*;
+import play.db.jpa.Model;
 import play.mvc.*;
 
 import java.util.*;
 
 import models.*;
 
-public class Application extends Controller {
-
-    private static Gson gson = new Gson();
+public class Application extends BaseController {
 
     public static void index() {
-        List<Freq> freqsList = Freq.findAll();
-        JsonArray array = new JsonArray();
-        for (Freq f : freqsList) {
-            JsonElement el = gson.toJsonTree(f, Freq.class);
-            array.add(el);
-        }
-        String freqs = array.toString();
-        String user = Secure.Security.connected();
-        if (isNull(user)){
+        String freqs = toJsonString(Freq.<Freq>findAll(), Freq.class);
+        String locations = toJsonString(Location.<Location>findAll(), Location.class);
+        String towers = toJsonString(Tower.<Tower>findAll(), Tower.class);
+        String username = Secure.Security.connected();
+        if (isNull(username)){
             renderTemplate("Application/stub.html");
         } else {
-            renderTemplate("Application/index.html", user, freqs);
+            renderTemplate("Application/index.html", username, freqs, locations, towers);
         }
     }
 

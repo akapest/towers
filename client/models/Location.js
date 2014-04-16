@@ -24,18 +24,17 @@
     initialize: function(state){
       if (!state)
         return;
-      var attrs = _.clone(state.attributes);
-      attrs.center = attrs.start;
-      delete attrs.start;
+      var attrs = _.clone(state.attributes) || state;
       delete attrs.type;
       delete attrs.end;
       delete attrs.azimuth;
       delete attrs.freq;
-      if (state.cid){
 
+      if (state.cid){
         this.attributes = attrs;
       } else {
         attrs = state;
+        attrs = this.parse(attrs);
         this.set(attrs)
       }
     },
@@ -48,6 +47,7 @@
       }
       return result;
     },
+
     parse: function(tower){
       tower.start = pointToArray(tower.start)
       if (tower.end){

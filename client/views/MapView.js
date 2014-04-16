@@ -74,7 +74,7 @@ $(function(){
       if (this.model.get('type') != 'location'){
         this.object = new Sector(this.model.get('start'), this.model.attributes, map, Geo, true);
       } else {
-        this.object = this._createCircle();
+        this.object = this._createCircle(this.model);
       }
       this.object.render && this.object.render();
       if (previous){
@@ -112,6 +112,12 @@ $(function(){
       })
     },
 
+    drawLocations: function(locations){
+      locations.each(_.bind(function(loc){
+        this._createCircle(loc);
+      }, this));
+    },
+
     removeAll: function(){
       _.forOwn(this.towers, function(t){
         t.remove();
@@ -119,11 +125,11 @@ $(function(){
       this.towers = [];
     },
 
-    _createCircle: function(){
+    _createCircle: function(model){
       var circle = new ymaps.Circle(
           [
-            this.model.get('start'),
-            this.model.get('radius')
+            model.get('start'),
+            model.get('radius')
           ],
           {},
           {

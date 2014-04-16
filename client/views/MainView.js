@@ -38,8 +38,8 @@
   window.MainView = View.extend({
     
     initialize: function(){
-      towers = createCollection('towers', Tower);
       freqs = createCollection('freqs', Freq, { comparator:function(el){return parseFloat(el.get('value'))} });
+      towers = createCollection('towers', Tower);
       locations = createCollection('locations', Location);
 
       var self = this;
@@ -52,7 +52,6 @@
         'locationsList': new ListView({el: '.acc-item.locations-list', collection: locations, name:'Список локаций'}),
         'legend': new LegendView({freqs:freqs, el:'.legend'})
       }
-      this.towersPromise = towers.fetch();
       ymaps.ready(function(){
         map = new MapView({model:state, freqs:freqs});
         map.on('create', function(){
@@ -72,19 +71,17 @@
             locations.add(location);
             location.save();
           }
-
         })
         map.on('click', function(){
           console.log('event:map.click')
           accSelect(state.get('type'));
         })
-        self.towersPromise.done(function(){
-          map.drawTowers(towers)
-        });
+        map.drawTowers(towers)
+        map.drawLocations(locations);
+
       })
     },
-    
-    
+
     render: function(){
       var self = this,
           promises = [];

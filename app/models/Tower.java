@@ -1,9 +1,15 @@
 package models;
 
 
+import play.data.validation.Required;
+import play.data.validation.Valid;
+import play.db.jpa.JPABase;
 import play.db.jpa.Model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 /**
@@ -18,41 +24,16 @@ public class Tower extends Model {
 
     public float freq;
 
-    @OneToOne
+    @Required
+    @OneToOne(cascade = CascadeType.ALL)
     public Point start;
-    @OneToOne
-    public Point end;  //только для точки. считаем две антенны одной вышкой
+    @OneToOne(cascade = CascadeType.ALL)
+    public Point end;  //только для точки-точки. считаем одной вышкой
 
     public float radius;
     public float azimuth;
 
-    @Override
-    public boolean validateAndSave(){
-        if (start != null){
-            start.validateAndSave();
-        } else {
-            return false;
-        }
-        if (end != null){
-            end.validateAndSave();
-        }
-        this.save();
-        return true;
-    }
-
-    @Override
-    public boolean validateAndCreate(){
-        if (start != null){
-            start.validateAndCreate();
-        } else {
-            return false;
-        }
-        if (end != null){
-            end.validateAndCreate();
-        }
-        super.create();
-        return true;
-    }
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    public Location location;
 
 }

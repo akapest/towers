@@ -1,9 +1,14 @@
 package controllers;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import models.User;
+import play.db.jpa.Model;
 import play.mvc.Controller;
 import play.mvc.With;
+
+import java.util.List;
 
 /**
  * @author kpestov
@@ -23,6 +28,15 @@ public class BaseController extends Secure.Security {
         String connected = connected();
         User user = User.find("byLogin", connected).first();
         return user != null && user.login.equals("admin");
+    }
+
+    protected static <M extends Model> String toJsonString(List<M> models, Class<M> cls) {
+        JsonArray array = new JsonArray();
+        for (M model : models) {
+            JsonElement el = gson.toJsonTree(model, cls);
+            array.add(el);
+        }
+        return array.toString();
     }
 
 
