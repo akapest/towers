@@ -4,15 +4,21 @@
 (function(){
 
   window.Tower = Location.extend({
-    url:'towers',
-    fields:['angle',
-            'name',
-            'freq',
-            'comment'],
-    fields2:['start',
-             'radius',
-             'azimuth',
-             'end'],
+    url: 'towers',
+    fields: [
+      {name: 'angle',
+        label: 'Угол'},
+      {name: 'name',
+        label: 'Название'},
+      {name: 'freq',
+        label: 'Частота'},
+      {name: 'comment',
+        label: 'Комментарий'}
+    ],
+    fields2: ['start',
+      'radius',
+      'azimuth',
+      'end'],
 
     initialize: function(state){
       if (!state)
@@ -31,8 +37,10 @@
 
     is: function(type){
       switch (type){
-        case 'tower': return this.get('end') == null;
-        case 'highway': return this.get('end') != null;
+        case 'tower':
+          return this.get('end') == null;
+        case 'highway':
+          return this.get('end') != null;
       }
       throw new Error("Cant find object type!")
     },

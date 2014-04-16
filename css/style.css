@@ -2,19 +2,19 @@
 	clear: both;
 }
 
-span.action:hover {
+span.acc-item:hover {
 	border: 1px dotted black;
 
 }
 
-.action.active > span {
+.acc-item.active > span {
 	color: #eee;
 }
 form label{
 	color: #eee;
 }
 
-.action-name {
+.acc-item-name, .action-name{
 	border-bottom: 1px dotted black;
 	color: black;
 	cursor: pointer;
@@ -29,27 +29,27 @@ span.big{
 	font-size:26px;
 }
 
-.action.active {
-	background: rgba(0, 0, 0, 0.52);
+.acc-item.active {
+	background: rgba(0, 0, 0, 0.65);
 }
 
-.action {
-	padding: 5px 0 15px 0;
+.acc-item {
+	padding: 5px 15px 15px;
 	-moz-user-select: -moz-none;
 	-khtml-user-select: none;
 	-webkit-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
 }
-.action.toggle {
+.acc-item.toggle {
 	/*float:right;*/
 }
 
-.action:first-of-type {
+.acc-item:first-of-type {
 	cursor: pointer;
 }
 
-.action .main {
+.acc-item .main {
 	color: black;
 }
 
@@ -64,18 +64,30 @@ span.big{
 }
 
 .actions span, .actions form {
-	margin: 0 15px 25px 15px;
 }
 
 span, input, label {
 }
 
-form label, form input {
-	float: left;
+.accordion label, .accordion input, .accordion .list-el{
 	color: #fff;
 }
 
-.action span {
+.accordion label, .accordion input{
+	float: left;
+}
+
+.accordion .list-el{
+	padding: 2px 0;
+	cursor: pointer;
+}
+
+.accordion .list-el:hover{
+	background-color: grey;
+}
+
+
+.acc-item span {
 	/*color: #fff;*/
 }
 

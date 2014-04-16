@@ -1,0 +1,8 @@
+<span class="acc-item-name main" data-model="name">!{name}</span>
+<div class="acc-item-data" style="display:none;">
+    <ul>
+        <% _.each(list, function(el){ %>
+            <li data-cid="!{el.cid}" class="list-el">!{el.name}</li>
+        <% }); %>
+    </ul>
+</div>

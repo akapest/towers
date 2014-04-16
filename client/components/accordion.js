@@ -5,33 +5,42 @@ $(function(){
   var events = Backbone;
 
   window.initAccordion = function(){
-    $('.accordion .toggle').data('state', false)
+    var acc = $('.accordion');
 
-    $('.accordion .action-name').click(function(){
-      $('.action').removeClass("active")
-      var actionForm = $(this).siblings('form')
-      if (!actionForm.length){
-        $('.action form').hide();//others
+    acc.find('.acc-item-data').hide();
+
+    acc.find('.toggle').data('state', false);
+
+    acc.find('.acc-item').click(function(e){
+
+      if ($(e.target).hasClass('acc-item-name') == false) return;
+
+      acc.find('.acc-item').removeClass("active")
+
+      var item = $(this);
+      var itemData = item.children('.acc-item-data');
+
+      if (!itemData.length){
+        acc.find('.acc-item-data').hide();//others
         return;
       }
-      var element = $(this).parent(".action")
-      var hidden = actionForm.is(':hidden');
+      if (itemData.is(':hidden')){
 
-      if (hidden){
-        $('.action form').hide();//others
-        actionForm.show();
-        element.addClass("active")
-        events.trigger('change:accordion', element.data('type'))
+        acc.find('.acc-item-data').hide();//others
+        item.addClass("active")
+        itemData.show();
+        events.trigger('change:accordion', item.data('type'))
 
       } else {
-        actionForm.hide();
+        itemData.hide();
       }
+      e.stopPropagation();
     });
 
-    $('.accordion .toggle').click(function(){
+    acc.find('.toggle').click(function(){
       var $el = $(this);
       var state = !$el.data('state');
-      var $actions = $('.action')
+      var $actions = $('.acc-item')
       if (state){
         $actions.show();
         $el.find('span').text('◀')
@@ -39,7 +48,7 @@ $(function(){
       } else {
         $actions.hide();
         $el.find('span').text('▶')
-        $actions.css('min-width','55px')
+        $actions.css('min-width', '55px')
       }
       $el.data('state', state);
       $el.show(); //always
@@ -48,14 +57,14 @@ $(function(){
 
   }
   window.accSelect = function(id){
-    var $el =  $('.action.toggle')
+    var $el = $('.acc-item.toggle')
     $el.data('state', true);
-    var $actions = $('.action')
+    var $actions = $('.acc-item')
     $actions.show();
     $el.find('span').text('▶')
     $el.find('span').css('font-size', '')
-    if (!$('.action.' + id).hasClass("active")){
-      $('.action.' + id + ' .action-name').click();
+    if (!$('.acc-item.' + id).hasClass("active")){
+      $('.acc-item.' + id + ' .acc-item').click();
     }
 
   }

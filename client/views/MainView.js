@@ -45,9 +45,11 @@
       var self = this;
       state = state = new State();
       this.views = {
-        'tower': new TowerView({el: '.action.tower', model:state, freqs:freqs, type:'tower'  }),
-        'highway': new HighwayView({el: '.action.highway', model:state, freqs:freqs, type:'highway' }),
-        'location': new LocationView({el: '.action.location', model:state}),
+        'tower': new TowerView({el: '.acc-item.tower', model:state, freqs:freqs, type:'tower'  }),
+        'highway': new HighwayView({el: '.acc-item.highway', model:state, freqs:freqs, type:'highway' }),
+        'location': new LocationView({el: '.acc-item.location', model:state}),
+        'towersList': new ListView({el: '.acc-item.towers-list', collection: towers, name:'Список вышек'}),
+        'locationsList': new ListView({el: '.acc-item.locations-list', collection: locations, name:'Список локаций'}),
         'legend': new LegendView({freqs:freqs, el:'.legend'})
       }
       this.towersPromise = towers.fetch();
@@ -60,7 +62,6 @@
             if (tower.isValid()){
               self.getCurrentView().bindColor();
               towers.add(tower)
-              debugger
               tower.save();
               map.drawTower(tower)
             } else {
