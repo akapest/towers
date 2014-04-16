@@ -5,16 +5,17 @@ $(function(){
 
   var ymaps = window.ymaps;
   var map = null;
-  var angle = Math.PI / 6;
 
   window.MapView = Backbone.View.extend({
 
     initialize: function(options){
       options = options || {};
-      this.model = options.model;
-      this.model.set({start: null, end: null});
-      this.model.on('change:end', this.updateObjectData, this)
+      this.state = options.model;
+      this.state.set({start: null, end: null});
+      this.state.on('change:end', this.updateObjectData, this)
       this.freqs = options.freqs;
+      this.locations = options.locations;
+
       if (map) throw new Error('MapView already created');
 
       map = new ymaps.Map('map', {
@@ -36,7 +37,7 @@ $(function(){
     },
 
     resetObjectCreation: function(){
-      this.model.set({
+      this.state.set({
         start: null,
         end: null
       });
@@ -48,11 +49,33 @@ $(function(){
 
     onClick: function(e){
       var point = e.get('coords');
-      if (!this.model.get('start')){
-        this.model.set({start: point});
+      if (!this.state.get('start')){
+        var start = point;
+        if (this.state.isTower()){
+          var locations = this.findLocations(start);
+          if (!locations.length){
+            alert('Данная точка не принаделжит ни одной локации. Сначала нужно создать локацию.')
+            start = null;
+          } else if (locations.length > 1){
+            alert('Данная точка принаделжит нескольким локацииям. Невозможно создать объект.');
+            start = null;
+          }
+        }
+        this.state.set({start: start});
 
       } else {
-        this.model.set({end: point});
+        if (this.state.isTower()){
+          var locations = this.findLocations(this.state.get('start')),
+              locId = locations[0].get('id'); //перенес получение id сюда, чтобы на создание локации было чуть больше времени
+          if (!locId){
+            alert('Невозможно создать вышку. Не найдена соответсвующая локации. Возможно, проблемы со связью.')
+          }
+          this.state.set({
+            end: point,
+            locationId: locId
+          });
+        }
+
         this.trigger('create');
         this.resetObjectCreation();
       }
@@ -60,21 +83,21 @@ $(function(){
     },
 
     onHover: function(e){
-      if (!this.model.get('start')) return;
+      if (!this.state.get('start')) return;
       var end = e.get('coords'),
-          _end = this.model.get('end');
+          _end = this.state.get('end');
       if (_end
           && Math.abs(_end[0] - end[0]) < 0.0001
           && Math.abs(_end[1] - end[1]) < 0.0001){
         return;
       }
-      this.model.set({end: end});
+      this.state.set({end: end});
       var previous = this.object;
 
-      if (this.model.get('type') != 'location'){
-        this.object = new Sector(this.model.get('start'), this.model.attributes, map, Geo, true);
+      if (this.state.isTower()){
+        this.object = new Sector(this.state.get('start'), this.state.attributes, map, Geo, true);
       } else {
-        this.object = this._createCircle(this.model);
+        this.object = this.drawLocation(this.state);
       }
       this.object.render && this.object.render();
       if (previous){
@@ -83,9 +106,9 @@ $(function(){
     },
 
     updateObjectData: function(){
-      this.model.set({
-        azimuth: Geo.getAzimuth(this.model.get('start'), this.model.get('end')),
-        radius: Geo.getDistance(this.model.get('start'), this.model.get('end'))
+      this.state.set({
+        azimuth: Geo.getAzimuth(this.state.get('start'), this.state.get('end')),
+        radius: Geo.getDistance(this.state.get('start'), this.state.get('end'))
       });
     },
 
@@ -114,7 +137,7 @@ $(function(){
 
     drawLocations: function(locations){
       locations.each(_.bind(function(loc){
-        this._createCircle(loc);
+        this.drawLocation(loc);
       }, this));
     },
 
@@ -125,7 +148,7 @@ $(function(){
       this.towers = [];
     },
 
-    _createCircle: function(model){
+    drawLocation: function(model){
       var circle = new ymaps.Circle(
           [
             model.get('start'),
@@ -134,15 +157,23 @@ $(function(){
           {},
           {
             interactivityModel: 'default#transparent',
-            draggable:false,
+            draggable: false,
             fillColor: "#DB709377",
             strokeColor: "#990066",
-            strokeOpacity: 0.8,
-            strokeWidth: 5
+            strokeOpacity: 0.4,
+            strokeWidth: 2
           }
       )
       map.geoObjects.add(circle);
       return new Circle(circle);
+    },
+
+    findLocations: function(start){
+      var result = this.locations.filter(function(location){
+        var distance = Geo.getDistance(start, location.get('start'));
+        return distance <= location.get('radius');
+      })
+      return result;
     }
 
   });

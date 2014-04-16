@@ -53,10 +53,10 @@
         'legend': new LegendView({freqs:freqs, el:'.legend'})
       }
       ymaps.ready(function(){
-        map = new MapView({model:state, freqs:freqs});
+        map = new MapView({model:state, freqs:freqs, locations: locations});
         map.on('create', function(){
           console.log('event:map.create')
-          if (state.get('type') != 'location'){
+          if (state.isTower()){
             var tower = new Tower(state)
             if (tower.isValid()){
               self.getCurrentView().bindColor();
@@ -70,6 +70,7 @@
             var location = new Location(state);
             locations.add(location);
             location.save();
+            map.drawLocation(location);
           }
         })
         map.on('click', function(){

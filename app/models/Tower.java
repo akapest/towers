@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 /**
  * @author kpestov
@@ -35,5 +36,11 @@ public class Tower extends Model {
 
     @ManyToOne(fetch = FetchType.LAZY)
     public Location location;
+
+    public transient Long locationId;
+
+    public void setLocationId(Long id){
+        this.location = Location.findById(id);
+    }
 
 }

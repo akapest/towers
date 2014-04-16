@@ -18,6 +18,10 @@
       this.reset();
     },
 
+    isTower: function(){
+      return this.get("type") != 'location';
+    },
+
     reset: function(){
       this.set({
         name:'',

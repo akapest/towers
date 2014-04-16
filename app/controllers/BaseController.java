@@ -1,6 +1,9 @@
 package controllers;
 
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import models.User;
@@ -16,7 +19,18 @@ import java.util.List;
 @With(Secure.class)
 public class BaseController extends Secure.Security {
 
-    protected static Gson gson = new Gson();
+    protected static Gson gson = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy(){
+
+        @Override
+        public boolean shouldSkipField(FieldAttributes field) {
+            return field.getName().equals("location");
+        }
+
+        @Override
+        public boolean shouldSkipClass(Class<?> aClass) {
+            return false;
+        }
+    }).create();
 
     static boolean authenticate(String login, String password){
         /*User user = User.find("byLogin", login).first();

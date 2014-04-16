@@ -36,6 +36,11 @@
       }
     },
 
+    //возвращает true, если объект вышка, точка-точка
+    isTower: function(){
+      return true;
+    },
+
     is: function(type){
       switch (type){
         case 'tower':

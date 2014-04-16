@@ -14,29 +14,22 @@
       {
         name: 'comment',
         label: 'Комментарий'
-      },
-      {
-        name: 'color',
-        label: 'Цвет'
       }
     ],
 
     initialize: function(state){
       if (!state)
         return;
-      var attrs = _.clone(state.attributes) || state;
+      var attrs = state.attributes || state;
       delete attrs.type;
       delete attrs.end;
       delete attrs.azimuth;
       delete attrs.freq;
 
-      if (state.cid){
-        this.attributes = attrs;
-      } else {
-        attrs = state;
+      if (!state.cid){
         attrs = this.parse(attrs);
-        this.set(attrs)
       }
+      this.attributes = _.clone(attrs);
     },
 
     toJSON: function(){
@@ -48,12 +41,14 @@
       return result;
     },
 
-    parse: function(tower){
-      tower.start = pointToArray(tower.start)
-      if (tower.end){
-        tower.end = pointToArray(tower.end)
+    parse: function(attrs){
+      if (attrs.start){
+        attrs.start = pointToArray(attrs.start)
       }
-      return tower;
+      if (attrs.end){
+        attrs.end = pointToArray(attrs.end)
+      }
+      return attrs;
     },
 
     ensurePointsFormat:function(){
