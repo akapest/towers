@@ -47,11 +47,15 @@
 
     invalidListener: function(){
       var group = this.$input.parents('.form-group')
-      group.addClass('has-error')
-      group.addClass('force')
+      group.removeClass('has-error')
       setTimeout(function(){
-        group.removeClass('force')
+        group.addClass('has-error')
+        group.addClass('force')
+        setTimeout(function(){
+          group.removeClass('force')
+        })
       })
+
     },
 
     remove: function(){

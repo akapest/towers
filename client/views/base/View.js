@@ -49,6 +49,12 @@
       })
     },
 
+    unbindFields: function(){
+      _.each(this.fields, function(fieldView){
+        fieldView.remove();
+      })
+    },
+
     bindEvent: function($el, eventName, func){
       this.inputEvents = this.inputEvents || [];
       this.inputEvents.push({
@@ -60,9 +66,7 @@
     },
 
     remove: function(){
-      _.each(this.fields, function(fieldView){
-        fieldView.remove();
-      })
+      this.unbindFields();
       _.each(this.inputEvents, function(el){
         el.input.off(el.name, el.func);
       });

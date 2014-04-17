@@ -28,16 +28,21 @@
 
     initialize: function(options){
       _.bindAll(this);
+      this.type = 'tower';
       this.options = options;
       this.freqs = options.freqs;
       this.freq = null;
-      this.model = options.model;
+      this.model = this.createModel();
       this.template = getTemplate('tower');
+    },
+
+    createModel: function(){
+      return new Tower({type:this.type});
     },
 
     renderAsync: function(){
       return this.template.done(_.bind(function(t){
-        var type = types[this.options.type];
+        var type = types[this.type];
         var html = t.execute(type)
         this.$el.html(html);
         this.delegateEvents()
@@ -50,14 +55,22 @@
       return this.model;
     },
 
+    setModel: function(model){
+      this.unbindFields();
+      this.stopListening(this.model);
+      this.model = model;
+      this.bindFields();
+      this.initFreqColor();
+    },
+
     initFreqColor: function(){
       var self = this;
-      this.model.on('change:color', function(model, color){
+      this.listenTo(this.model, 'change:color', function(model, color){
         if (!model.get('freq')) return;
         self.$('.bind-color').show();
       })
       var $color = this.$('.color');
-      this.model.on('change:freq', function(model, freq){
+      this.listenTo(this.model, 'change:freq', function(model, freq){
         if (!freq){
           self.$('.bind-color').hide();
           return;

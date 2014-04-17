@@ -17,11 +17,14 @@
       }
     ],
 
-    initialize: function(attrs){
+    initialize: function(attrs, opts){
       if (attrs){
         attrs = this.parse(attrs);
+        this.set(attrs);
       }
-      this.set(attrs);
+      if (opts){
+        this.locations = opts.locations;
+      }
     },
 
     isTower: function(){
@@ -64,7 +67,7 @@
         {
           name: 'name',
           validate: function(name){
-            var loc = self.collection.find(function(el){
+            var loc = self.locations.find(function(el){
               return el.get('name') == name;
             });
             if (loc) return 'Уже существует локация с названием "' + name + '"';

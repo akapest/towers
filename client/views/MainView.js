@@ -12,16 +12,16 @@
   window.createCollection = function(url, model, options){
     var models = getBootstrapData(url);
     var collection = new (Backbone.Collection.extend({
-      url:'rest/' + url,
-      model:model
+      url: 'rest/' + url,
+      model: model
     }))(models, options)
     collection.fields = (new model()).fields;
     return collection;
 
     function getBootstrapData(name){
       try {
-        return JSON.parse($('.data-holder.'+ name).html())
-      } catch (e) {
+        return JSON.parse($('.data-holder.' + name).html())
+      } catch (e){
         return [];
       }
     }
@@ -30,45 +30,42 @@
   var towers;
   var freqs;
   var locations;
-  
+
   var mainView = null,
       type,
       map;
 
   window.MainView = View.extend({
-    
+
     initialize: function(){
-      freqs = createCollection('freqs', Freq, { comparator:function(el){return parseFloat(el.get('value'))} });
+      freqs = createCollection('freqs', Freq, { comparator: function(el){
+        return parseFloat(el.get('value'))
+      } });
       towers = createCollection('towers', Tower);
       locations = createCollection('locations', Location);
 
       var self = this;
       this.views = {
-        'tower': new TowerView({el: '.acc-item.tower', model:new Tower(), freqs:freqs, type:'tower'  }),
-        'highway': new HighwayView({el: '.acc-item.highway', model:new Tower(), freqs:freqs, type:'highway' }),
-        'location': new LocationView({el: '.acc-item.location', model:new Location()}),
-        'towersList': new ListView({el: '.acc-item.towers-list', collection: towers, name:'Список вышек'}),
-        'locationsList': new ListView({el: '.acc-item.locations-list', collection: locations, name:'Список локаций'}),
-        'legend': new LegendView({freqs:freqs, el:'.legend'})
+        'tower': new TowerView({el: '.acc-item.tower', freqs: freqs  }),
+        'highway': new HighwayView({el: '.acc-item.highway', freqs: freqs }),
+        'location': new LocationView({el: '.acc-item.location', locations: locations }),
+        'towersList': new ListView({el: '.acc-item.towers-list', collection: towers, name: 'Список вышек'}),
+        'locationsList': new ListView({el: '.acc-item.locations-list', collection: locations, name: 'Список локаций'}),
+        'legend': new LegendView({el: '.legend', freqs: freqs})
       }
       ymaps.ready(function(){
-        map = new MapView({freqs:freqs, locations: locations});
+        map = new MapView({freqs: freqs, locations: locations});
         map.on('create', function(model){
           console.log('event:map.create')
-          var view = self.getCurrentView();
-          if (model.isValid()){
-            if (model.isTower()){
-              towers.add(model)
-              map.drawTower(model)
-              view.setModel(new Tower())
 
-            } else {
-              locations.add(model);
-              map.drawLocation(location);
-              view.setModel(new Location())
-            }
-            model.save({validate:false});
-          }
+          model.isTower() ? towers.add(model) : locations.add(model);
+          model.save({validate: false});
+          map.draw(model);
+
+          var view = self.getCurrentView(),
+              newModel = view.createModel();
+          view.setModel(newModel);
+          map.setModel(newModel);
         })
         map.on('click', function(){
           console.log('event:map.click')
@@ -76,7 +73,6 @@
         })
         map.drawTowers(towers)
         map.drawLocations(locations);
-
       })
     },
 
@@ -99,19 +95,21 @@
         map.drawTowers(towers)
       })
     },
-    
+
     initAccordion: function(){
       window.initAccordion();
       Backbone.on('change:accordion', _.bind(function(type_){
         type = type_;
-        var view = this.views[type]
-        map.setModel(view.getModel());
-        if (view.getAngle){
-          view.getModel().set({angle:view.getAngle()}, {silent:true});
+        var view = this.views[type];
+        if (view.getModel){
+          map.setModel(view.getModel());
+          if (view.getAngle){
+            view.getModel().set({angle: view.getAngle()}, {silent: true});
+          }
         }
       }, this));
 
-      $('.accordion').on('hover',function(e){
+      $('.accordion').on('hover', function(e){
         e.preventDefault();
         return false;
       });

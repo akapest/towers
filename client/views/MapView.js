@@ -77,16 +77,17 @@ $(function(){
           locations = this.findLocations(this.model.get('start'))
           var locId = locations[0].get('id'); //перенес получение id сюда, чтобы на создание локации было чуть больше времени
           if (!locId){
-            alert('Невозможно создать вышку. Не найдена соответсвующая локации. Возможно, проблемы со связью.')
+            alert('Невозможно создать вышку. Не найдена соответсвующая локация. Возможно, проблемы со связью.')
           }
           this.model.set({
-            end: point,
             locationId: locId
           });
-          this.updateObjectData();
+          this.setEnd(point);
         }
-        this.trigger('create', this.model);
-        this.resetObjectCreation();
+        if (this.model.isValid()){
+          this.trigger('create', this.model);
+          this.resetObjectCreation();
+        }
       }
       this.trigger('click')
     },
@@ -101,8 +102,7 @@ $(function(){
           && Math.abs(_end[1] - end[1]) < 0.0001){
         return;
       }
-      this.model.set({end: end});
-      this.updateObjectData();
+      this.setEnd(end);
 
       var previous = this.object;
 
@@ -117,11 +117,20 @@ $(function(){
       }
     },
 
-    updateObjectData: function(){
+    setEnd: function(end){
       this.model.set({
-        azimuth: Geo.getAzimuth(this.model.get('start'), this.model.get('end')),
-        radius: Geo.getDistance(this.model.get('start'), this.model.get('end'))
+        azimuth: Geo.getAzimuth(this.model.get('start'), end),
+        radius: Geo.getDistance(this.model.get('start'), end),
+        end: (this.model.isTower() && this.model.is('highway')) ? end : void 0
       });
+    },
+
+    draw: function(model){
+      if (model.isTower()){
+        this.drawTower(model);
+      } else {
+        this.drawLocation(model);
+      }
     },
 
     drawTower: function(tower){

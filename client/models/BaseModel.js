@@ -9,11 +9,12 @@
       return this.name || this.url.replace(/s$/, '');
     },
 
-    save: function(){
+    save: function(opts){
+      opts = opts || {};
       var data = {};
       data[this._getName()] = this.toJSON()
-      var url = '/rest/' + this.url + '?' + $.param(data);
-      Backbone.Model.prototype.save.call(this,null, {url:url})
+      opts.url = '/rest/' + this.url + '?' + $.param(data);
+      Backbone.Model.prototype.save.call(this, null, opts)
     },
 
     destroy: function(){

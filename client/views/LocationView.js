@@ -8,7 +8,8 @@
     initialize: function(options){
       _.bindAll(this);
       this.options = options;
-      this.model = options.model;
+      this.locations = options.locations;
+      this.model = this.createModel();
       this.template = getTemplate('location');
     },
 
@@ -21,8 +22,18 @@
       }, this));
     },
 
+    createModel: function(){
+      return new Location({}, {locations:this.locations});
+    },
+
     getModel: function(){
       return this.model;
+    },
+
+    setModel: function(model){
+      this.unbindFields();
+      this.model = model;
+      this.bindFields();
     }
 
   })

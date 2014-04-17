@@ -33,13 +33,7 @@
     },
 
     is: function(type){
-      switch (type){
-        case 'tower':
-          return this.get('end') == null;
-        case 'highway':
-          return this.get('end') != null;
-      }
-      throw new Error("Cant find object type!")
+      return this.get("type") == type;
     },
 
     validate: function(){
