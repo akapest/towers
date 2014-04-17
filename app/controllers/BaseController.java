@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import models.User;
+import play.Play;
 import play.db.jpa.Model;
 import play.mvc.Controller;
 import play.mvc.With;
@@ -19,7 +20,7 @@ import java.util.List;
 @With(Secure.class)
 public class BaseController extends Secure.Security {
 
-    protected static Gson gson = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy(){
+    protected static Gson gson = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
 
         @Override
         public boolean shouldSkipField(FieldAttributes field) {
@@ -32,16 +33,18 @@ public class BaseController extends Secure.Security {
         }
     }).create();
 
-    static boolean authenticate(String login, String password){
-        /*User user = User.find("byLogin", login).first();
-        return user != null && user.password.equals(password);*/
-        return true;
+    static boolean authenticate(String login, String password) {
+        if ("admin".equals(login)) {
+            return Play.configuration.getProperty("admin.pass", "admin").equals(password);
+        } else {
+            User user = User.find("byLogin", login).first();
+            return user != null && user.password != null && user.password.equals(password);
+        }
     }
 
-    static boolean check(String profile){
+    static boolean check(String profile) {
         String connected = connected();
-        User user = User.find("byLogin", connected).first();
-        return user != null && user.login.equals("admin");
+        return connected.equals("admin");
     }
 
     protected static <M extends Model> String toJsonString(List<M> models, Class<M> cls) {
@@ -52,7 +55,6 @@ public class BaseController extends Secure.Security {
         }
         return array.toString();
     }
-
 
 
 }

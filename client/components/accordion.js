@@ -37,22 +37,23 @@ $(function(){
       e.stopPropagation();
     });
 
-    acc.find('.toggle').click(function(){
+    acc.find('.toggle').click(function(e){
       var $el = $(this);
       var state = !$el.data('state');
       var $actions = $('.acc-item')
       if (state){
         $actions.show();
-        $el.find('span').text('◀')
+        $el.find('a').text('◀')
 
       } else {
         $actions.hide();
-        $el.find('span').text('▶')
+        $el.find('a').text('▶')
         $actions.css('min-width', '55px')
       }
       $el.data('state', state);
       $el.show(); //always
       events.trigger('toggle:accordion', state)
+      e.preventDefault();
     })
 
   }
@@ -61,8 +62,8 @@ $(function(){
     $el.data('state', true);
     var $actions = $('.acc-item')
     $actions.show();
-    $el.find('span').text('▶')
-    $el.find('span').css('font-size', '')
+    $el.find('a').text('▶')
+    $el.find('a').css('font-size', '')
     if (!$('.acc-item.' + id).hasClass("active")){
       $('.acc-item.' + id + ' .acc-item').click();
     }

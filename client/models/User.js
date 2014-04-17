@@ -15,6 +15,11 @@
         label: 'Пароль'
       },
       {
+        name: 'locations',
+        label: 'Локации',
+        input: 'select-multiple'
+      },
+      {
         name: 'comment',
         label: 'Комментарий',
         input: 'textarea'

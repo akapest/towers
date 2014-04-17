@@ -5,6 +5,8 @@
 	<meta charset="${_response_encoding}">
 	<link rel="stylesheet" media="screen" href="@{'/css/style.css'}">
 	<link rel="stylesheet" media="screen" href="@{'/css/bootstrap.css'}">
+	<link rel="stylesheet" media="screen" href="@{'/css/select2.css'}">
+	<link rel="stylesheet" media="screen" href="@{'/css/select2-bootstrap.css'}">
 	#{get 'moreStyles' /}
 	<link rel="shortcut icon" type="image/png" href="@{'/public/images/favicon.png'}">
 
@@ -39,8 +41,10 @@
 			<div class="acc-item highway" data-type="highway" style="display:none;"></div>
 		#{/if}
 	</div>
-	<div id="list">
-
+	<div id="users-list" style="display:none;">
+		#{if username != 'admin'}
+			Недостаточно прав для просмотра раздела.
+		#{/if}
 	</div>
 	<div id="map" class="map edit"></div>
 	#{include 'elems/legend.html'/}

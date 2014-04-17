@@ -13,12 +13,18 @@
 
     main: function(){
       MainView.get().show();
+      $('#users-list').hide();
     },
 
     users: function(){
+      var $users = $('#users-list')
+      $users.show();
       new TableView({
-        el: $('#list'),
-        collection: createCollection('users', User)
+        el: $users,
+        collection: createCollection('users', User),
+        collections: {
+          locations: createCollection("locations", Location)
+        }
       }).show();
 
       $('.user').hide();

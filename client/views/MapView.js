@@ -25,7 +25,7 @@ $(function(){
     initMap: function(options){
       if (map) throw new Error('MapView already created');
       map = new ymaps.Map('map', {
-        center: options.center || [57, 58],
+        center: options.center || [56.8, 60.5],
         zoom: 10,
         behaviors: ['default', 'scrollZoom']
       });

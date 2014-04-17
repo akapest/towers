@@ -185,6 +185,9 @@ ul{
 	float:right;
 	position: relative;
 	z-index: 100;
+	padding: 5px;
+	font-weight: bold;
+	font-size: 14px;
 }
 
 td input{
@@ -208,4 +211,8 @@ td input{
 @keyframes has-error{
 	from {background: rgb(129, 43, 43);}
 	to {background: rgb(238, 238, 238);}
+}
+
+#users-list{
+	padding:50px;
 }

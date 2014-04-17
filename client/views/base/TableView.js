@@ -16,6 +16,7 @@
     initialize: function(options){
       this.options = options;
       this.fields = this.collection.fields;
+      this.collections = this.options.collections;
       this.tableTemplate = getTemplate('table');
       this.trTemplate = getTemplate('tr');
       _.bindAll(this, ['inputHandler', 'closeInput']);
@@ -109,9 +110,29 @@
       var input = null;
       var inputType = this._getField(field).input;
       switch (inputType) {
-        case 'textarea':
+        case 'textarea':{
           input= $('<textarea>');
           break;
+        }
+        case 'select-multiple':{
+          if (!this.collections || !this.collections[field]) throw new Error('Collection for field ' + field + ' not defined')
+          input = $('<select>')
+          input.attr('multiple', 'multiple')
+          this.collections[field].each(function(el){
+            var opt = $('<option>');
+            opt.attr('value', el.get('name'))
+            opt.html(el.get('name'))
+            input.append(opt);
+          })
+          setTimeout(function(){
+            input.select2({
+              allowClear:true,
+              width: 'resolve'
+            })
+          })
+
+          break;
+        }
         default:
           input = $('<input>');
       }

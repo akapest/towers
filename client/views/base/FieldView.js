@@ -1,5 +1,6 @@
 /**
  * require(vendor/backbone)
+ * require(vendor/select2)
  */
 (function(){
 
@@ -71,6 +72,7 @@
         case 'text':
         case 'textarea':
         case 'select-one':
+        case 'select-multiple':
         case 'color':
           return $input.val();
         case 'checkbox':
@@ -92,6 +94,7 @@
         case 'textarea':
           return 'keyup';
         case 'select-one':
+        case 'select-multiple':
         case 'color':
         case 'checkbox':
           return 'change';
@@ -136,6 +139,7 @@
         case 'textarea':
         case 'color':
         case 'select-one':
+        case 'select-multiple':
           this.$input.val(value);
           break;
         case 'checkbox':
