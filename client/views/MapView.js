@@ -11,13 +11,19 @@ $(function(){
   window.MapView = Backbone.View.extend({
 
     initialize: function(options){
-      options = options || {};
       this.model = null;
       this.freqs = options.freqs;
       this.locations = options.locations;
+      this.towersGeoObjects = {};
+      this.locationGeoObjects = {};
+      this.showLocations = false;
 
+      this.initMap(options);
+      this.bindEvents();
+    },
+
+    initMap: function(options){
       if (map) throw new Error('MapView already created');
-
       map = new ymaps.Map('map', {
         center: options.center || [57, 58],
         zoom: 10,
@@ -26,10 +32,23 @@ $(function(){
       map.options.set('scrollZoomSpeed', 5);
       map.events.add('click', this.onClick, this);
       map.events.add('mousemove', _.throttle(this.onHover, 50), this);
-      document.addEventListener('keyup', _.bind(this.keyUpListener, this));
-      this.towers = [];
     },
 
+    bindEvents: function(){
+      document.addEventListener('keyup', _.bind(this.keyUpListener, this));
+      Backbone.on('show:locations', _.bind(function(val){
+        this.showLocations = val;
+        this.showLocations ? this.drawLocations(this.locations) : this.removeLocations();
+      }, this));
+      this.locations.on('change:active', function(active){
+        map.panTo(active.get('start'),{delay:0});
+      })
+    },
+
+    /**
+     * Устанавливает объект, созданием или редактированием к-го занимается пользователь в текущий момент. 
+     * Может быть вышкой или локацией.
+     */
     setModel: function(model){
       this.model = model;
     },
@@ -137,36 +156,14 @@ $(function(){
       console.log('draw tower ' + tower.get('start'))
 
       if (tower.is('highway')){
-        this.towers[tower.cid + '0'] = new Sector(tower.get('start'), tower.attributes, map, Geo).render();
+        this.towersGeoObjects[tower.cid + '0'] = new Sector(tower.get('start'), tower.attributes, map, Geo).render();
         var attrs = _.clone(tower.attributes),
             a = attrs.azimuth;
         attrs.azimuth = a > 0 ? a - Math.PI : Math.PI + a;
-        this.towers[tower.cid + '1'] = new Sector(tower.get('end'), attrs, map, Geo).render();
+        this.towersGeoObjects[tower.cid + '1'] = new Sector(tower.get('end'), attrs, map, Geo).render();
       } else {
-        this.towers[tower.cid] = new Sector(tower.get('start'), tower.attributes, map, Geo).render();
+        this.towersGeoObjects[tower.cid] = new Sector(tower.get('start'), tower.attributes, map, Geo).render();
       }
-    },
-
-    drawTowers: function(towers){
-      var self = this;
-      towers.each(function(tower){
-        var model = self.freqs.findWhere({value: parseFloat(tower.get('freq'))})
-        tower.set('color', model.get('color'))
-        self.drawTower(tower);
-      })
-    },
-
-    drawLocations: function(locations){
-      locations.each(_.bind(function(loc){
-        this.drawLocation(loc);
-      }, this));
-    },
-
-    removeAll: function(){
-      _.forOwn(this.towers, function(t){
-        t.remove();
-      })
-      this.towers = [];
     },
 
     drawLocation: function(model){
@@ -186,7 +183,48 @@ $(function(){
           }
       )
       map.geoObjects.add(circle);
-      return new Circle(circle);
+      var result = new Circle(circle);
+      this.locationGeoObjects[model.cid] = result;
+      return result;
+    },
+
+    drawTowers: function(towers){
+      var self = this;
+      towers.each(function(tower){
+        var freq = parseFloat(tower.get('freq'))
+        var model = self.freqs.findWhere({value: freq})
+        if (model){
+          tower.set('color', model.get('color'))
+          self.drawTower(tower);
+        } else {
+          console.error("Freq not found:" + freq);
+        }
+      })
+    },
+
+    drawLocations: function(locations){
+      locations.each(_.bind(function(loc){
+        this.drawLocation(loc);
+      }, this));
+    },
+
+    removeAll: function(){
+      this.removeLocations();
+      this.removeTowers();
+    },
+
+    removeTowers: function(){
+      _.forOwn(this.towersGeoObjects, function(t){
+        t.remove();
+      })
+      this.towersGeoObjects = {};
+    },
+
+    removeLocations: function(){
+      _.forOwn(this.locationGeoObjects, function(l){
+        l.remove();
+      })
+      this.locationGeoObjects = {};
     },
 
     findLocations: function(start){

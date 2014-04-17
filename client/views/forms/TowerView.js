@@ -28,8 +28,7 @@
 
     initialize: function(options){
       _.bindAll(this);
-      this.type = 'tower';
-      this.options = options;
+      this.type = options.type;
       this.freqs = options.freqs;
       this.freq = null;
       this.model = this.createModel();
@@ -132,12 +131,5 @@
 
   })
 
-  window.HighwayView = TowerView.extend({
-
-    toString: function(){
-      return 'HighwayView'
-    }
-
-  });
 
 }());

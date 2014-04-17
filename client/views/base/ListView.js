@@ -1,5 +1,5 @@
 /**
- * require(views/base/TableView)
+ * require(views/base/View)
  */
 (function(){
 

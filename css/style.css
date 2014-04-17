@@ -78,12 +78,22 @@ span, input, label {
 }
 
 .accordion .list-el{
-	padding: 2px 0;
+	margin-top: 2px;
+	padding: 5px;
 	cursor: pointer;
 }
+.accordion .list-el:first-of-type{
+	margin-top: 5px;
+}
+
 
 .accordion .list-el:hover{
-	background-color: grey;
+	background-color: rgba(106, 107, 106, 0.9);
+}
+
+.list-el.active {
+	background: rgba(106, 107, 106, 0.9);
+	box-shadow: inset 0 2px 5px 0 rgba(0, 0, 0, 0.9);
 }
 
 

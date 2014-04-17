@@ -3,8 +3,10 @@
  * require(models/Tower)
  * require(models/Location)
  * require(models/Freq)
- * require(views/TowerView)
- * require(views/LegendView)
+ * require(views/forms/TowerView)
+ * require(views/forms/LocationView)
+ * require(views/forms/LocationsView)
+ * require(views/forms/LegendView)
  * require(views/MapView)
  */
 (function(){
@@ -46,11 +48,11 @@
 
       var self = this;
       this.views = {
-        'tower': new TowerView({el: '.acc-item.tower', freqs: freqs  }),
-        'highway': new HighwayView({el: '.acc-item.highway', freqs: freqs }),
+        'tower': new TowerView({el: '.acc-item.tower', freqs: freqs, type: 'tower'  }),
+        'highway': new TowerView({el: '.acc-item.highway', freqs: freqs, type: 'highway' }),
         'location': new LocationView({el: '.acc-item.location', locations: locations }),
         'towersList': new ListView({el: '.acc-item.towers-list', collection: towers, name: 'Список вышек'}),
-        'locationsList': new ListView({el: '.acc-item.locations-list', collection: locations, name: 'Список локаций'}),
+        'locationsList': new LocationsView({el: '.acc-item.locations-list', collection: locations, name: 'Список локаций'}),
         'legend': new LegendView({el: '.legend', freqs: freqs})
       }
       ymaps.ready(function(){
@@ -60,7 +62,6 @@
 
           model.isTower() ? towers.add(model) : locations.add(model);
           model.save({validate: false});
-          map.draw(model);
 
           var view = self.getCurrentView(),
               newModel = view.createModel();
@@ -72,7 +73,6 @@
           accSelect(type);
         })
         map.drawTowers(towers)
-        map.drawLocations(locations);
       })
     },
 
@@ -91,7 +91,7 @@
       })
 
       freqs.on('change', function(){
-        map.removeAll();
+        map.removeTowers();
         map.drawTowers(towers)
       })
     },
