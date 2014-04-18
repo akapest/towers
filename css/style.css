@@ -216,3 +216,9 @@ td input{
 #users-list{
 	padding:50px;
 }
+
+.error-msg{
+	font-size:11px;
+	margin-left:5px;
+	display: inline-block;
+}

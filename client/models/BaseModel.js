@@ -38,7 +38,8 @@
           throw new Error("Unsupported obj type.")
         }
         if (error){
-          var event = 'invalid:'+ field.name || field;
+          var event = 'invalid:'+ (field.name || field);
+          console.log('trigger ' + event)
           this.trigger(event, error);
           errors = errors || {};
           errors[field] = error;

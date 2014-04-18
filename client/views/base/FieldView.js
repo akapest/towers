@@ -47,9 +47,10 @@
       }
     },
 
-    invalidListener: function(){
+    invalidListener: function(msg){
       var group = this.$input.parents('.form-group')
       group.removeClass('has-error')
+      this.setErrorMessage(msg)
       setTimeout(function(){
         group.addClass('has-error')
         group.addClass('force')
@@ -63,6 +64,7 @@
       var group = this.$input.parents('.form-group')
       group.removeClass('has-error')
       group.removeClass('force')
+      this.setErrorMessage('')
     },
 
     remove: function(){
@@ -170,7 +172,17 @@
 
     getInput: function(){
       return this.$input;
+    },
+
+    setErrorMessage: function(msg){
+      var el = this.formGroup().find('.error-msg');
+      el.html(msg)
+    },
+
+    formGroup: function(){
+      return this.$input.parents('.form-group');
     }
+
 
 
   })
