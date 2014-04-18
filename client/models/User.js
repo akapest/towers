@@ -24,7 +24,18 @@
         label: 'Комментарий',
         input: 'textarea'
       }
-    ]
+    ],
+
+    getV: function(attr){
+      var value = this.get(attr);
+      if (attr == 'locations'){
+        value = value || [];
+        return value.join(', ');
+      } else {
+        return value;
+      }
+    }
+
   });
 
 

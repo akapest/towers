@@ -159,8 +159,7 @@
     closeFieldView: function(){
       if (this.fieldView){
         var input = this.fieldView.getInput();
-        var val = input.val();
-        input.parent().html(val);
+        input.parent().html(this.model.getV(this.field));
         input.remove()
         this.fieldView.remove();
         this.fieldView = null;

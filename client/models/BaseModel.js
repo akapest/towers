@@ -17,6 +17,11 @@
       Backbone.Model.prototype.save.call(this, null, opts)
     },
 
+    //get view presentation of attribute
+    getV: function(attr){
+      return this.get(attr); //by default
+    },
+
     destroy: function(){
       Backbone.Model.prototype.destroy.call(this, {url:'/rest/' + this.url + '/' + this.id})
     },
