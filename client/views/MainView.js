@@ -11,8 +11,8 @@
  */
 (function(){
 
-  window.createCollection = function(url, model, options){
-    var models = getBootstrapData(url);
+  window.createCollection = function(url, model, options, models){
+    models = models || getBootstrapData(url);
     var collection = new (Backbone.Collection.extend({
       url: 'rest/' + url,
       model: model
@@ -42,9 +42,10 @@
     initialize: function(){
       freqs = createCollection('freqs', Freq, { comparator: function(el){
         return parseFloat(el.get('value'))
-      } });
-      towers = createCollection('towers', Tower);
+      }});
       locations = createCollection('locations', Location);
+      var startLocation = locations.first();
+      towers = createCollection('towers', Tower, {}, startLocation ? startLocation.get('towers') :[])
 
       var self = this;
       var views = this.views = {
@@ -52,11 +53,11 @@
         'highway': new TowerView({el: '.acc-item.highway', freqs: freqs, type: 'highway' }),
         'location': new LocationView({el: '.acc-item.location', locations: locations }),
         'towersList': new ListView({el: '.acc-item.towers-list', collection: towers, name: 'Вышки'}),
-        'locationsList': new LocationsView({el: '.acc-item.locations-list', collection: locations, name: 'Локации'}),
+        'locationsList': new LocationsView({el: '.acc-item.locations-list', collection: locations, active: locations.first(), name: 'Локации'}),
         'legend': new LegendView({el: '.legend', freqs: freqs})
       }
       ymaps.ready(function(){
-        map = new MapView({freqs: freqs, locations: locations});
+        map = new MapView({freqs: freqs, locations: locations, center: startLocation ? startLocation.get('start') : 0 });
         map.on('create', function(model){
           console.log('event:map.create')
 
@@ -70,12 +71,21 @@
           map.setModel(newModel);
         })
         map.on('click', function(){
-          console.log('event:map.click')
           accSelect(type);
         })
         map.drawTowers(towers)
         Backbone.trigger('show:locations', true)
       })
+
+      locations.on('change:active', _.bind(function(loc){
+        towers = createCollection('towers', Tower, {}, loc.get('towers'));
+        this.views['towersList'].setCollection(towers);
+        if (map) map.removeTowers();
+        setTimeout(function(){
+          if (map) map.drawTowers(towers);
+        })
+
+      }, this))
     },
 
     render: function(){
@@ -93,8 +103,8 @@
       })
 
       freqs.on('change', function(){
-        map.removeTowers();
-        map.drawTowers(towers)
+//        map.removeTowers();
+//        map.drawTowers(towers)
       })
     },
 
@@ -105,9 +115,6 @@
         var view = this.views[type];
         if (view.getModel){
           map.setModel(view.getModel());
-          if (view.getAngle){
-            view.getModel().set({angle: view.getAngle()}, {silent: true});
-          }
         }
       }, this));
 

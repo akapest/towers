@@ -23,6 +23,7 @@
     initialize: function(options){
       _.bindAll(this);
       this.name = options.name;
+      this.active = options.active;
       this.templateP = getTemplate('locations');
       this.listenTo(this.collection, 'add remove reset', this.renderAsync);
     },
@@ -40,6 +41,10 @@
           name:this.name,
           list: list
         }));
+        if (this.active){
+          this.$el.find('li[data-cid="'+ this.active.cid +'"]').addClass('active');
+        }
+
 
       }, this));
     }

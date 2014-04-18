@@ -14,13 +14,12 @@ public class Application extends BaseController {
 
     public static void index() {
         String freqs = toJsonString(Freq.<Freq>findAll(), Freq.class);
-        String locations = toJsonString(Location.<Location>findAll(), Location.class);
-        String towers = toJsonString(Tower.<Tower>findAll(), Tower.class);
+        String locations = toJsonString(userLocations(), Location.class);
         String username = Secure.Security.connected();
         if (isNull(username)){
             renderTemplate("Application/stub.html");
         } else {
-            renderTemplate("Application/index.html", username, freqs, locations, towers);
+            renderTemplate("Application/index.html", username, freqs, locations);
         }
     }
 

@@ -10,7 +10,8 @@
     this.raw = raw;
     this.center = center;
     this.sector = this.attrs = towerAttrs;
-    this.angleSteps = this.sector.type == 'highway' || raw ?  0.5 : Math.floor(this.sector.angle * 10);
+    this.angle = parseAngle(this.sector.angle);
+    this.angleSteps = this.sector.type == 'highway' || this.raw ?  1 : Math.floor(this.angle * 6);
     this.gradientSteps = this.sector.type == 'highway'? 1 : 5;
     this.geo = geo;
     this.map = map;
@@ -23,8 +24,8 @@
       var previous = null,//triangle
         sector = this.sector,
         azimuth = sector.azimuth,
-        startAzimuth = azimuth - sector.angle,
-        angleStep = sector.angle / this.angleSteps,
+        startAzimuth = azimuth - this.angle,
+        angleStep = this.angle / this.angleSteps,
         lengthStep = sector.radius / this.gradientSteps,
 
         part = null,
@@ -96,7 +97,7 @@
       });
       this.geoObjects.add(circle);
       var rectangle = new ymaps.Rectangle(circle.geometry.getBounds(), {
-        balloonContent:this.attrs.name + '<br/>' + this.attrs.comment
+        balloonContent:this.sector.name + '<br/>' + this.sector.comment ? this.sector.comment : ''
       }, {
         fillColor: this.sector.color || '#fff',
         coordRendering: "boundsPath",
@@ -120,6 +121,31 @@
       case 15: return 'F'
       default: return d;
     }
+  }
+
+
+  var parseAngle = function(str){
+    var anglePattern = /(\d+)([^\d]*)/;
+    if (!str || !_.isString(str)){
+      throw new Error('Invalid angle')
+    }
+    function convert(value, unit){
+      switch (unit){
+        case "°":
+          return value * Math.PI / 360
+        case "'":
+          return value * Math.PI / 360 / 60
+        case '':
+          return value * Math.PI / 360 / 3600
+      }
+      throw new Error("Unit not found - " + unit)
+    }
+
+    var result = null;
+    str.replace(anglePattern, function(m, value, unit){
+      result = convert(value, unit);
+    })
+    return result;
   }
 
 

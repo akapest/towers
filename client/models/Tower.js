@@ -41,33 +41,7 @@
 
     validate: function(){
       return this.__validate(['freq', 'name']);//required
-    },
-
-    parseAngle: function(str){
-      var anglePattern = /(\d+)([^\d]*)/;
-      if (!str){
-        return 0;
-      }
-      function convert(value, unit){
-        switch (unit){
-          case '':
-            return value * Math.PI / 360
-          case "m":
-            return value * Math.PI / 360 / 60
-          case 's':
-            return value * Math.PI / 360 / 3600
-        }
-        throw new Error("Unit not found - " + unit)
-      }
-
-      var result = null;
-      str.replace(anglePattern, function(m, value, unit){
-        result = convert(value, unit);
-      })
-      return result;
     }
-
-
 
   })
 

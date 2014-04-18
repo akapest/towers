@@ -197,17 +197,17 @@ $(function(){
     },
 
     drawTowers: function(towers){
-      var self = this;
-      towers.each(function(tower){
+      //this.removeTowers();
+      towers.each(_.bind(function(tower){
         var freq = parseFloat(tower.get('freq'))
-        var model = self.freqs.findWhere({value: freq})
+        var model = this.freqs.findWhere({value: freq})
         if (model){
           tower.set('color', model.get('color'))
-          self.drawTower(tower);
+          this.drawTower(tower);
         } else {
           console.error("Freq not found:" + freq);
         }
-      })
+      },this));
     },
 
     drawLocations: function(locations){

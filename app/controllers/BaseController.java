@@ -6,12 +6,15 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import models.Location;
 import models.User;
 import play.Play;
 import play.db.jpa.Model;
 import play.mvc.Controller;
 import play.mvc.With;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -48,13 +51,25 @@ public class BaseController extends Secure.Security {
         return connected.equals("admin");
     }
 
-    protected static <M extends Model> String toJsonString(List<M> models, Class<M> cls) {
+    protected static <M extends Model> String toJsonString(Collection<M> models, Class<M> cls) {
         JsonArray array = new JsonArray();
         for (M model : models) {
             JsonElement el = gson.toJsonTree(model, cls);
             array.add(el);
         }
         return array.toString();
+    }
+
+    protected static Collection<Location> userLocations() {
+        String login = connected();
+        if ("admin".equals(login)){
+            return Location.findAll();
+        }
+        User user = User.find("byLogin", login).first();
+        if (user != null){
+            return user.locations_;
+        }
+        return new HashSet<Location>();
     }
 
 

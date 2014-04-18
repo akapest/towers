@@ -7,15 +7,11 @@
   var types = {
     tower: {
       name: 'Новая вышка',//Редактировать вышку
-      angles: [60, 90, 120],
-      angleSymbol: '°',
-      angleUnit: ''
+      angles: ['60°', '90°', '120°', '360°']
     },
     highway: {
       name: 'Новая точка-точка',//Редактировать точку-точку
-      angles: [15, 20, 30],
-      angleSymbol: "'",
-      angleUnit: 'm'
+      angles: ["15'", "20'", "30'"]
     }
   }
 
@@ -37,7 +33,15 @@
     },
 
     createModel: function(){
-      return new Tower({type:this.type});
+      var result = null;
+      if (this.model){
+        result = this.model.clone();
+      } else {
+        result = new Tower({type:this.type});
+        var angle = this.$el.find(".angle").val() || types[this.type].angles[0];
+        result.set({angle: angle},{silent:true});
+      }
+      return result;
     },
 
     renderAsync: function(){

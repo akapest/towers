@@ -3,9 +3,11 @@ package controllers;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import models.Location;
+import models.User;
 import play.Logger;
 import play.data.validation.Valid;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -14,7 +16,7 @@ import java.util.List;
 public class Locations extends BaseController {
 
     public static void all() {
-        List<Location> locations = Location.findAll();
+        Collection<Location> locations = userLocations();
         JsonArray array = new JsonArray();
         for (Location f : locations) {
             JsonElement el = gson.toJsonTree(f, Location.class);

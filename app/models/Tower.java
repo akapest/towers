@@ -21,7 +21,7 @@ public class Tower extends Model {
 
     public String name;
 
-    public float angle;
+    public String angle;
 
     public float freq;
 
