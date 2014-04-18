@@ -1,4 +1,7 @@
 /**
+ * require()
+ */
+/**
  * @license
  * Lo-Dash 2.4.1 (Custom Build) <http://lodash.com/>
  * Build: `lodash modern -o ./dist/lodash.js`

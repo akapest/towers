@@ -1,3 +1,6 @@
+/**
+ * require()
+ */
 /*
 Copyright 2014 Igor Vaynberg
 

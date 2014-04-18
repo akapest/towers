@@ -1,3 +1,6 @@
+/**
+ * require()
+ */
 /* ========================================================================
  * Bootstrap: alert.js v3.1.0
  * http://getbootstrap.com/javascript/#alerts
