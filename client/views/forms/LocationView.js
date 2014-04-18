@@ -23,7 +23,14 @@
     },
 
     createModel: function(){
-      return new Location({}, {locations:this.locations});
+      var loc;
+      if (!this.model){
+        loc = new Location();
+      } else {
+        loc = this.model.clone();
+      }
+      loc.locations = this.locations;
+      return loc;
     },
 
     getModel: function(){
