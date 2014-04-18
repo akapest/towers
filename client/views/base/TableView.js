@@ -20,8 +20,8 @@
       this.tableTemplate = getTemplate('table');
       this.trTemplate = getTemplate('tr');
       _.bindAll(this, ['inputHandler', 'closeInput']);
-
       this.bindEvent($('body'), 'click', this.closeInput);
+      this.save = true;
     },
 
     render: function(){
@@ -99,6 +99,7 @@
       if (this.model && this.model.hasChanged()){
         this.model.save();
       }
+      this.save = true;
     },
 
     createInput: function(){
@@ -127,7 +128,7 @@
           setTimeout(function(){
             input.select2({
               allowClear:true,
-              width: 'resolve'
+              width: '200px'
             })
           })
 
@@ -146,8 +147,8 @@
       return input;
     },
 
-    closeInput: function(revert){
-      if (!revert){
+    closeInput: function(){
+      if (this.save){
         this.saveModel();
       }
       this.closeFieldView();
@@ -181,7 +182,8 @@
         }
         case ESC:
         {
-          this.closeInput(true);
+          this.save = false;
+          this.closeInput();
           break;
         }
         case TAB:

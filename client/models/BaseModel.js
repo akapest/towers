@@ -15,6 +15,11 @@
       data[this._getName()] = this.toJSON()
       opts.url = '/rest/' + this.url + '?' + $.param(data);
       Backbone.Model.prototype.save.call(this, null, opts)
+      this.changed = {};
+    },
+
+    set: function(){
+      return Backbone.Model.prototype.set.apply(this,arguments);
     },
 
     //get view presentation of attribute

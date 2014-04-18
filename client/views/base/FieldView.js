@@ -31,10 +31,15 @@
       this.removeErrors();
       this.isChanging = true;
       var value = this.getRawValue();
+      var current = this.model.get(this.field)
       if (this.isValid(value)){
-        this.model.set(this.field, this.parseValue(value))
+        var val = this.parseValue(value)
+        var equals = current == val || _.isEqual(current, val);
+        if (!equals){
+          this.model.set(this.field, value)
+        }
       } else {
-        this.setValue(this.model.get(this.field)) //revert back to previous value
+        this.model.set(this.field, current) //revert back to previous value
       }
       this.isChanging = false
     },
@@ -71,6 +76,7 @@
       this.$input.off(this.getPropertyToListenTo(), this.inputChangeListener)
       this.model.off('change:' + this.field, this.modelChangeListener)
       this.model.off('invalid:' + this.field, this.invalidListener)
+      this.off()
     },
 
     getRawValue: function(){

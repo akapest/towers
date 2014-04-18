@@ -29,6 +29,9 @@
 
       $('.user').hide();
       $('.legend').hide();
+      $('.acc-item.toggle').click(function(){
+        window.location.href = '/';
+      })
     }
 
   })
