@@ -70,7 +70,7 @@
             var loc = self.locations.find(function(el){
               return el.get('name') == name;
             });
-            if (loc) return 'Уже существует локация с названием "' + name + '"';
+            if (loc) return 'Не уникальное название';
           }
         }
 

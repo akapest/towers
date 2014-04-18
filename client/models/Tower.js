@@ -13,14 +13,15 @@
       {name: 'freq',
         label: 'Частота'},
       {name: 'comment',
-        label: 'Комментарий'}
+        label: 'Комментарий'},
+        'color'
     ],
     fields2: [
       'start',
       'radius',
       'azimuth',
-      'end',
-      'color'],
+      'end'
+      ],
 
     initialize: function(attrs){
       if (attrs){

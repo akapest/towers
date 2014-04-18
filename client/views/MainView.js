@@ -47,7 +47,7 @@
       locations = createCollection('locations', Location);
 
       var self = this;
-      this.views = {
+      var views = this.views = {
         'tower': new TowerView({el: '.acc-item.tower', freqs: freqs, type: 'tower'  }),
         'highway': new TowerView({el: '.acc-item.highway', freqs: freqs, type: 'highway' }),
         'location': new LocationView({el: '.acc-item.location', locations: locations }),

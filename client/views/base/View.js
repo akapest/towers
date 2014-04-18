@@ -70,7 +70,8 @@
       _.each(this.inputEvents, function(el){
         el.input.off(el.name, el.func);
       });
-      Backbone.View.prototype.remove.apply(this);
+      this.$el.html("");
+      this.stopListening();
     }
 
 

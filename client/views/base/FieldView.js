@@ -28,6 +28,7 @@
     },
 
     inputChangeListener: function(){
+      this.removeErrors();
       this.isChanging = true;
       var value = this.getRawValue();
       if (this.isValid(value)){
@@ -56,7 +57,12 @@
           group.removeClass('force')
         })
       })
+    },
 
+    removeErrors: function(){
+      var group = this.$input.parents('.form-group')
+      group.removeClass('has-error')
+      group.removeClass('force')
     },
 
     remove: function(){
