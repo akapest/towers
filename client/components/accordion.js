@@ -43,11 +43,11 @@ $(function(){
       var $actions = $('.acc-item')
       if (state){
         $actions.show();
-        $el.find('a').text('◀')
+        $el.find('span').text('◁')
 
       } else {
         $actions.hide();
-        $el.find('a').text('▶')
+        $el.find('span').text('▷')
         $actions.css('min-width', '55px')
       }
       $el.data('state', state);
@@ -62,8 +62,8 @@ $(function(){
     $el.data('state', true);
     var $actions = $('.acc-item')
     $actions.show();
-    $el.find('a').text('▶')
-    $el.find('a').css('font-size', '')
+    $el.find('span').text('▷')
+    $el.find('span').css('font-size', '')
     if (!$('.acc-item.' + id).hasClass("active")){
       $('.acc-item.' + id + ' .acc-item').click();
     }

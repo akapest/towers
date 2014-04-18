@@ -32,6 +32,13 @@ $(function(){
       map.options.set('scrollZoomSpeed', 5);
       map.events.add('click', this.onClick, this);
       map.events.add('mousemove', _.throttle(this.onHover, 50), this);
+      map.controls.add('zoomControl', { left: 5, bottom: 15 })
+          .add('typeSelector', {left: 150, bottom: 15}) // Список типов карты
+          .add('mapTools', { left: 35, bottom: 15 }); // Стандартный набор кнопок
+//    вариант сверху
+//      map.controls.add('zoomControl', { right: 5, top: 35 })
+//          .add('typeSelector', {right: 35, top: 65}) // Список типов карты
+//          .add('mapTools', { right: 35, top: 35 }); // Стандартный набор кнопок
     },
 
     bindEvents: function(){
@@ -41,12 +48,12 @@ $(function(){
         this.showLocations ? this.drawLocations(this.locations) : this.removeLocations();
       }, this));
       this.locations.on('change:active', function(active){
-        map.panTo(active.get('start'),{delay:0});
+        map.panTo(active.get('start'), {delay: 0});
       })
     },
 
     /**
-     * Устанавливает объект, созданием или редактированием к-го занимается пользователь в текущий момент. 
+     * Устанавливает объект, созданием или редактированием к-го занимается пользователь в текущий момент.
      * Может быть вышкой или локацией.
      */
     setModel: function(model){
@@ -104,6 +111,7 @@ $(function(){
           this.setEnd(point);
         }
         if (this.model.isValid()){
+          if (this.model.isTower()) Backbone.trigger('create:tower', this.model);
           this.trigger('create', this.model);
           this.resetObjectCreation();
         }
@@ -140,7 +148,7 @@ $(function(){
       this.model.set({
         azimuth: Geo.getAzimuth(this.model.get('start'), end),
         radius: Geo.getDistance(this.model.get('start'), end),
-        end: (this.model.isTower() && this.model.is('highway')) ? end : void 0
+        end: end
       });
     },
 
@@ -176,8 +184,8 @@ $(function(){
           {
             interactivityModel: 'default#transparent',
             draggable: false,
-            fillColor: "#DB709377",
-            strokeColor: "#990066",
+            fillColor: "rgb(0,0,0,0)",
+            strokeColor: "#83h",
             strokeOpacity: 0.4,
             strokeWidth: 2
           }

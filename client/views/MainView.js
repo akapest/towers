@@ -51,8 +51,8 @@
         'tower': new TowerView({el: '.acc-item.tower', freqs: freqs, type: 'tower'  }),
         'highway': new TowerView({el: '.acc-item.highway', freqs: freqs, type: 'highway' }),
         'location': new LocationView({el: '.acc-item.location', locations: locations }),
-        'towersList': new ListView({el: '.acc-item.towers-list', collection: towers, name: 'Список вышек'}),
-        'locationsList': new LocationsView({el: '.acc-item.locations-list', collection: locations, name: 'Список локаций'}),
+        'towersList': new ListView({el: '.acc-item.towers-list', collection: towers, name: 'Вышки'}),
+        'locationsList': new LocationsView({el: '.acc-item.locations-list', collection: locations, name: 'Локации'}),
         'legend': new LegendView({el: '.legend', freqs: freqs})
       }
       ymaps.ready(function(){
@@ -62,6 +62,7 @@
 
           model.isTower() ? towers.add(model) : locations.add(model);
           model.save({validate: false});
+          map.draw(model)
 
           var view = self.getCurrentView(),
               newModel = view.createModel();
@@ -73,6 +74,7 @@
           accSelect(type);
         })
         map.drawTowers(towers)
+        Backbone.trigger('show:locations', true)
       })
     },
 

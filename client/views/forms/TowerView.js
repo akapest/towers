@@ -33,6 +33,7 @@
       this.freq = null;
       this.model = this.createModel();
       this.template = getTemplate('tower');
+      Backbone.on('create:tower', this.bindColor);
     },
 
     createModel: function(){
@@ -94,11 +95,14 @@
     },
 
     bindColor: function(){
-      if (this.freq) return;
+      if (this.$('.bind-color').is(':hidden')) return;
+      if (this.freq){
+        this.stopListening(this.freq)
+      }
       var $color = this.$('.color');
       var freq = new Freq({
         value: parseFloat(this.model.get('freq')),
-        color: this.model.get('color')
+        color: $color.val()
       })
       this.freq = freq;
       this.listenTo(freq, 'change:color', function(m, color){

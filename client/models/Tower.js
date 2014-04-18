@@ -15,10 +15,12 @@
       {name: 'comment',
         label: 'Комментарий'}
     ],
-    fields2: ['start',
+    fields2: [
+      'start',
       'radius',
       'azimuth',
-      'end'],
+      'end',
+      'color'],
 
     initialize: function(attrs){
       if (attrs){
