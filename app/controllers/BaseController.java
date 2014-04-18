@@ -24,7 +24,8 @@ public class BaseController extends Secure.Security {
 
         @Override
         public boolean shouldSkipField(FieldAttributes field) {
-            return field.getName().equals("location");
+            return field.getName().equals("location")     // for tower
+                    || field.getName().equals("locations_"); // for user
         }
 
         @Override
