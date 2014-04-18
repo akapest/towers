@@ -78,12 +78,13 @@
       })
 
       locations.on('change:active', _.bind(function(loc){
-        towers = createCollection('towers', Tower, {}, loc.get('towers'));
+        if (!loc.get('_towers')){
+          towers = createCollection('towers', Tower, {}, loc.get('towers'));
+          loc.set({_towers:towers});
+        } else {
+          towers = loc.get('_towers');
+        }
         this.views['towersList'].setCollection(towers);
-        if (map) map.removeTowers();
-        setTimeout(function(){
-          if (map) map.drawTowers(towers);
-        })
 
       }, this))
     },

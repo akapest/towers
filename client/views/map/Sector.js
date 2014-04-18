@@ -104,7 +104,7 @@
         strokeWidth: 0
       });
       this.geoObjects.add(rectangle);
-      rectangle.balloon.open();
+      //rectangle.balloon.open();
     }
   });
 

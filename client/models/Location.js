@@ -81,6 +81,7 @@
 
   function pointToArray(point){
     if (!point) return null;
+    if (_.isArray(point)) return point;
     return [point.latitude, point.longitude]
   }
   function arrayToPoint(array){

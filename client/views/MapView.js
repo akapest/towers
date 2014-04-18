@@ -23,7 +23,7 @@ $(function(){
     },
 
     initMap: function(options){
-      if (map) throw new Error('MapView already created');
+      if (map) map.destroy();
       map = new ymaps.Map('map', {
         center: options.center || [56.8, 60.5],
         zoom: 10,
@@ -35,7 +35,7 @@ $(function(){
       map.controls.add('zoomControl', { left: 5, bottom: 15 })
           .add('typeSelector', {left: 150, bottom: 15}) // Список типов карты
           .add('mapTools', { left: 35, bottom: 15 }); // Стандартный набор кнопок
-//    вариант сверху
+//    вариант контролов сверху
 //      map.controls.add('zoomControl', { right: 5, top: 35 })
 //          .add('typeSelector', {right: 35, top: 65}) // Список типов карты
 //          .add('mapTools', { right: 35, top: 35 }); // Стандартный набор кнопок
@@ -47,9 +47,22 @@ $(function(){
         this.showLocations = val;
         this.showLocations ? this.drawLocations(this.locations) : this.removeLocations();
       }, this));
-      this.locations.on('change:active', function(active){
-        map.panTo(active.get('start'), {delay: 0});
-      })
+      this.locations.on('change:active', _.bind(function(active){
+//        this.initMap({
+//          center: active.get('start')
+//        });
+        var duration = 500;
+        map.panTo(active.get('start'),{delay:0, duration:duration})
+
+        this.removeTowers();
+        var self = this;
+        setTimeout(function(){
+          //self.drawLocations(self.locations);
+          setTimeout(function(){
+            self.drawTowers(active.get('_towers'));
+          }, duration + 50)
+        })
+      }, this))
     },
 
     /**
@@ -203,7 +216,9 @@ $(function(){
         var model = this.freqs.findWhere({value: freq})
         if (model){
           tower.set('color', model.get('color'))
-          this.drawTower(tower);
+          //setTimeout(_.bind(function(){
+            this.drawTower(tower);
+          //}, this))
         } else {
           console.error("Freq not found:" + freq);
         }
