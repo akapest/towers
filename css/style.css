@@ -222,3 +222,6 @@ td input{
 	margin-left:5px;
 	display: inline-block;
 }
+.list-el .remove{
+	float:right;
+}

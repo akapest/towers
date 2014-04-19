@@ -73,7 +73,6 @@
         map.on('click', function(){
           accSelect(type);
         })
-        map.drawTowers(towers)
         Backbone.trigger('show:locations', true)
       })
 
@@ -87,6 +86,8 @@
         this.views['towersList'].setCollection(towers);
 
       }, this))
+
+      locations.trigger('change:active', locations.first());
     },
 
     render: function(){
@@ -112,6 +113,9 @@
     initAccordion: function(){
       window.initAccordion();
       Backbone.on('change:accordion', _.bind(function(type_){
+        if (type_ != 'tower' && type_ != 'highway' && type_ != 'location'){
+          return;
+        }
         type = type_;
         var view = this.views[type];
         if (view.getModel){

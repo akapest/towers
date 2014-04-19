@@ -5,9 +5,22 @@
 
   window.ListView = View.extend({
 
+    events:{
+      'click .remove' : function(e){
+        var el = $(e.currentTarget);
+        var cid = el.parent('li').data('cid');
+        var model = this.collection.get(cid);
+        if (confirm('Удалить вышку?')){
+          model.destroy();
+        }
+      }
+    },
+
     initialize: function(options){
+      _.bindAll(this)
       this.name = options.name;
       this.templateP = getTemplate('list');
+      this.setCollection(this.collection);
     },
 
     setCollection: function(collection){
@@ -29,10 +42,15 @@
       })
       return this.templateP.done(_.bind(function(template){
 
-        this.$el.html(template.execute({
+        var display = this.$el.find('.acc-item-data').css('display');
+
+        var html = template.execute({
           name:this.name,
           list: list
-        }));
+        })
+        this.$el.html(html);
+        this.$el.find('.acc-item-data').css('display', display);
+        this.delegateEvents();
 
       }, this));
     }
