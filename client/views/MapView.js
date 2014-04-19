@@ -48,6 +48,7 @@ $(function(){
         this.showLocations ? this.drawLocations(this.locations) : this.removeLocations();
       }, this));
       this.locations.on('change:active', _.bind(function(active){
+        if (!active) return;
 //        this.initMap({
 //          center: active.get('start')
 //        });

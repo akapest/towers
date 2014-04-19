@@ -77,6 +77,7 @@
       })
 
       locations.on('change:active', _.bind(function(loc){
+        if (!loc) return;
         if (!loc.get('_towers')){
           towers = createCollection('towers', Tower, {}, loc.get('towers'));
           loc.set({_towers:towers});
