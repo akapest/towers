@@ -9,7 +9,8 @@
     initialize: function(opts){
       _.bindAll(this)
       var $input = this.$input = opts.$el;
-      var field = this.field = _.isString(opts.field) ? opts.field : opts.field.name;
+      var field = this.fieldName = _.isString(opts.field) ? opts.field : opts.field.name;
+      this.field = _.isObject(opts.field) ? opts.field : {name: field};
       var model = this.model = opts.model;
       if (!field)
         console.warn('Creating FieldView for "null" field');
@@ -23,30 +24,31 @@
     bindField: function(){
       this.isChanging = false;
       this.$input.on(this.getPropertyToListenTo(), this.inputChangeListener)
-      this.model.on('change:' + this.field, this.modelChangeListener)
-      this.model.on('invalid:' + this.field, this.invalidListener)
+      this.model.on('change:' + this.fieldName, this.modelChangeListener)
+      this.model.on('invalid:' + this.fieldName, this.invalidListener)
     },
 
     inputChangeListener: function(){
       this.removeErrors();
       this.isChanging = true;
       var value = this.getRawValue();
-      var current = this.model.get(this.field)
+      var current = this.model.get(this.fieldName)
       if (this.isValid(value)){
         var val = this.parseValue(value)
         var equals = current == val || _.isEqual(current, val);
         if (!equals){
-          this.model.set(this.field, value)
+          this.model.set(this.fieldName, value)
         }
       } else {
-        this.model.set(this.field, current) //revert back to previous value
+        this.model.set(this.fieldName, current) //revert back to previous value
+        this.setValue(current)
       }
       this.isChanging = false
     },
 
     modelChangeListener: function(){
       if (!this.isChanging){
-        this.setValue(this.model.get(this.field))
+        this.setValue(this.model.get(this.fieldName))
       } else {
         // already changing - so do nothing
       }
@@ -74,8 +76,8 @@
 
     remove: function(){
       this.$input.off(this.getPropertyToListenTo(), this.inputChangeListener)
-      this.model.off('change:' + this.field, this.modelChangeListener)
-      this.model.off('invalid:' + this.field, this.invalidListener)
+      this.model.off('change:' + this.fieldName, this.modelChangeListener)
+      this.model.off('invalid:' + this.fieldName, this.invalidListener)
       this.off()
     },
 
@@ -113,12 +115,12 @@
         case 'checkbox':
           return 'change';
       }
-      console.warn('Cant bind to field `' + this.field + '`');
+      console.warn('Cant bind to field `' + this.fieldName + '`');
       return null;
     },
 
     parseValue: function(value){
-      var expectedMethodName = 'parse' + this.field[0].toUpperCase() + this.field.substring(1);
+      var expectedMethodName = 'parse' + this.fieldName[0].toUpperCase() + this.fieldName.substring(1);
       var prop = this.model[expectedMethodName]
       if (prop){
         if (_.isFunction(prop)){
@@ -132,7 +134,7 @@
     },
 
     prepareValue: function(value){
-      var expectedMethodName = 'prepare' + this.field[0].toUpperCase() + this.field.substring(1);
+      var expectedMethodName = 'prepare' + this.fieldName[0].toUpperCase() + this.fieldName.substring(1);
       var prop = this.model[expectedMethodName]
       if (prop){
         if (_.isFunction(prop)){

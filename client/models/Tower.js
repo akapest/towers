@@ -11,7 +11,9 @@
       {name: 'name',
         label: 'Название'},
       {name: 'freq',
-        label: 'Частота'},
+        type: 'float',
+        label: 'Частота'
+        },
       {name: 'comment',
         label: 'Комментарий'},
         'color'
