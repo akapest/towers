@@ -13,6 +13,12 @@
         if (confirm('Удалить вышку?')){
           model.destroy();
         }
+      },
+      'mouseenter .list-el' : function(e){
+        $(e.currentTarget).find('.remove').show();
+      },
+      'mouseleave .list-el' : function(e){
+        $(e.currentTarget).find('.remove').hide();
       }
     },
 

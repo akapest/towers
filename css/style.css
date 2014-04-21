@@ -224,4 +224,9 @@ td input{
 }
 .list-el .remove{
 	float:right;
+	color: rgb(184, 184, 184);
+	display:none;
+}
+.list-el .remove:hover{
+	color: #fff;
 }
