@@ -7,8 +7,12 @@ import play.db.jpa.Model;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 
 /**
@@ -25,8 +29,6 @@ public class Location extends Model {
     public String name;
 
     public String comment;
-
-    public String color;
 
     @Required
     @OneToOne(cascade = CascadeType.ALL)

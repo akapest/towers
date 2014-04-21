@@ -12,6 +12,7 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
+import java.io.UnsupportedEncodingException;
 
 /**
  * @author kpestov
@@ -20,6 +21,8 @@ import javax.persistence.Transient;
 public class Tower extends Model {
 
     public String name;
+
+    public String comment;
 
     public String angle;
 

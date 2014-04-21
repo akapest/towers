@@ -3,6 +3,24 @@
  */
 (function(){
 
+  window.createCollection = function(url, model, options, models){
+    models = models || getBootstrapData(url);
+    var collection = new (Backbone.Collection.extend({
+      url: 'rest/' + url,
+      model: model
+    }))(models, options)
+    collection.fields = (new model()).fields;
+    return collection;
+
+    function getBootstrapData(name){
+      try {
+        return JSON.parse($('.data-holder.' + name).html())
+      } catch (e){
+        return [];
+      }
+    }
+  }
+
   window.Location = BaseModel.extend({
 
     url: 'locations',
@@ -34,8 +52,10 @@
     toJSON: function(){
       var result = _.clone(this.attributes);
       result.start = arrayToPoint(result.start);
-      if (result.end){
+      if (result.end && this.is && this.is('highway')){
         result.end = arrayToPoint(result.end);
+      } else {
+        delete result.end;
       }
       return result;
     },
@@ -46,6 +66,7 @@
       }
       if (attrs.end){
         attrs.end = pointToArray(attrs.end)
+        attrs.type = attrs.type || 'highway';
       }
       return attrs;
     },
@@ -75,6 +96,16 @@
         }
 
       ])
+    },
+
+    getTowers: function(){
+      if (!this.get('_towers')){
+        var towers = createCollection('towers', Tower, {}, this.get('towers'));
+        this.set({_towers:towers});
+      } else {
+        towers = this.get('_towers');
+      }
+      return towers;
     }
 
   })
