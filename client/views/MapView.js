@@ -58,15 +58,12 @@ $(function(){
         this.removeTowers();
         var self = this;
         setTimeout(function(){
-          //self.drawLocations(self.locations);
-          active.get('_towers').on('destroy', function(m){
+          active.getTowers().on('destroy', function(m){
             var object = self.towersGeoObjects[m.cid];
             if (object) object.remove();
           })
-
           setTimeout(function(){
-            self.drawTowers(active.get('_towers'));
-
+            self.drawTowers(active.getTowers());
           }, duration + 50)
         })
       }, this))

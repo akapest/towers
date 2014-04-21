@@ -4,9 +4,6 @@
 (function(){
 
   window.Sector = function(center, towerAttrs, map, geo, raw){
-    this.parts = new ymaps.GeoObjectCollection({}, {
-      draggable: false
-    });
     this.raw = raw;
     this.center = center;
     this.sector = this.attrs = towerAttrs;
@@ -16,6 +13,15 @@
     this.geo = geo;
     this.map = map;
     this.geoObjects = map.geoObjects;
+    this.text = this.sector.name + '<br>' + (this.sector.comment ? " " + this.sector.comment : '');
+    this.parts = new ymaps.GeoObjectCollection({}, {
+      draggable: false,
+      interactivityModel: 'default#transparent'
+    });
+    this.parts.events.add(['click'], function(e){
+      if (this.base) this.base.balloon.open();
+    }, this)
+    this.base = null;
   }
 
   $.extend(Sector.prototype, {
@@ -39,7 +45,6 @@
 
       for (var i = 1; i <= this.gradientSteps; i++){
         var radius = lengthStep * i;
-        console.log(yColor)
         var circle = new ymaps.Circle(
             [this.center, radius],
             {}, {
@@ -131,14 +136,18 @@
       });
       this.geoObjects.add(circle);
       var rectangle = new ymaps.Rectangle(circle.geometry.getBounds(), {
-        balloonContent:this.sector.name + '<br/>' + this.sector.comment ? this.sector.comment : ''
+        balloonContentBody:this.text
       }, {
         fillColor: this.sector.color || '#fff',
         coordRendering: "boundsPath",
         strokeWidth: 0
       });
-      this.geoObjects.add(rectangle);
-      //rectangle.balloon.open();
+      this.setBase(rectangle);
+    },
+
+    setBase: function(base){
+      this.base = base;
+      this.geoObjects.add(base);
     }
   });
 

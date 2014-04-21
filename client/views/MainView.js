@@ -11,23 +11,6 @@
  */
 (function(){
 
-  window.createCollection = function(url, model, options, models){
-    models = models || getBootstrapData(url);
-    var collection = new (Backbone.Collection.extend({
-      url: 'rest/' + url,
-      model: model
-    }))(models, options)
-    collection.fields = (new model()).fields;
-    return collection;
-
-    function getBootstrapData(name){
-      try {
-        return JSON.parse($('.data-holder.' + name).html())
-      } catch (e){
-        return [];
-      }
-    }
-  }
 
   var towers;
   var freqs;
@@ -74,21 +57,15 @@
           accSelect(type);
         })
         Backbone.trigger('show:locations', true)
+        locations.trigger('change:active', locations.first());
       })
 
       locations.on('change:active', _.bind(function(loc){
-        if (!loc) return;
-        if (!loc.get('_towers')){
-          towers = createCollection('towers', Tower, {}, loc.get('towers'));
-          loc.set({_towers:towers});
-        } else {
-          towers = loc.get('_towers');
+        if (loc){
+          this.views['towersList'].setCollection(loc.getTowers());
         }
-        this.views['towersList'].setCollection(towers);
-
       }, this))
 
-      locations.trigger('change:active', locations.first());
     },
 
     render: function(){
@@ -106,7 +83,7 @@
       })
 
       freqs.on('change', function(){
-//        map.removeTowers();
+//        map.removeTowers()
 //        map.drawTowers(towers)
       })
     },
