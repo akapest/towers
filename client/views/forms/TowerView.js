@@ -12,7 +12,6 @@
 
     initialize: function(options){
       _.bindAll(this);
-      this.freqs = options.freqs;
       this.freq = null;
       this.model = options.model;
       this.template = getTemplate('tower');
@@ -57,7 +56,7 @@
         if (self.freq){
           self.stopListening(self.freq)
         }
-        var found = self.freqs.findWhere({value: parseFloat(freq)});
+        var found = state.get('freqs').findWhere({value: parseFloat(freq)});
         if (found){
           self.freq = found;
           self.listenTo(self.freq, 'change:color', function(m, color){
@@ -78,16 +77,20 @@
       if (this.freq){
         this.stopListening(this.freq)
       }
+      var value = parseFloat(this.model.get('freq'))
+      if (state.get('freqs').findWhere({value: value})){
+        return;
+      }
       var $color = this.$('.color');
       var freq = new Freq({
-        value: parseFloat(this.model.get('freq')),
+        value: value,
         color: $color.val()
       })
       this.freq = freq;
       this.listenTo(freq, 'change:color', function(m, color){
         $color.val(color)
       });
-      this.freqs.add(freq);
+      state.get('freqs').add(freq);
       freq.save();
 
       this.$('.bind-color').hide();

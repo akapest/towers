@@ -93,23 +93,13 @@
       })
 
       freqs.on('change', function(){
-//        map.removeTowers()
-//        map.drawTowers(towers)
+        map.removeTowers()
+        map.drawTowers(state.get('location').getTowers())
       })
     },
 
     initAccordion: function(){
       window.initAccordion();
-//      Backbone.on('change:accordion', _.bind(function(type_){
-//        if (type_ != 'tower' && type_ != 'highway' && type_ != 'location'){
-//          return;
-//        }
-//        type = type_;
-//        var view = this.views[type];
-//        if (view.getModel){
-//          map.setModel(view.getModel());
-//        }
-//      }, this));
       $('.accordion').on('hover', function(e){
         e.preventDefault();
         return false;

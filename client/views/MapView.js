@@ -141,7 +141,7 @@ $(function(){
             accSelectWithoutEvents($('.acc-item:eq(1)'));
           }
           state.trigger('edit:done', model)
-          model = null;
+          this.model = null;
           this.resetObjectCreation();
         }
       }
