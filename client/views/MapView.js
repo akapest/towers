@@ -56,9 +56,7 @@ $(function(){
         this.resetObjectCreation(); //if any
 
         if (active.isNew()) return;
-//        this.initMap({
-//          center: active.get('start')
-//        });
+
         var duration = 500;
         map.panTo(active.get('start'),{delay:0, duration:duration})
 
@@ -183,7 +181,7 @@ $(function(){
 
     draw: function(model){
       if (model.isTower()){
-        if (!model.isNew()){
+        if (!model.isNew()){ //если правка уже существующей вышки
           this.removeTower(model);
         }
         this.drawTower(model);
@@ -193,18 +191,20 @@ $(function(){
     },
 
     removeTower: function(model){
-      if (!model.isHighway()){
-        var object = this.towersGeoObjects[model.cid];
-        object && object.remove();
+      if (model.isHighway()){
+        this.removeObj(model.cid + '0');
+        this.removeObj(model.cid + '1');
       } else {
-        this.towersGeoObjects[model.cid + '0'] && this.towersGeoObjects[model.cid + '0'].remove();
-        this.towersGeoObjects[model.cid + '1'] && this.towersGeoObjects[model.cid + '1'].remove();
+        this.removeObj(model.cid);
       }
     },
 
-    drawTower: function(tower){
-      console.log('draw tower ' + tower.get('start'))
+    removeObj: function(id){
+      var object = this.towersGeoObjects[id];
+      object && object.remove();
+    },
 
+    drawTower: function(tower){
       if (tower.is('highway')){
         this.towersGeoObjects[tower.cid + '0'] = new Sector(tower.get('start'), tower.attributes, map, Geo).render();
         var attrs = _.clone(tower.attributes),
@@ -277,10 +277,6 @@ $(function(){
         l.remove();
       })
       this.locationGeoObjects = {};
-    },
-
-    findLocations: function(start){
-
     }
 
   });

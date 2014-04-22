@@ -20,7 +20,6 @@
   var locations;
 
   var mainView = null,
-      type,
       map;
 
   window.MainView = View.extend({

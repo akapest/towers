@@ -174,9 +174,9 @@
         case "°":
           return value * Math.PI / 360
         case "'":
-          return value * Math.PI / 360 / 60
+          return limit(value * Math.PI / 360 / 60)
         case '':
-          return value * Math.PI / 360 / 3600
+          return limit(value * Math.PI / 360 / 3600)
       }
       throw new Error("Unit not found - " + unit)
     }
@@ -186,6 +186,11 @@
       result = convert(value, unit);
     })
     return result;
+  }
+
+  var limit = function(angle){
+    if (angle < 0.003) return 0.003;
+    else return angle;
   }
 
 
