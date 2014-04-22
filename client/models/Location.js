@@ -40,9 +40,6 @@
         attrs = this.parse(attrs);
         this.set(attrs);
       }
-      if (opts){
-        this.locations = opts.locations;
-      }
     },
 
     isTower: function(){
@@ -57,6 +54,8 @@
       } else {
         delete result.end;
       }
+      delete result._towers;
+      delete result.towers;
       return result;
     },
 
@@ -82,19 +81,17 @@
     },
 
     validate: function(){
-      var self = this;
       return this.__validate([
         'name', //required
         {
           name: 'name',
           validate: function(name){
-            var loc = self.locations.find(function(el){
+            var loc = state.get('locations').find(function(el){
               return el.get('name') == name;
             });
             if (loc) return 'Не уникальное название';
           }
         }
-
       ])
     },
 

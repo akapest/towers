@@ -14,9 +14,9 @@
       'change .color': 'onColorChange'
     },
 
-    initialize: function(options){
+    initialize: function(){
       _.bindAll(this)
-      this.freqs = options.freqs;
+      this.freqs = state.get('freqs');
       if (!this.freqs.length){
         this.$el.hide();
       }

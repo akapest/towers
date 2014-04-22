@@ -1,29 +1,19 @@
 /**
- * require(views/base/View)
+ * require(views/base/ListView)
+ * require(models/Location)
  */
 (function(){
 
-  window.LocationsView = View.extend({
+  var bottom = '<div role="form" style=" height: 30px; ">\
+              <label>Показать границы</label>\
+              <input type="checkbox" class="show-locations" checked="checked" style=" margin:9px 0 0 5px;"/>\
+           </div>';
 
-    events: {
-      'change .show-locations': function(e){
-        var $el = $(e.currentTarget);
-        Backbone.trigger('show:locations', $el.is(":checked"));
-      },
-      'click li': function(e){
-        var $el = $(e.currentTarget);
-        var el = this.collection.get($el.data('cid'));
-        this.collection.active = el;
-        this.collection.trigger('change:active', el);
-        this.$el.find('li').removeClass('active');
-        $el.addClass('active');
-      }
-    },
+  window.LocationsView = ListView.extend({
 
     initialize: function(options){
       _.bindAll(this);
       this.name = options.name;
-      this.active = options.active;
       this.templateP = getTemplate('locations');
       this.listenTo(this.collection, 'add remove reset', this.renderAsync);
     },
@@ -36,19 +26,28 @@
         }
       })
       return this.templateP.done(_.bind(function(template){
-
         this.$el.html(template.execute({
           name:this.name,
           list: list
         }));
-        if (this.active){
-          this.$el.find('li[data-cid="'+ this.active.cid +'"]').addClass('active');
+        var active = state.get('location')
+        if (active){
+          this.$el.find('li[data-cid="'+ active.cid +'"]').addClass('active');
         }
-
-
       }, this));
-    }
+    },
 
+    _setActive: function(el, $el){
+      state.set('location', el);
+    },
+
+    _createModel : function(){
+      return new Location();
+    },
+
+    _removeMsg: function(){
+      return "Удалить локацию?"
+    }
 
   })
 

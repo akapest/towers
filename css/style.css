@@ -7,7 +7,7 @@ span.acc-item:hover {
 
 }
 
-.acc-item.active > span {
+.acc-item.active  span {
 	color: #eee;
 }
 form label{
@@ -34,7 +34,7 @@ span.big{
 }
 
 .acc-item {
-	padding: 5px 15px 15px;
+	padding: 5px 15px 20px;
 	-moz-user-select: -moz-none;
 	-khtml-user-select: none;
 	-webkit-user-select: none;
@@ -69,7 +69,11 @@ span.big{
 span, input, label {
 }
 
-.accordion label, .accordion input, .accordion .list-el{
+.accordion{
+	min-width: 200px;
+}
+
+.accordion label, .accordion input, .accordion li{
 	color: #fff;
 }
 
@@ -77,25 +81,42 @@ span, input, label {
 	float: left;
 }
 
-.accordion .list-el{
+.list li{
 	margin-top: 2px;
 	padding: 5px;
 	cursor: pointer;
 }
-.accordion .list-el:first-of-type{
+
+.list .list-el:first-of-type{
 	margin-top: 5px;
 }
 
-
-.accordion .list-el:hover{
+.list li:hover{
 	background-color: rgba(106, 107, 106, 0.9);
 }
 
-.list-el.active {
+.list li.active {
 	background: rgba(106, 107, 106, 0.9);
 	box-shadow: inset 0 2px 5px 0 rgba(0, 0, 0, 0.9);
 }
 
+.list-el .remove{
+	float:right;
+	color: rgb(184, 184, 184);
+	display:none;
+}
+.list-el .remove:hover{
+	color: #fff;
+}
+
+.list button{
+	/*background-color:#eee;*/
+	height: 25px;
+}
+
+.list button.add{
+	margin: 3px 0 3px 1px;
+}
 
 .acc-item span {
 	/*color: #fff;*/
@@ -222,11 +243,4 @@ td input{
 	margin-left:5px;
 	display: inline-block;
 }
-.list-el .remove{
-	float:right;
-	color: rgb(184, 184, 184);
-	display:none;
-}
-.list-el .remove:hover{
-	color: #fff;
-}
+

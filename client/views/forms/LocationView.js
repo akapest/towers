@@ -9,7 +9,6 @@
       _.bindAll(this);
       this.options = options;
       this.locations = options.locations;
-      this.model = this.createModel();
       this.template = getTemplate('location');
     },
 
@@ -20,27 +19,6 @@
         this.delegateEvents()
         this.bindFields();
       }, this));
-    },
-
-    createModel: function(){
-      var loc;
-      if (!this.model){
-        loc = new Location();
-      } else {
-        loc = this.model.clone();
-      }
-      loc.locations = this.locations;
-      return loc;
-    },
-
-    getModel: function(){
-      return this.model;
-    },
-
-    setModel: function(model){
-      this.unbindFields();
-      this.model = model;
-      this.bindFields();
     }
 
   })

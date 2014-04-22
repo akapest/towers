@@ -104,6 +104,9 @@
 
     remove: function(){
       this.parts.removeAll();
+      if (this.base){
+        this.geoObjects.remove(this.base)
+      }
     },
 
     createPolygon: function(points,step){
@@ -142,6 +145,7 @@
         coordRendering: "boundsPath",
         strokeWidth: 0
       });
+      this.geoObjects.remove(circle)
       this.setBase(rectangle);
     },
 

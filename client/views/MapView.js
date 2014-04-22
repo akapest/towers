@@ -12,20 +12,18 @@ $(function(){
 
     initialize: function(options){
       this.model = null;
-      this.freqs = options.freqs;
-      this.locations = options.locations;
       this.towersGeoObjects = {};
       this.locationGeoObjects = {};
       this.showLocations = false;
-
-      this.initMap(options);
+      this.initMap();
       this.bindEvents();
     },
 
-    initMap: function(options){
+    initMap: function(){
       if (map) map.destroy();
+      var center = state.get('location') ? state.get('location').get('start') : null;
       map = new ymaps.Map('map', {
-        center: options.center || [56.8, 60.5],
+        center: center || [56.8, 60.5],
         zoom: 10,
         behaviors: ['default', 'scrollZoom']
       });
@@ -43,19 +41,24 @@ $(function(){
 
     bindEvents: function(){
       document.addEventListener('keyup', _.bind(this.keyUpListener, this));
+
       Backbone.on('show:locations', _.bind(function(val){
         this.showLocations = val;
-        this.showLocations ? this.drawLocations(this.locations) : this.removeLocations();
+        this.showLocations ? this.drawLocations(state.get('locations')) : this.removeLocations();
       }, this));
-      this.locations.on('change:active', _.bind(function(active){
+
+      state.on('change:location', _.bind(function(){
+        var active = state.get('location')
         if (!active) return;
+        this.removeTowers();
+
+        if (active.isNew()) return;
 //        this.initMap({
 //          center: active.get('start')
 //        });
         var duration = 500;
         map.panTo(active.get('start'),{delay:0, duration:duration})
 
-        this.removeTowers();
         var self = this;
         setTimeout(function(){
           active.getTowers().on('destroy', function(m){
@@ -84,11 +87,12 @@ $(function(){
     },
 
     resetObjectCreation: function(){
-      if (!this.model) return;
-      this.model.set({
-        start: null,
-        end: null
-      });
+      if (this.model){
+        this.model.set({
+          start: null,
+          end: null
+        });
+      }
       if (this.object){
         this.object.remove();
         this.object = null;
@@ -128,8 +132,11 @@ $(function(){
           this.setEnd(point);
         }
         if (this.model.isValid()){
-          if (this.model.isTower()) Backbone.trigger('create:tower', this.model);
+          //if (this.model.isTower()) Backbone.trigger('create:tower', this.model); Tower.js@24
+          this.model.save({validate: false});
           this.trigger('create', this.model);
+          this.draw(this.model)
+          this.model = null;
           this.resetObjectCreation();
         }
       }
@@ -217,7 +224,7 @@ $(function(){
       //this.removeTowers();
       towers.each(_.bind(function(tower){
         var freq = parseFloat(tower.get('freq'))
-        var model = this.freqs.findWhere({value: freq})
+        var model = state.get('freqs').findWhere({value: freq})
         if (model){
           tower.set('color', model.get('color'))
           //setTimeout(_.bind(function(){
@@ -255,7 +262,7 @@ $(function(){
     },
 
     findLocations: function(start){
-      var result = this.locations.filter(function(location){
+      var result = state.get('locations').filter(function(location){
         var distance = Geo.getDistance(start, location.get('start'));
         return distance <= location.get('radius');
       })

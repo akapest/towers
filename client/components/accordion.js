@@ -3,10 +3,9 @@
  */
 $(function(){
   var events = Backbone;
+  var acc = $('.accordion');
 
   window.initAccordion = function(){
-    var acc = $('.accordion');
-
     acc.find('.acc-item-data').hide();
 
     acc.find('.toggle').data('state', false);
@@ -18,7 +17,7 @@ $(function(){
       acc.find('.acc-item').removeClass("active")
 
       var item = $(this);
-      var itemData = item.children('.acc-item-data');
+      var itemData = item.find('.acc-item-data');
 
       if (!itemData.length){
         acc.find('.acc-item-data').hide();//others
@@ -65,9 +64,16 @@ $(function(){
     $el.find('span').text('▷')
     $el.find('span').css('font-size', '')
     if (!$('.acc-item.' + id).hasClass("active")){
-      $('.acc-item.' + id + ' .acc-item').click();
+      $('.acc-item.' + id + ' .acc-item-name').click();
     }
 
+  }
+
+  window.accSelectWithoutEvents = function(el){
+    acc.find('.acc-item').removeClass("active");
+    acc.find('.acc-item-data').hide();
+    el.addClass("active");
+    el.find('.acc-item-data').show();
   }
 
 });

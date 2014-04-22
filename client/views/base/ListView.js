@@ -5,62 +5,63 @@
 
   window.ListView = View.extend({
 
-    events:{
-      'click .remove' : function(e){
+    events: {
+      'click .list-el': function(e){
+        var $el = $(e.currentTarget);
+        var el = this.collection.get($el.data('cid'));
+        this.__setActive(el, $el);
+      },
+      'click .add': function(e){
+        var $el = $(e.currentTarget);
+        $el.removeClass('active')
+        var model = this._createModel();
+        state.set('editModel', model);
+        this.__setActive(model);
+      },
+      'click .remove': function(e){
         var el = $(e.currentTarget);
         var cid = el.parent('li').data('cid');
         var model = this.collection.get(cid);
-        if (confirm('Удалить вышку?')){
+        if (confirm(this._removeMsg())){
           model.destroy();
         }
       },
-      'mouseenter .list-el' : function(e){
+
+      'mouseenter .list-el': function(e){
         $(e.currentTarget).find('.remove').show();
       },
-      'mouseleave .list-el' : function(e){
+      'mouseleave .list-el': function(e){
         $(e.currentTarget).find('.remove').hide();
+      },
+      'mousedown .add': function(e){
+        var $el = $(e.currentTarget);
+        $el.addClass('active')
+      },
+
+      'change .show-locations': function(e){
+        var $el = $(e.currentTarget);
+        Backbone.trigger('show:locations', $el.is(":checked"));
       }
     },
 
-    initialize: function(options){
-      _.bindAll(this)
-      this.name = options.name;
-      this.templateP = getTemplate('list');
-      this.setCollection(this.collection);
-    },
-
-    setCollection: function(collection){
-      if (this.collection){
-        this.stopListening(this.collection)
+    __setActive: function(el, $el){
+      this.$el.find('li').removeClass('active');
+      if (!$el){
+        $el = this.$el.find('li[data-cid="'+ el.cid +'"]')
       }
-      this.collection = collection;
-      this.listenTo(this.collection, 'add remove reset', this.renderAsync);
-      this.renderAsync();
+      $el.addClass('active');
+      this._setActive(el)
     },
 
-    renderAsync: function(){
-      if (!this.collection) return;
-      var list = this.collection.map(function(el){
-        return {
-          name: el.get('name'),
-          cid: el.cid
-        }
-      })
-      return this.templateP.done(_.bind(function(template){
+    _setActive: $.noop,
 
-        var display = this.$el.find('.acc-item-data').css('display');
+    _createModel : function(){
+      debugger
+    },
 
-        var html = template.execute({
-          name:this.name,
-          list: list
-        })
-        this.$el.html(html);
-        this.$el.find('.acc-item-data').css('display', display);
-        this.delegateEvents();
-
-      }, this));
+    _removeMsg: function(){
+      debugger
     }
-
 
   })
 

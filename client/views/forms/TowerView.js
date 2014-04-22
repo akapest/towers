@@ -4,18 +4,6 @@
  */
 (function(){
 
-  var types = {
-    tower: {
-      name: 'Новая вышка',//Редактировать вышку
-      angles: ['60°', '90°', '120°', '360°']
-    },
-    highway: {
-      name: 'Новая точка-точка',//Редактировать точку-точку
-      angles: ["15'", "20'", "30'"]
-    }
-  }
-
-
   window.TowerView = View.extend({
 
     events: {
@@ -27,44 +15,21 @@
       this.type = options.type;
       this.freqs = options.freqs;
       this.freq = null;
-      this.model = this.createModel();
+      this.model = options.model;
+      this.type = this.model.get('type');
       this.template = getTemplate('tower');
-      Backbone.on('create:tower', this.bindColor);
-    },
-
-    createModel: function(){
-      var result = null;
-      if (this.model){
-        result = this.model.clone();
-      } else {
-        result = new Tower({type:this.type});
-        var angle = this.$el.find(".angle").val() || types[this.type].angles[0];
-        result.set({angle: angle},{silent:true});
-      }
-      return result;
+      this.model.on('save', this.bindColor);
     },
 
     renderAsync: function(){
       return this.template.done(_.bind(function(t){
-        var type = types[this.type];
+        var type = Tower.types[this.type];
         var html = t.execute(type)
         this.$el.html(html);
         this.delegateEvents()
         this.bindFields();
         this.initFreqColor();
       }, this));
-    },
-
-    getModel: function(){
-      return this.model;
-    },
-
-    setModel: function(model){
-      this.unbindFields();
-      this.stopListening(this.model);
-      this.model = model;
-      this.bindFields();
-      this.initFreqColor();
     },
 
     initFreqColor: function(){
