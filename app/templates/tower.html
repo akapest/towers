@@ -3,6 +3,13 @@
 	<div class="form-group"><label class="control-label">Название* <span class="error-msg"></span></label><input class="name form-control" type="text"/></div>
 	<div class="form-group"><label class="control-label">Частота*, Mhz <span class="error-msg"></span></label><input class="freq form-control" type="text"/></div>
 	<div class="form-group"><label class="control-label">Цвет</label><label class="bind-color" style="display:none;" title="Привязать цвет к частоте">Привязать</label><input class="color form-control" type="color"/></div>
+	<div class="form-group"><label class="control-label">Тип</label>
+		<select class="type form-control">
+			<option value="tower">Вышка</option>
+			<option value="highway">Точка-точка</option>
+		</select>
+
+	</div>
 	<div class="form-group"><label class="control-label">Угол раскытия</label>
 		<select class="angle form-control">
 			<% _.each(angles, function(angle){ %>

@@ -100,12 +100,12 @@ span, input, label {
 	box-shadow: inset 0 2px 5px 0 rgba(0, 0, 0, 0.9);
 }
 
-.list-el .remove{
+.list-el .remove, .list-el .edit{
 	float:right;
 	color: rgb(184, 184, 184);
 	display:none;
 }
-.list-el .remove:hover{
+.list-el .remove:hover, .list-el .edit:hover{
 	color: #fff;
 }
 
@@ -157,6 +157,11 @@ div .form-control:focus {
 	outline: 0;
 	-webkit-box-shadow: none;
 	box-shadow: none;
+}
+
+div .form-control[disabled], div .form-control[readonly], div fieldset[disabled] .form-control {
+	background-color: rgb(153, 153, 153);
+	border-color: rgb(153, 153, 153);
 }
 
 div .has-error .control-label{

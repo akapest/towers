@@ -44,13 +44,16 @@ $(function(){
 
       Backbone.on('show:locations', _.bind(function(val){
         this.showLocations = val;
-        this.showLocations ? this.drawLocations(state.get('locations')) : this.removeLocations();
+        setTimeout(_.bind(function(){
+          this.showLocations ? this.drawLocations(state.get('locations')) : this.removeLocations();
+        }, this))
       }, this));
 
       state.on('change:location', _.bind(function(){
         var active = state.get('location')
         if (!active) return;
         this.removeTowers();
+        this.resetObjectCreation(); //if any
 
         if (active.isNew()) return;
 //        this.initMap({
@@ -99,44 +102,46 @@ $(function(){
       }
     },
 
+    fitsToLocation: function(start){
+      var location = state.get('location');
+      var distance = Geo.getDistance(start, location.get('start'));
+      return distance <= location.get('radius');
+    },
+
     onClick: function(e){
       if (!this.model) return;
-
+      var model = this.model;
       var point = e.get('coords');
-      if (!this.model.get('start')){
-        var start = point,
-            locations = [];
-
-        if (this.model.isTower()){
-          locations = this.findLocations(start);
-          if (!locations.length){
-            alert('Данная точка не принаделжит ни одной локации. Сначала нужно создать локацию.')
-            start = null;
-          } else if (locations.length > 1){
-            alert('Данная точка принаделжит нескольким локацииям. Невозможно создать объект.');
+      if (!model.get('start')){
+        var start = point;
+        if (model.isTower()){
+          if (!this.fitsToLocation(start)){
+            alert('Данная точка не принадлежит текщей локации.')
             start = null;
           }
         }
-        this.model.set({start: start});
+        model.set({start: start});
 
       } else {
-        if (this.model.isTower()){
-          locations = this.findLocations(this.model.get('start'))
-          var locId = locations[0].get('id'); //перенес получение id сюда, чтобы на создание локации было чуть больше времени
-          if (!locId){
-            alert('Невозможно создать вышку. Не найдена соответсвующая локация. Возможно, проблемы со связью.')
-          }
-          this.model.set({
-            locationId: locId
+        if (model.isTower()){
+          model.set({
+            locationId: state.get('location').get('id')
           });
           this.setEnd(point);
         }
-        if (this.model.isValid()){
-          //if (this.model.isTower()) Backbone.trigger('create:tower', this.model); Tower.js@24
-          this.model.save({validate: false});
-          this.trigger('create', this.model);
-          this.draw(this.model)
-          this.model = null;
+        if (model.isValid()){
+
+          model.save({validate: false});
+          this.draw(model)
+          if (model.isTower()){
+            state.get('location').getTowers().add(model);
+          } else {
+            state.set('location', model)
+            state.get('locations').add(model);
+            accSelectWithoutEvents($('.acc-item:eq(1)'));
+          }
+          state.trigger('edit:done', model)
+          model = null;
           this.resetObjectCreation();
         }
       }
@@ -178,9 +183,22 @@ $(function(){
 
     draw: function(model){
       if (model.isTower()){
+        if (!model.isNew()){
+          this.removeTower(model);
+        }
         this.drawTower(model);
       } else {
         this.drawLocation(model);
+      }
+    },
+
+    removeTower: function(model){
+      if (!model.isHighway()){
+        var object = this.towersGeoObjects[model.cid];
+        object && object.remove();
+      } else {
+        this.towersGeoObjects[model.cid + '0'] && this.towersGeoObjects[model.cid + '0'].remove();
+        this.towersGeoObjects[model.cid + '1'] && this.towersGeoObjects[model.cid + '1'].remove();
       }
     },
 
@@ -262,11 +280,7 @@ $(function(){
     },
 
     findLocations: function(start){
-      var result = state.get('locations').filter(function(location){
-        var distance = Geo.getDistance(start, location.get('start'));
-        return distance <= location.get('radius');
-      })
-      return result;
+
     }
 
   });

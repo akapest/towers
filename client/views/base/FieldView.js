@@ -26,6 +26,7 @@
       this.$input.on(this.getPropertyToListenTo(), this.inputChangeListener)
       this.model.on('change:' + this.fieldName, this.modelChangeListener)
       this.model.on('invalid:' + this.fieldName, this.invalidListener)
+      this.setValue(this.model.get(this.fieldName))
     },
 
     inputChangeListener: function(){

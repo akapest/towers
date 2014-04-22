@@ -31,11 +31,10 @@
       }});
       locations = createCollection('locations', Location);
       var startLocation = locations.first();
-
       state.set({
-        location: startLocation,
         locations: locations,
-        freqs: freqs
+        freqs: freqs,
+        location: startLocation
       })
 
       this.views = {
@@ -46,24 +45,21 @@
       ymaps.ready(_.bind(function(){
         map = window.map = new MapView({freqs: freqs, locations: locations});
 
-        map.on('create', _.bind(function(model){
+        state.on('edit:done', _.bind(function(model){
           if (model.isTower()){
-            state.get('location').getTowers().add(model);
             accSelectWithoutEvents($('.acc-item:eq(2)'));
-
           } else {
-            state.set('location', model)
-            locations.add(model);
             accSelectWithoutEvents($('.acc-item:eq(1)'));
           }
-          if (this.modelView){
-            this.modelView.remove();
-          }
+          this.modelView && this.modelView.remove();
+
         }, this))
         map.on('click', function(){
           //accSelect(type);
         })
+        state.trigger('change:location')
         Backbone.trigger('show:locations', true)
+
       }, this))
 
       state.on('change:editModel', _.bind(function(state, model){

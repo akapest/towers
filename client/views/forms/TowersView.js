@@ -45,6 +45,10 @@
       }, this));
     },
 
+    _setActive: function(tower){
+      state.set('tower', tower);
+    },
+
     _createModel : function(){
       return new Tower({type:'tower'});
     },

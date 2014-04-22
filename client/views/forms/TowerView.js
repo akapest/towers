@@ -12,24 +12,34 @@
 
     initialize: function(options){
       _.bindAll(this);
-      this.type = options.type;
       this.freqs = options.freqs;
       this.freq = null;
       this.model = options.model;
-      this.type = this.model.get('type');
       this.template = getTemplate('tower');
-      this.model.on('save', this.bindColor);
+      this.listenTo(state, 'edit:done', this.bindColor);
+      this.listenTo(this.model, 'change:type', this.renderAsync)
     },
 
     renderAsync: function(){
       return this.template.done(_.bind(function(t){
-        var type = Tower.types[this.type];
-        var html = t.execute(type)
+        var data = {
+          angles: Tower.angles[this.model.get('type')],
+          name: this.model.getName()
+        };
+        var html = t.execute(data)
         this.$el.html(html);
         this.delegateEvents()
         this.bindFields();
         this.initFreqColor();
+        this.afterRender();
       }, this));
+    },
+
+    afterRender: function(){
+      var typeSelect = this.$('.type');
+      if (!this.model.isNew()){
+        typeSelect.attr('disabled', 'disabled')
+      }
     },
 
     initFreqColor: function(){

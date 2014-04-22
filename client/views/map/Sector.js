@@ -133,25 +133,18 @@
     },
 
     renderBase: function(){
-      var circle = new ymaps.Circle([this.center, 20], {}, {
+      var circle = new ymaps.Circle([this.center, 1], {
+        balloonContentBody:this.text
+      }, {
         fill:false,
         strokeWidth:0
       });
-      this.geoObjects.add(circle);
-      var rectangle = new ymaps.Rectangle(circle.geometry.getBounds(), {
-        balloonContentBody:this.text
-      }, {
-        fillColor: this.sector.color || '#fff',
-        coordRendering: "boundsPath",
-        strokeWidth: 0
-      });
-      this.geoObjects.remove(circle)
-      this.setBase(rectangle);
+      this.setBase(circle);
     },
 
-    setBase: function(base){
-      this.base = base;
-      this.geoObjects.add(base);
+    setBase: function(circle){
+      this.base = circle;
+      this.geoObjects.add(circle);
     }
   });
 

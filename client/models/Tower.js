@@ -3,15 +3,9 @@
  */
 (function(){
 
-  var types = {
-    tower: {
-      name: 'Новая вышка',//Редактировать вышку
-      angles: ['60°', '90°', '120°', '360°']
-    },
-    highway: {
-      name: 'Новая точка-точка',//Редактировать точку-точку
-      angles: ["15'", "20'", "30'"]
-    }
+  var angles = {
+    tower: ['60°', '90°', '120°', '360°'],
+    highway: ["15'", "20'", "30'"]
   }
 
   window.Tower = Location.extend({
@@ -27,6 +21,7 @@
         },
       {name: 'comment',
         label: 'Комментарий'},
+        'type',
         'color'
     ],
     fields2: [
@@ -43,9 +38,20 @@
           if (!attrs.type)
             throw new Error("Unable to determine tower type. " + attrs);
           else
-            attrs.angle = types[attrs.type].angles[0];
+            attrs.angle = angles[attrs.type][0];
         }
         this.set(attrs)
+      }
+      this.on('change:type', _.bind(function(){
+        this.set('angle', angles[this.get('type')][0])
+      }, this))
+    },
+
+    getName: function(){
+      if (!this.get('name')){
+        return 'Новая ' + (this.isHighway() ? 'точка-точка' : 'вышка');
+      } else {
+        return (this.isHighway() ? 'Точка-точка' : 'Вышка')  + ' ' + this.get('name');
       }
     },
 
@@ -68,6 +74,6 @@
 
   })
 
-  Tower.types = types;
+  Tower.angles = angles;
 
 }());
