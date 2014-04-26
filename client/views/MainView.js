@@ -56,8 +56,10 @@
         map.on('click', function(){
           //accSelect(type);
         })
-        state.trigger('change:location')
-        Backbone.trigger('show:locations', true)
+        if (startLocation){
+          state.trigger('change:location')
+          Backbone.trigger('show:locations', true)
+        }
 
       }, this))
 

@@ -10,7 +10,6 @@
       return this.collection.get(cid);
     },
 
-
     events: {
       'click .list-el': function(e){
         var $el = $(e.currentTarget);
@@ -23,13 +22,17 @@
         var model = this._createModel();
         state.set('editModel', model);
         this.__setActive(model);
+        e.stopPropagation();
+        return false;
       },
       'click .remove': function(e){
         var $el = $(e.currentTarget);
         var model = this._getModel($el);
-        if (confirm(this._removeMsg())){
+        if (this._canRemove(model) && confirm(this._removeMsg())){
           model.destroy();
         }
+        e.stopPropagation();
+        return false;
       },
       'click .edit': function(e){
         var $el = $(e.currentTarget);
@@ -57,6 +60,31 @@
       }
     },
 
+    renderAsync: function(){
+      if (!this.collection) return;
+      return this.templateP.done(_.bind(function(template){
+        var display = this.$el.find('.acc-item-data').css('display');
+        var html = template.execute(this._data())
+        this.$el.html(html);
+        this.$el.find('.acc-item-data').css('display', display);
+        this._afterRender();
+        this.delegateEvents();
+      }, this));
+    },
+
+    _data: function(){
+      var list = this.collection.map(function(el){
+        return {
+          name: el.get('name'),
+          cid: el.cid
+        }
+      })
+      return {
+        name:this.name,
+        list: list
+      }
+    },
+
     __setActive: function(el, $el){
       this.$el.find('li').removeClass('active');
       if (!$el){
@@ -74,7 +102,15 @@
 
     _removeMsg: function(){
       debugger
+    },
+
+    _canRemove: function(){
+      return true;
+    },
+
+    _afterRender: function(){
     }
+
 
   })
 

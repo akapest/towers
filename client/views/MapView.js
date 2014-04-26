@@ -49,6 +49,10 @@ $(function(){
         }, this))
       }, this));
 
+      state.get("locations").on('remove', _.bind(function(model){
+        this.removeLocation(model);
+      }, this))
+
       state.on('change:location', _.bind(function(){
         var active = state.get('location')
         if (!active) return;
@@ -192,15 +196,20 @@ $(function(){
 
     removeTower: function(model){
       if (model.isHighway()){
-        this.removeObj(model.cid + '0');
-        this.removeObj(model.cid + '1');
+        this.removeTowerObj(model.cid + '0');
+        this.removeTowerObj(model.cid + '1');
       } else {
-        this.removeObj(model.cid);
+        this.removeTowerObj(model.cid);
       }
     },
 
-    removeObj: function(id){
+    removeTowerObj: function(id){
       var object = this.towersGeoObjects[id];
+      object && object.remove();
+    },
+
+    removeLocation: function(model){
+      var object = this.locationGeoObjects[model.cid];
       object && object.remove();
     },
 

@@ -18,23 +18,11 @@
       this.listenTo(this.collection, 'add remove reset', this.renderAsync);
     },
 
-    renderAsync: function(){
-      var list = this.collection.map(function(el){
-        return {
-          name: el.get('name'),
-          cid: el.cid
-        }
-      })
-      return this.templateP.done(_.bind(function(template){
-        this.$el.html(template.execute({
-          name:this.name,
-          list: list
-        }));
-        var active = state.get('location')
-        if (active){
-          this.$el.find('li[data-cid="'+ active.cid +'"]').addClass('active');
-        }
-      }, this));
+    _afterRender: function(){
+      var active = state.get('location')
+      if (active){
+        this.$el.find('li[data-cid="'+ active.cid +'"]').addClass('active');
+      }
     },
 
     _setActive: function(el, $el){
@@ -47,6 +35,12 @@
 
     _removeMsg: function(){
       return "Удалить локацию?"
+    },
+
+    _canRemove: function(model){
+      var canRemove = !model.getTowers() || model.getTowers().length == 0;
+      if (!canRemove) alert('Чтобы удалить локацию, сперва нужно удалить все вышки.')
+      return canRemove;
     }
 
   })

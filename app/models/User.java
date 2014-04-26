@@ -38,8 +38,8 @@ public class User extends Model{
     private void addLocation(Location l){
         if (locations_ == null){
             locations_ = new HashSet<Location>();
-            locations_.add(l);
         }
+        locations_.add(l);
     }
 
     public void setLocations(Collection<String> locations){
