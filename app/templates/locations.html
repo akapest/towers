@@ -2,9 +2,16 @@
 <div class="acc-item-data list" style="display:none;">
     <ul>
         <% _.each(list, function(el){ %>
-            <li data-cid="!{el.cid}" class="list-el"><span>!{el.name}</span><span class="remove" >Удалить</span></li>
+            <li data-cid="!{el.cid}" class="list-el">
+                <span>!{el.name}</span>
+                #{if isAdmin}
+                <span class="remove" >Удалить</span>
+                #{/if}
+            </li>
         <% }); %>
-	    <li class="add">Добавить</li>
+        #{if isAdmin}
+        <li class="add">Добавить</li>
+        #{/if}
     </ul>
     <div role="form" style=" height: 30px; ">
         <label>Показать границы</label>

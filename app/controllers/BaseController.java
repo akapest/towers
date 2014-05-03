@@ -8,8 +8,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import models.Location;
 import models.User;
+import play.Logger;
 import play.Play;
 import play.db.jpa.Model;
+import play.mvc.Before;
 import play.mvc.Controller;
 import play.mvc.With;
 
@@ -37,6 +39,11 @@ public class BaseController extends Secure.Security {
         }
     }).create();
 
+    @Before
+    public static void before(){
+        Logger.info("%s", request.action);
+    }
+
     static boolean authenticate(String login, String password) {
         if ("admin".equals(login)) {
             return Play.configuration.getProperty("admin.pass", "admin").equals(password);
@@ -49,6 +56,10 @@ public class BaseController extends Secure.Security {
     static boolean check(String profile) {
         String connected = connected();
         return connected.equals("admin");
+    }
+
+    protected static boolean isAdmin() {
+        return connected() != null && connected().equals("admin");
     }
 
     protected static <M extends Model> String toJsonString(Collection<M> models, Class<M> cls) {
