@@ -18,6 +18,7 @@
         this.$el.html(html);
         this.delegateEvents()
         this.bindFields();
+        this.focus('.name');
       }, this));
     }
 

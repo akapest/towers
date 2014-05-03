@@ -72,10 +72,14 @@
       });
       this.$el.html("");
       this.stopListening();
+    },
+
+    focus: function(selector){
+      var $el = this.$(selector)
+      setTimeout(function(){
+        $el.focus();
+      })
     }
-
-
-
 
   });
 

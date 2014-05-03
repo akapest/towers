@@ -31,6 +31,7 @@
         this.bindFields();
         this.initFreqColor();
         this.afterRender();
+        this.focus('.name');
       }, this));
     },
 
