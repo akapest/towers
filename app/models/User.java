@@ -3,16 +3,10 @@ package models;
 import play.Logger;
 import play.db.jpa.Model;
 
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author kpestov
@@ -33,7 +27,7 @@ public class User extends Model{
     @ElementCollection
     @CollectionTable(name="location_names", joinColumns=@JoinColumn(name="user_id"))
     @Column(name="locations")
-    public Collection<String> locations;
+    public Set<String> locations;
 
     private void addLocation(Location l){
         if (locations_ == null){
@@ -42,7 +36,7 @@ public class User extends Model{
         locations_.add(l);
     }
 
-    public void setLocations(Collection<String> locations){
+    public void setLocations(Set<String> locations){
         for (String name : locations){
             Location l = Location.find("byName", name).first();
             if (l != null){
@@ -54,12 +48,11 @@ public class User extends Model{
         this.locations = locations;
     }
 
-    public Collection<String> getLocations(){
-        Collection<String> result = new HashSet<String>();
+    public void removeLocation(Location location) {
+        this.locations_.remove(location);
+        this.locations = new HashSet<String>();
         for (Location l : locations_){
-            result.add(l.name);
+            this.locations.add(l.name);
         }
-        return result;
     }
-
 }
