@@ -42,6 +42,10 @@
       }
     },
 
+    is: function(type){
+      return type == 'location';
+    },
+
     isTower: function(){
       return false;
     },

@@ -176,9 +176,13 @@ $(function(){
     },
 
     setEnd: function(end){
+      var radius = Geo.getDistance(this.model.get('start'), end);
+      if (this.model.is('tower')){
+        radius = Math.min(radius, 15000);
+      }
       this.model.set({
         azimuth: Geo.getAzimuth(this.model.get('start'), end),
-        radius: Geo.getDistance(this.model.get('start'), end),
+        radius: radius,
         end: end
       });
     },
