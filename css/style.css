@@ -7,7 +7,7 @@ span.acc-item:hover {
 
 }
 
-.acc-item.active .name {
+.acc-item.active .main {
 	color: #eee;
 }
 form label{
