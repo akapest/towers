@@ -1,12 +1,12 @@
-<span class="acc-item-name main" data-model="name">!{name}</span>
+<span class="acc-item-name main name" data-model="name">!{name}</span>
 <div class="acc-item-data list" style="display:none;">
     <ul>
         <% _.each(list, function(el){ %>
             <li data-cid="!{el.cid}" class="list-el">
-                <span>!{el.name}</span>
+                <span class="name">!{el.name}</span>
                 #{if isAdmin}
-                <span class="remove" >Удалить</span>
-                <span class="edit">Ред.</span>
+                <span class="remove glyphicon glyphicon-remove" title="Удалить"></span>
+                <span class="edit glyphicon glyphicon-pencil" title="Редактировать"></span>
                 #{/if}
             </li>
         <% }); %>
