@@ -25,8 +25,8 @@
       }
     },
 
-    _setActive: function(el, $el){
-      state.set('location', el);
+    _getType: function(){
+      return 'location'
     },
 
     _createModel : function(){

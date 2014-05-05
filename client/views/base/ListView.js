@@ -94,7 +94,11 @@
       this._setActive(el)
     },
 
-    _setActive: $.noop,
+    _setActive: function(el, $el){
+      var type = this._getType();
+      state.trigger('click:object', el)
+      state.set(type, el);
+    },
 
     _createModel : function(){
       debugger
@@ -109,6 +113,10 @@
     },
 
     _afterRender: function(){
+    },
+
+    _getType: function(){
+      throw new Error("Type not defined")
     }
 
 

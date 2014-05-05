@@ -24,8 +24,8 @@
       this.renderAsync();
     },
 
-    _setActive: function(tower){
-      state.set('tower', tower);
+    _getType: function(){
+      return 'tower'
     },
 
     _createModel : function(){

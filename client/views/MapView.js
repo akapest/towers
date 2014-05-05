@@ -53,6 +53,14 @@ $(function(){
         this.removeLocation(model);
       }, this))
 
+      var duration = 500;
+
+      state.on('click:object', function(object){
+        if (object && object.get('start')){
+          map.panTo(object.get('start'),{delay:0, duration:duration})
+        }
+      })
+
       state.on('change:location', _.bind(function(){
         var active = state.get('location')
         if (!active) return;
@@ -60,9 +68,6 @@ $(function(){
         this.destroyCurrentObject(); //if any
 
         if (active.isNew()) return;
-
-        var duration = 500;
-        map.panTo(active.get('start'),{delay:0, duration:duration})
 
         var self = this;
         setTimeout(function(){
