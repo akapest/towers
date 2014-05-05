@@ -10,6 +10,17 @@ span.acc-item:hover {
 .acc-item.active .main {
 	color: #eee;
 }
+
+.acc-item.active > div > .remove{
+    color: rgb(184, 184, 184);
+    float:right;
+    cursor:pointer;
+    font-size: 17px;
+}
+.acc-item.active > div > .remove:hover{
+    color: #eee;
+}
+
 form label{
 	color: #eee;
 }

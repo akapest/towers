@@ -7,13 +7,18 @@
   window.TowerView = View.extend({
 
     events: {
-      'click .bind-color': 'bindColor'
+      'click .bind-color': 'bindColor',
+      'click .remove': function(){
+        this.model.restore();
+        state.set('editModel', null);
+      }
     },
 
     initialize: function(options){
       _.bindAll(this);
       this.freq = null;
       this.model = options.model;
+      this.model.store();
       this.template = getTemplate('tower');
       this.listenTo(this.model, 'change:type', this.renderAsync)
     },

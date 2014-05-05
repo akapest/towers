@@ -42,41 +42,30 @@
         'legend': new LegendView({el: '.legend'})
       }
       ymaps.ready(_.bind(function(){
-        map = window.map = new MapView({freqs: freqs, locations: locations});
-
-        state.on('edit:done', _.bind(function(model){
-          this.modelView && this.modelView.remove();
-          if (model.isTower()){
-            accSelectWithoutEvents($('.acc-item:eq(2)'));
-          } else {
-            accSelectWithoutEvents($('.acc-item:eq(1)'));
-          }
-          state.set('editModel', null);
-
-        }, this))
-        map.on('click', function(){
-          //accSelect(type);
-        })
+        map = window.map = new MapView({
+          freqs: freqs,
+          locations: locations
+        });
         if (startLocation){
           state.trigger('change:location')
           Backbone.trigger('show:locations', true)
         }
-
       }, this))
 
       state.on('change:editModel', _.bind(function(state, model){
-        if (!model) {
-          return;
-        }
         this.modelView && this.modelView.remove();
-        var view = this.modelView = model.isTower() ? new TowerView({freqs:freqs, model:model}) : new LocationView({model:model});
-        this.modelView.renderAsync().done(function(){
-          var $el = $('.item-view')
-          $el.html(view.$el);
-          accSelectWithoutEvents($el);
-        });
+        this.modelVeiw = null;
+        if (!model) {
+          accSelectWithoutEvents($('.acc-item:eq(' + (state.getPreviousEditModel().isTower() ? 2 : 1) +  ' )'));
+        } else {
+          var view = this.modelView = model.isTower() ? new TowerView({freqs:freqs, model:model}) : new LocationView({model:model});
+          this.modelView.renderAsync().done(function(){
+            var $el = $('.item-view')
+            $el.html(view.$el);
+            accSelectWithoutEvents($el);
+          });
+        }
         map.setModel(model);
-
       }, this));
     },
 

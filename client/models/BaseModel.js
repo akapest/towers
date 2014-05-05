@@ -1,5 +1,5 @@
 /**
- * require(vendor/backbone)
+ * require(vendor/backbone.memento)
  */
 (function(){
 
@@ -12,7 +12,7 @@
     save: function(opts){
       opts = opts || {};
       var data = {};
-      data[this._getName()] = this.toJSON()
+      data[this._getName()] = this._toJSON ? this._toJSON () : this.toJSON();
       opts.url = '/rest/' + this.url + '?' + $.param(data);
       Backbone.Model.prototype.save.call(this, null, opts)
       this.changed = {};

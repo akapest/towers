@@ -10,7 +10,7 @@ $(function(){
 
   window.MapView = Backbone.View.extend({
 
-    initialize: function(options){
+    initialize: function(){
       this.model = null;
       this.towersGeoObjects = {};
       this.locationGeoObjects = {};
@@ -57,7 +57,7 @@ $(function(){
         var active = state.get('location')
         if (!active) return;
         this.removeTowers();
-        this.resetObjectCreation(); //if any
+        this.destroyCurrentObject(); //if any
 
         if (active.isNew()) return;
 
@@ -83,21 +83,22 @@ $(function(){
      */
     setModel: function(model){
       this.model = model;
+      this.destroyCurrentObject(); //if any
     },
 
     keyUpListener: function(e){
       if (e.keyCode == 27){ //ESC
-        this.resetObjectCreation();
+        if (this.model){
+          this.model.set({
+            start: null,
+            end: null
+          });
+        }
+        this.destroyCurrentObject();
       }
     },
 
-    resetObjectCreation: function(){
-      if (this.model){
-        this.model.set({
-          start: null,
-          end: null
-        });
-      }
+    destroyCurrentObject: function(){
       if (this.object){
         this.object.remove();
         this.object = null;
@@ -137,14 +138,12 @@ $(function(){
           this.draw(model)
           if (model.isTower()){
             state.get('location').getTowers().add(model);
+
           } else {
             state.set('location', model)
             state.get('locations').add(model);
-            accSelectWithoutEvents($('.acc-item:eq(1)'));
           }
-          state.trigger('edit:done', model)
-          this.model = null;
-          this.resetObjectCreation();
+          state.set('editModel', null)
         }
       }
       this.trigger('click')

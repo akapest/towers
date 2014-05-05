@@ -40,6 +40,7 @@
         attrs = this.parse(attrs);
         this.set(attrs);
       }
+      _.extend(this, new Backbone.Memento(this));
     },
 
     is: function(type){
@@ -50,7 +51,7 @@
       return false;
     },
 
-    toJSON: function(){
+    _toJSON: function(){
       var result = _.clone(this.attributes);
       result.start = arrayToPoint(result.start);
       if (result.end && this.is && this.is('highway')){
