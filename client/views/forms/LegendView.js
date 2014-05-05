@@ -23,6 +23,7 @@
       _.each(['reset', 'add', 'remove'], _.bind(function(event){
         this.freqs.on(event, this.render, this)
       }, this));
+      state.on('change:location', this.render);
     },
 
     render: function(){
@@ -31,11 +32,24 @@
       }
       var $ul = this.$el.find('ul');
       $ul.html('');
-      this.freqs.each(function(freq){
-        var html = _.template(t, freq.attributes, {interpolate:/\$\{(.+?)\}/g})
-        $ul.append(html);
-      })
+      var towers = state.get('location').getTowers();
+      this.freqs.each(_.bind(function(freq){
+        if (this.has(towers, freq)){
+          var html = _.template(t, freq.attributes, {interpolate:/\$\{(.+?)\}/g})
+          $ul.append(html);
+        }
+      }, this));
       return this;
+    },
+
+    has: function(towers, freq){
+      for (var i = 0; i < towers.length; i++){
+        var t = towers.at(i);
+        if (t.get('freq') == freq.get('value')){
+          return true;
+        }
+      }
+      return false;
     },
 
     onColorChange: function(e){
