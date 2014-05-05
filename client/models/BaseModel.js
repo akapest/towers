@@ -1,5 +1,5 @@
 /**
- * require(vendor/backbone.memento)
+ * require(vendor/backbone)
  */
 (function(){
 
@@ -16,10 +16,21 @@
       opts.url = '/rest/' + this.url + '?' + $.param(data);
       Backbone.Model.prototype.save.call(this, null, opts)
       this.changed = {};
+      this.markToRevert();
     },
 
     set: function(){
       return Backbone.Model.prototype.set.apply(this,arguments);
+    },
+
+    markToRevert: function(){
+      this.restoreAttributes = _.clone(this.attributes);
+    },
+
+    revert: function(){
+      if (this.restoreAttributes){
+        this.set(this.restoreAttributes, {silent:true});
+      }
     },
 
     //get view presentation of attribute

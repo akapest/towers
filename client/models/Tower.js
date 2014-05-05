@@ -42,7 +42,6 @@
         }
         this.set(attrs)
       }
-      _.extend(this, new Backbone.Memento(this));
 
       this.on('change:type', _.bind(function(){
         this.set('angle', angles[this.get('type')][0])

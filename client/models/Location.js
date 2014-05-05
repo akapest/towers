@@ -40,7 +40,6 @@
         attrs = this.parse(attrs);
         this.set(attrs);
       }
-      _.extend(this, new Backbone.Memento(this));
     },
 
     is: function(type){

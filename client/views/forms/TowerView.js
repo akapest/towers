@@ -9,7 +9,7 @@
     events: {
       'click .bind-color': 'bindColor',
       'click .remove': function(){
-        this.model.restore();
+        this.model.revert();
         state.set('editModel', null);
       }
     },
@@ -18,7 +18,6 @@
       _.bindAll(this);
       this.freq = null;
       this.model = options.model;
-      this.model.store();
       this.template = getTemplate('tower');
       this.listenTo(this.model, 'change:type', this.renderAsync)
     },

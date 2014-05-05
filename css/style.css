@@ -64,6 +64,10 @@ span.big{
 	color: black;
 }
 
+.acc-item-data{
+    margin-top: 14px;
+}
+
 .toggle span {
 	border-bottom: none;
 }

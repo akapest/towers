@@ -7,7 +7,7 @@
 
     events: {
       'click .remove': function(){
-        this.model.restore();
+        this.model.revert();
         state.set('editModel', null);
       }
     },
