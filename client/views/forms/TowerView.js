@@ -88,7 +88,7 @@
         this.stopListening(this.freq)
       }
       var value = parseFloat(this.model.get('freq'))
-      if (state.get('freqs').findWhere({value: value})){
+      if (!value || state.get('freqs').findWhere({value: value})){
         return;
       }
       var $color = this.$('.color');

@@ -5,9 +5,11 @@
 
   window.LocationView = View.extend({
 
-    'click .remove': function(){
-      this.model.restore();
-      state.set('editModel', null);
+    events: {
+      'click .remove': function(){
+        this.model.restore();
+        state.set('editModel', null);
+      }
     },
 
     initialize: function(options){
