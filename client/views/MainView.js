@@ -38,9 +38,9 @@
 
       this.views = {
         'towersList': new TowersView({el: '.acc-item.towers-list', name: 'Вышки'}),
-        'locationsList': new LocationsView({el: '.acc-item.locations-list', collection: locations, name: 'Локации'}),
-        'legend': new LegendView({el: '.legend'})
+        'locationsList': new LocationsView({el: '.acc-item.locations-list', collection: locations, name: 'Локации'})
       }
+      new LegendView({el: '.legend'})
       ymaps.ready(_.bind(function(){
         map = window.map = new MapView({
           freqs: freqs,
