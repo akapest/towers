@@ -15,7 +15,6 @@
       this.freq = null;
       this.model = options.model;
       this.template = getTemplate('tower');
-      this.listenTo(state, 'edit:done', this.bindColor);
       this.listenTo(this.model, 'change:type', this.renderAsync)
     },
 
@@ -33,6 +32,11 @@
         this.afterRender();
         this.focus('.name');
       }, this));
+    },
+
+    remove: function(){
+      this.bindColor();
+      View.prototype.remove.apply(this, arguments);
     },
 
     afterRender: function(){

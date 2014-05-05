@@ -45,12 +45,13 @@
         map = window.map = new MapView({freqs: freqs, locations: locations});
 
         state.on('edit:done', _.bind(function(model){
+          this.modelView && this.modelView.remove();
           if (model.isTower()){
             accSelectWithoutEvents($('.acc-item:eq(2)'));
           } else {
             accSelectWithoutEvents($('.acc-item:eq(1)'));
           }
-          this.modelView && this.modelView.remove();
+          state.set('editModel', null);
 
         }, this))
         map.on('click', function(){
@@ -64,10 +65,10 @@
       }, this))
 
       state.on('change:editModel', _.bind(function(state, model){
-
-        if (this.modelView){
-          this.modelView.remove();
+        if (!model) {
+          return;
         }
+        this.modelView && this.modelView.remove();
         var view = this.modelView = model.isTower() ? new TowerView({freqs:freqs, model:model}) : new LocationView({model:model});
         this.modelView.renderAsync().done(function(){
           var $el = $('.item-view')
