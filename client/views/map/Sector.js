@@ -19,7 +19,7 @@
       interactivityModel: 'default#transparent'
     });
     this.parts.events.add(['click'], function(e){
-      if (this.base) this.base.balloon.open();
+        this.openBalloon();
     }, this)
     this.base = null;
   }
@@ -36,6 +36,10 @@
         this.renderBase();
       }
       return this;
+    },
+
+    openBalloon: function(){
+      if (this.base) this.base.balloon.open();
     },
 
     renderCircleTower: function(){

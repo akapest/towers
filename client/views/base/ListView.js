@@ -20,8 +20,10 @@
         var $el = $(e.currentTarget);
         $el.removeClass('active')
         var model = this._createModel();
-        state.set('editModel', model);
-        this.__setActive(model);
+        if (model){
+          state.set('editModel', model);
+          this.__setActive(model);
+        }
         e.stopPropagation();
         return false;
       },

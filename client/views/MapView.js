@@ -55,11 +55,14 @@ $(function(){
 
       var duration = 500;
 
-      state.on('click:object', function(object){
+      state.on('click:object', _.bind(function(object){
         if (object && object.get('start')){
-          map.panTo(object.get('start'),{delay:0, duration:duration})
+          map.panTo(object.get('start'),{delay:0, duration:duration});
+          if (object.isTower() && this.getTower(object.cid)){
+             this.getTower(object.cid).openBalloon();
+          }
         }
-      })
+      }, this))
 
       state.on('change:location', _.bind(function(){
         var active = state.get('location')
@@ -219,6 +222,10 @@ $(function(){
     removeLocation: function(model){
       var object = this.locationGeoObjects[model.cid];
       object && object.remove();
+    },
+
+    getTower: function(cid){
+      return this.towersGeoObjects[cid];
     },
 
     drawTower: function(tower){

@@ -29,6 +29,10 @@
     },
 
     _createModel : function(){
+      if (state.get('location') == null){
+        alert("Не выбрана локация")
+        return false;
+      }
       return new Tower({type:'tower'});
     },
 
