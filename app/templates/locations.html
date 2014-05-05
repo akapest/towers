@@ -13,10 +13,12 @@
         <li class="add">Добавить</li>
         #{/if}
     </ul>
+    #{if isAdmin}
     <div role="form" style=" height: 30px; ">
         <label>Показать границы</label>
         <input type="checkbox" class="show-locations" checked="checked" style=" margin:9px 0 0 5px;"/>
     </div>
+    #{/if}
     </div>
 </div>
 
