@@ -48,9 +48,6 @@
         });
         if (startLocation){
           state.trigger('change:location')
-          if ($('.show-locations').length){
-            Backbone.trigger('show:locations', true)
-          }
         }
       }, this))
 

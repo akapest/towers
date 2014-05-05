@@ -23,6 +23,7 @@
       if (active){
         this.$el.find('li[data-cid="'+ active.cid +'"]').addClass('active');
       }
+      Backbone.trigger('show:locations', $('.show-locations').is(':checked'));
     },
 
     _getType: function(){
