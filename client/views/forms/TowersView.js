@@ -20,7 +20,7 @@
         this.stopListening(this.collection)
       }
       this.collection = collection;
-      this.listenTo(this.collection, 'add remove reset', this.renderAsync);
+      this.listenTo(this.collection, 'add remove reset change', this.renderAsync);
       this.renderAsync();
     },
 

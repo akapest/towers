@@ -85,13 +85,14 @@
     },
 
     validate: function(){
+      var id = this.id
       return this.__validate([
         'name', //required
         {
           name: 'name',
           validate: function(name){
             var loc = state.get('locations').find(function(el){
-              return el.get('name') == name;
+              return el.get('name') == name && el.id != id;
             });
             if (loc) return 'Не уникальное название';
           }
@@ -107,9 +108,13 @@
         towers = this.get('_towers');
       }
       return towers;
+    },
+
+    getName: function(){
+      return this.get('name') || 'Новая локация'
     }
 
-  })
+  });
 
   function pointToArray(point){
     if (!point) return null;

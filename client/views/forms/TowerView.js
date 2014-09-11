@@ -114,7 +114,6 @@
     },
 
     setValue: function($el, fieldName){
-      debugger
       if (fieldName != 'angle'){
         this[fieldName].setValue.apply(this, arguments);
       }

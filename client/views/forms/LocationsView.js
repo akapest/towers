@@ -15,11 +15,15 @@
       _.bindAll(this);
       this.name = options.name;
       this.templateP = getTemplate('locations');
-      this.listenTo(this.collection, 'add remove reset', this.renderAsync);
+      this.listenTo(this.collection, 'add remove reset change', this.renderAsync);
     },
 
     _afterRender: function(){
       var active = state.get('location')
+      if (active == this.current){
+        return;
+      }
+      this.current = active;
       if (active){
         this.$el.find('li[data-cid="'+ active.cid +'"]').addClass('active');
       }

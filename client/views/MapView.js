@@ -49,6 +49,11 @@ $(function(){
         }, this))
       }, this));
 
+      Backbone.on('update:location', _.bind(function(model){
+        this.removeLocation(model)
+        this.drawLocation(model)
+      }, this));
+
       state.get("locations").on('remove', _.bind(function(model){
         this.removeLocation(model);
       }, this))
@@ -220,8 +225,10 @@ $(function(){
     },
 
     removeLocation: function(model){
-      var object = this.locationGeoObjects[model.cid];
-      object && object.remove();
+      var arr = this.locationGeoObjects[model.cid];
+      arr && _.each(arr, function(el){
+        el.remove()
+      });
     },
 
     getTower: function(cid){
@@ -258,7 +265,8 @@ $(function(){
       )
       map.geoObjects.add(circle);
       var result = new Circle(circle);
-      this.locationGeoObjects[model.cid] = result;
+      this.locationGeoObjects[model.cid] = this.locationGeoObjects[model.cid] || [];
+      this.locationGeoObjects[model.cid].push(result)
       return result;
     },
 
@@ -279,6 +287,7 @@ $(function(){
     },
 
     drawLocations: function(locations){
+      this.removeLocations();
       locations.each(_.bind(function(loc){
         this.drawLocation(loc);
       }, this));
@@ -297,9 +306,11 @@ $(function(){
     },
 
     removeLocations: function(){
-      _.forOwn(this.locationGeoObjects, function(l){
-        l.remove();
-      })
+      _.each(this.locationGeoObjects, _.bind(function(arr){
+        _.each(arr, function(el){
+          el.remove()
+        });
+      }, this));
       this.locationGeoObjects = {};
     }
 

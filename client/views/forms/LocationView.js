@@ -12,6 +12,11 @@
       }
     },
 
+    remove: function(){
+      Backbone.trigger('update:location', this.model);
+      View.prototype.remove.apply(this)
+    },
+
     initialize: function(options){
       _.bindAll(this);
       this.options = options;
@@ -21,7 +26,10 @@
 
     renderAsync: function(){
       return this.template.done(_.bind(function(t){
-        var html = t.execute()
+        var data = {
+          name: this.model.getName()
+        };
+        var html = t.execute(data);
         this.$el.html(html);
         this.delegateEvents()
         this.bindFields();
