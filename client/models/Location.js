@@ -71,6 +71,9 @@
         attrs.end = pointToArray(attrs.end)
         attrs.type = attrs.type || 'highway';
       }
+      if (attrs.comment){
+        attrs.comment = attrs.comment.replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+      }
       return attrs;
     },
 
