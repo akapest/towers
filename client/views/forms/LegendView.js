@@ -12,15 +12,21 @@
         this.$('.list').toggle();
       },
       'change input[type="checkbox"]': function(e){
-        var cid = $(e.currentTarget).data('freq-cid')
-        var freq = state.get('freqs').get(cid)
-        freq.switchVisibility()
+        var $el = $(e.currentTarget);
+        if ($el.data('toggle-all')){
+          this.toggleAll($el.is(":checked"))
+        } else {
+          var cid = $el.data('freq-cid')
+          var freq = state.get('freqs').get(cid)
+          freq.switchVisibility()
+        }
       },
       'change .color': 'onColorChange'
     },
 
     initialize: function(){
       _.bindAll(this)
+      this.showAll = true;
       this.templatePromise = getTemplate('legend')
       this.freqs = state.get('freqs');
       if (!this.freqs.length){
@@ -31,6 +37,7 @@
     },
 
     render: function(){
+      this.freqs = state.get('freqs');
       if (this.freqs.length){
         this.$el.show();
       }
@@ -38,7 +45,8 @@
         var html = t.execute({
           freqs: this.freqs,
           towers: state.get('location').getTowers(),
-          has: this.has
+          has: this.has,
+          showAll: this.showAll
         });
         this.$el.html(html)
       }, this));
@@ -62,9 +70,18 @@
       model.set('color', $el.val())
       model.save()
       this.freqs.trigger('change', model)
+    },
+
+    toggleAll: function(show){
+      this.showAll = show;
+      this.freqs.each(function(freq){
+        freq.set({show:show})
+      });
+      this.$('input[type="checkbox"]').each(function(index, el){
+        $(el).prop('checked', show)
+      });
+
     }
-
-
 
   });
 

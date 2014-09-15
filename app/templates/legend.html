@@ -1,6 +1,12 @@
 <span class="acc-item-name main toggle">Легенда</span>
 <div class="">
     <ul>
+        <li class="freq list-item">
+            <label class="touch-it">
+                <input type="checkbox" checked="!{showAll}" data-toggle-all="true"/>
+                Все
+            </label>
+        </li>
         <%
            freqs.each(function(f){
               if (has(towers, f)){
@@ -14,6 +20,5 @@
               }
            });
         %>
-
     </ul>
 </div>
