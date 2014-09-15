@@ -9,7 +9,7 @@
 
     events:{
       'click .toggle': function(){
-        this.$('.list').toggle();
+        this.$('.form-body').toggle();
       },
       'change input[type="checkbox"]': function(e){
         var $el = $(e.currentTarget);
