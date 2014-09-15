@@ -11,33 +11,36 @@
       'click .toggle': function(){
         this.$('.list').toggle();
       },
+      'change input[type="checkbox"]': function(e){
+        var cid = $(e.currentTarget).data('freq-cid')
+        var freq = state.get('freqs').get(cid)
+        freq.switchVisibility()
+      },
       'change .color': 'onColorChange'
     },
 
     initialize: function(){
       _.bindAll(this)
+      this.templatePromise = getTemplate('legend')
       this.freqs = state.get('freqs');
       if (!this.freqs.length){
         this.$el.hide();
       }
-      _.each(['reset', 'add', 'remove'], _.bind(function(event){
-        this.freqs.on(event, this.render, this)
-      }, this));
-      state.on('change:location', this.render);
+      this.listenTo(this.freqs, 'add reset remove', this.render)
+      this.listenTo(state, 'change:location', this.render)
     },
 
     render: function(){
       if (this.freqs.length){
         this.$el.show();
       }
-      var $ul = this.$el.find('ul');
-      $ul.html('');
-      var towers = state.get('location').getTowers();
-      this.freqs.each(_.bind(function(freq){
-        if (this.has(towers, freq)){
-          var html = _.template(t, freq.attributes, {interpolate:/\$\{(.+?)\}/g})
-          $ul.append(html);
-        }
+      this.templatePromise.done(_.bind(function(t){
+        var html = t.execute({
+          freqs: this.freqs,
+          towers: state.get('location').getTowers(),
+          has: this.has
+        });
+        this.$el.html(html)
       }, this));
       return this;
     },
@@ -58,7 +61,7 @@
       var model = this.freqs.findWhere({value:freq})
       model.set('color', $el.val())
       model.save()
-      this.freqs.trigger('change')
+      this.freqs.trigger('change', model)
     }
 
 

@@ -273,17 +273,26 @@ $(function(){
     drawTowers: function(towers){
       //this.removeTowers();
       towers.each(_.bind(function(tower){
-        var freq = parseFloat(tower.get('freq'))
-        var model = state.get('freqs').findWhere({value: freq})
-        if (model){
-          tower.set('color', model.get('color'))
-          //setTimeout(_.bind(function(){
-            this.drawTower(tower);
-          //}, this))
-        } else {
-          console.error("Freq not found:" + freq);
+        var freq = tower.getFreq_();
+        if (freq.shouldShow()){
+          tower.set('color', freq.get('color'));
+          this.drawTower(tower);
         }
-      },this));
+      }, this));
+    },
+
+    redrawTowers: function(towers){
+      towers.each(_.bind(function(tower){
+        this.removeTower(tower)
+        if (tower.getFreq_().shouldShow()){
+          tower.updateColor()
+          this.drawTower(tower)
+        }
+      }, this))
+    },
+
+    isShown: function(tower){
+      return this.towersGeoObjects[tower.cid] || this.towersGeoObjects[tower.cid + '0']
     },
 
     drawLocations: function(locations){

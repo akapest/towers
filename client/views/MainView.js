@@ -82,9 +82,12 @@
         self.initAccordion();
       })
 
-      freqs.on('change', function(){
-        map.removeTowers()
-        map.drawTowers(state.get('location').getTowers())
+      freqs.on('change', function(freq, b, c){
+        var towers = state.get('location').getTowers();
+        var filtered = towers.filter(function(tower){
+          return tower.getFreq_().cid == freq.cid
+        });
+        map.redrawTowers(_(filtered))
       })
     },
 

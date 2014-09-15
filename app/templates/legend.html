@@ -1,0 +1,17 @@
+<span class="acc-item-name main toggle">Легенда</span>
+<div class="">
+    <ul>
+        <%
+           freqs.each(function(f){
+              if (has(towers, f)){
+                 %> <li class="freq list-item">
+                    <input type="checkbox" checked="!{f.shouldShow()}" data-freq-cid="!{f.cid}"/>
+                    <input class="color" type="color" data-freq="!{f.get('value')}" value="!{f.get('color')}"/>
+                    <label>!{f.get('value')} Mhz</label>
+                 </li> <%
+              }
+           });
+        %>
+
+    </ul>
+</div>

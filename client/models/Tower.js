@@ -56,6 +56,21 @@
       }
     },
 
+    getFreq_: function(){
+      var freq = parseFloat(this.get('freq'));
+      var result = state.get('freqs').findWhere({value: freq})
+      if (!result){
+        console.error("freq not found: " + freq)
+      } else {
+        return result
+      }
+    },
+
+    updateColor: function(){
+      var freq = this.getFreq_();
+      this.set({color: freq.get('color')})
+    },
+
     //возвращает true, если объект вышка или точка-точка
     isTower: function(){
       return true;
