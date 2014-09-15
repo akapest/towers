@@ -267,3 +267,8 @@ td input{
 .glyphicon{
     padding:3px;
 }
+
+.touch-it{
+    padding: 7px;
+    margin: 0 0 0 -7px;
+}
