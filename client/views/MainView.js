@@ -49,6 +49,7 @@
         if (startLocation){
           state.trigger('change:location')
         }
+        Backbone.trigger('show:locations', true)
       }, this))
 
       state.on('change:editModel', _.bind(function(state, model){
