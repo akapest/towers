@@ -77,10 +77,7 @@
       this.freqs.each(function(freq){
         freq.set({show:show})
       });
-      this.$('input[type="checkbox"]').each(function(index, el){
-        $(el).prop('checked', show)
-      });
-
+      this.$('input[type="checkbox"]').prop('checked', show)
     }
 
   });
