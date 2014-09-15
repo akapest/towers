@@ -34,18 +34,24 @@
       }
       this.listenTo(this.freqs, 'add reset remove', this.render)
       this.listenTo(state, 'change:location', this.render)
+      this.listenTo(state, 'change:location', this.listenToTowersAddition)
+    },
+
+    listenToTowersAddition: function(){
+      var towers = state.get('location').getTowers();
+      this.listenTo(towers, 'add', this.render)
     },
 
     render: function(){
-      this.freqs = state.get('freqs');
       if (this.freqs.length){
         this.$el.show();
       }
+      var freqs = this.freqs.filter(_.bind(function(freq){
+        return this.has(freq)
+      }, this));
       this.templatePromise.done(_.bind(function(t){
         var html = t.execute({
-          freqs: this.freqs,
-          towers: state.get('location').getTowers(),
-          has: this.has,
+          freqs: freqs,
           showAll: this.showAll
         });
         this.$el.html(html)
@@ -53,7 +59,8 @@
       return this;
     },
 
-    has: function(towers, freq){
+    has: function(freq){
+      var towers = state.get('location').getTowers()
       for (var i = 0; i < towers.length; i++){
         var t = towers.at(i);
         if (t.get('freq') == freq.get('value')){

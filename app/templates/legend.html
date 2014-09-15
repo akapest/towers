@@ -1,23 +1,22 @@
 <span class="acc-item-name main toggle">Легенда</span>
 <div class="form-body">
     <ul>
-        <li class="freq list-item">
-            <label class="touch-it">
-                <input type="checkbox" checked="!{showAll}" data-toggle-all="true"/>
-                Все
-            </label>
-        </li>
-        <%
-           freqs.each(function(f){
-              if (has(towers, f)){
-                 %> <li class="freq list-item">
-                        <label class="touch-it">
-                            <input type="checkbox" checked="!{f.shouldShow()}" data-freq-cid="!{f.cid}"/>
-                            <input class="color" type="color" data-freq="!{f.get('value')}" value="!{f.get('color')}"/>
-                            !{f.get('value')} Mhz
-                        </label>
-                 </li> <%
-              }
+        <% if (freqs.length > 1){ %>
+            <li class="freq list-item">
+                <label class="touch-it">
+                    <input type="checkbox" checked="!{showAll}" data-toggle-all="true"/>
+                    Все
+                </label>
+            </li>
+        <% }
+           _(freqs).each(function(f){
+             %> <li class="freq list-item">
+                    <label class="touch-it">
+                        <input type="checkbox" checked="!{f.shouldShow()}" data-freq-cid="!{f.cid}"/>
+                        <input class="color" type="color" data-freq="!{f.get('value')}" value="!{f.get('color')}"/>
+                        !{f.get('value')} Mhz
+                    </label>
+             </li> <%
            });
         %>
     </ul>
