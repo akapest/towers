@@ -23,7 +23,7 @@ $(function(){
       if (map) map.destroy();
       var center = state.get('location') ? state.get('location').get('start') : null;
       map = new ymaps.Map('map', {
-        center: center || [56.8, 60.5],
+        center: center || [56.8, 60.7],
         zoom: 10,
         behaviors: ['default', 'scrollZoom']
       });
