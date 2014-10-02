@@ -1,5 +1,6 @@
 /**
  * require(models/Location)
+ * require(models/Point)
  */
 (function(){
 
@@ -42,7 +43,7 @@
         }
         this.set(attrs)
       }
-
+      this.set('points', new Backbone.Collection());
       this.on('change:type', _.bind(function(){
         this.set('angle', angles[this.get('type')][0])
       }, this))
@@ -54,6 +55,10 @@
       } else {
         return (this.isHighway() ? 'Точка-точка' : 'Вышка')  + ' ' + this.get('name');
       }
+    },
+
+    getPoints: function(){
+      return this.get('points')
     },
 
     getFreq_: function(){

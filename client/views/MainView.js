@@ -7,6 +7,7 @@
  * require(views/forms/LocationView)
  * require(views/forms/TowersView)
  * require(views/forms/LocationsView)
+ * require(views/forms/PointsView)
  * require(views/forms/LegendView)
  * require(views/MapView)
  */
@@ -38,7 +39,8 @@
 
       this.views = {
         'towersList': new TowersView({el: '.acc-item.towers-list', name: 'Вышки'}),
-        'locationsList': new LocationsView({el: '.acc-item.locations-list', collection: locations, name: 'Локации'})
+        'locationsList': new LocationsView({el: '.acc-item.locations-list', collection: locations, name: 'Локации'}),
+        'pointsList': new PointsView({el: '.acc-item.points-list', name: 'Точки'})
       }
       new LegendView({el: '.legend'})
       ymaps.ready(_.bind(function(){
@@ -51,15 +53,14 @@
         }
         Backbone.trigger('show:locations', true)
       }, this))
-
+      var view = null;
       state.on('change:editModel', _.bind(function(state, model){
-        this.modelView && this.modelView.remove();
-        this.modelVeiw = null;
+        view && view.remove();
         if (!model) {
           accSelectWithoutEvents($('.acc-item:eq(' + (state.getPreviousEditModel().isTower() ? 2 : 1) +  ' )'));
         } else {
-          var view = this.modelView = model.isTower() ? new TowerView({freqs:freqs, model:model}) : new LocationView({model:model});
-          this.modelView.renderAsync().done(function(){
+          view = model.isTower() ? new TowerView({freqs:freqs, model:model}) : (model.is('location')? new LocationView({model:model}): null);
+          view && view.renderAsync().done(function(){
             var $el = $('.item-view')
             $el.html(view.$el);
             accSelectWithoutEvents($el);

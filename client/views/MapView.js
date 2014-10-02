@@ -14,6 +14,7 @@ $(function(){
       this.model = null;
       this.towersGeoObjects = {};
       this.locationGeoObjects = {};
+      this.pointsGeoObjects = {};
       this.showLocations = false;
       this.initMap();
       this.bindEvents();
@@ -73,6 +74,7 @@ $(function(){
         var active = state.get('location')
         if (!active) return;
         this.removeTowers();
+        this.removePoints();
         this.destroyCurrentObject(); //if any
 
         if (active.isNew()) return;
@@ -87,6 +89,21 @@ $(function(){
             self.drawTowers(active.getTowers());
           }, duration + 50)
         })
+      }, this))
+
+      state.on('change:showPoints', _.bind(function(){
+        var self = this;
+        var value = state.get('showPoints');
+        if (value){
+          var towers = state.get('location').getTowers()
+          towers.each(function(tower){
+            tower.getPoints().each(function(point){
+              self.drawPoint(point)
+            })
+          });
+        } else {
+          this.removePoints()
+        }
       }, this))
     },
 
@@ -152,9 +169,12 @@ $(function(){
           if (model.isTower()){
             state.get('location').getTowers().add(model);
 
-          } else {
+          } else if (this.model.is('location')){
             state.set('location', model)
             state.get('locations').add(model);
+
+          } else {
+            state.get('tower').getPoints().add(model);
           }
           state.set('editModel', null)
         }
@@ -178,8 +198,10 @@ $(function(){
 
       if (this.model.isTower()){
         this.object = new Sector(this.model.get('start'), this.model.attributes, map, Geo, true);
-      } else {
+      } else if (this.model.is('location')){
         this.object = this.drawLocation(this.model);
+      } else {
+        this.object = this.drawPoint(this.model);
       }
       this.object.render && this.object.render();
       if (previous){
@@ -205,8 +227,12 @@ $(function(){
           this.removeTower(model);
         }
         this.drawTower(model);
-      } else {
+
+      } else if (model.is('location')){
         this.drawLocation(model);
+
+      } else {
+        this.drawPoint(model);
       }
     },
 
@@ -247,26 +273,42 @@ $(function(){
       }
     },
 
-    drawLocation: function(model){
+    createCircle: function(model, options){
       var circle = new ymaps.Circle(
-          [
-            model.get('start'),
-            model.get('radius')
-          ],
-          {},
-          {
-            interactivityModel: 'default#transparent',
-            draggable: false,
-            fillColor: "rgb(0,0,0,0)",
-            strokeColor: "#83h",
-            strokeOpacity: 0.4,
-            strokeWidth: 2
-          }
-      )
+        [
+          model.get('start'),
+          model.get('radius')
+        ],
+        {},
+        _.extend({
+          interactivityModel: 'default#transparent',
+          draggable: false
+        }, options)
+      );
       map.geoObjects.add(circle);
       var result = new Circle(circle);
+      return result;
+    },
+
+    drawLocation: function(model){
+      var result = this.createCircle(model, {
+        fillColor: "rgb(0,0,0,0)",
+        strokeColor: "#83h",
+        strokeOpacity: 0.4,
+        strokeWidth: 2
+      });
       this.locationGeoObjects[model.cid] = this.locationGeoObjects[model.cid] || [];
       this.locationGeoObjects[model.cid].push(result)
+      return result;
+    },
+
+    drawPoint: function(model){
+      var result = this.createCircle(model, {
+        fillColor: model.get('tower').get('color'),
+        strokeColor: model.get('tower').get('color'),
+        strokeOpacity: 0.4
+      });
+      this.pointsGeoObjects[model.cid] = result
       return result;
     },
 
@@ -310,7 +352,7 @@ $(function(){
     removeTowers: function(){
       _.forOwn(this.towersGeoObjects, function(t){
         t.remove();
-      })
+      });
       this.towersGeoObjects = {};
     },
 
@@ -321,6 +363,13 @@ $(function(){
         });
       }, this));
       this.locationGeoObjects = {};
+    },
+
+    removePoints: function(){
+      _.forOwn(this.pointsGeoObjects, function(point){
+        point.remove();
+      });
+      this.pointsGeoObjects = {};
     }
 
   });

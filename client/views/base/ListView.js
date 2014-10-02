@@ -74,6 +74,15 @@
       }, this));
     },
 
+    setCollection: function(collection){
+      if (this.collection){
+        this.stopListening(this.collection)
+      }
+      this.collection = collection;
+      this.listenTo(this.collection, 'add remove reset change', this.renderAsync);
+      this.renderAsync();
+    },
+
     _data: function(){
       var list = this.collection.map(function(el){
         return {

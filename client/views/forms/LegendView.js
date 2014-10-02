@@ -15,6 +15,10 @@
         var $el = $(e.currentTarget);
         if ($el.data('toggle-all')){
           this.toggleAll($el.is(":checked"))
+
+        } else if ($el.data('toggle-points')){
+          state.set('showPoints', $el.is(':checked'))
+
         } else {
           var cid = $el.data('freq-cid')
           var freq = state.get('freqs').get(cid)
@@ -52,7 +56,8 @@
       this.templatePromise.done(_.bind(function(t){
         var html = t.execute({
           freqs: freqs,
-          showAll: this.showAll
+          showAll: this.showAll,
+          showPoints: state.get('showPoints')
         });
         this.$el.html(html)
       }, this));

@@ -15,22 +15,13 @@
       }, this));
     },
 
-    setCollection: function(collection){
-      if (this.collection){
-        this.stopListening(this.collection)
-      }
-      this.collection = collection;
-      this.listenTo(this.collection, 'add remove reset change', this.renderAsync);
-      this.renderAsync();
-    },
-
     _getType: function(){
       return 'tower'
     },
 
     _createModel : function(){
       if (state.get('location') == null){
-        alert("Не выбрана локация")
+        alert("Не выбрана локация");
         return false;
       }
       return new Tower({type:'tower'});
