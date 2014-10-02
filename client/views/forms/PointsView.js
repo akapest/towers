@@ -1,5 +1,6 @@
 /**
  * require(views/base/ListView)
+ * require(models/Point)
  */
 (function(){
 
