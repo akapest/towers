@@ -1,5 +1,5 @@
 /**
- * require(models/BaseModel)
+ * require(models/Location)
  */
 (function(){
 
