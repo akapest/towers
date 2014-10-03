@@ -57,6 +57,10 @@
       }
     },
 
+    isNew: function(){
+      return !this.get('radius')
+    },
+
     getPoints: function(){
       return this.get('points')
     },

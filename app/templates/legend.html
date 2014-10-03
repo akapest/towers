@@ -1,12 +1,6 @@
 <span class="acc-item-name main toggle">Легенда</span>
 <div class="form-body">
     <ul>
-        <li class="">
-            <label class="touch-it">
-                <input type="checkbox" checked="!{showPoints}" data-toggle-points="true"/>
-                Показать точки
-            </label>
-        </li>
         <% if (freqs.length > 1){ %>
             <li class="freq list-item">
                 <label class="touch-it">
@@ -14,8 +8,14 @@
                     Все
                 </label>
             </li>
-        <% }
-           _(freqs).each(function(f){
+        <% } %>
+        <li class="">
+            <label class="touch-it">
+                <input type="checkbox" checked="!{showPoints}" data-toggle-points="true"/>
+                Показать точки
+            </label>
+        </li>
+        <% _(freqs).each(function(f){
              %> <li class="freq list-item">
                     <label class="touch-it">
                         <input type="checkbox" checked="!{f.shouldShow()}" data-freq-cid="!{f.cid}"/>

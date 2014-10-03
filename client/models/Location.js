@@ -60,6 +60,7 @@
       }
       delete result._towers;
       delete result.towers;
+      delete result.points;
       return result;
     },
 

@@ -57,7 +57,9 @@
       state.on('change:editModel', _.bind(function(state, model){
         view && view.remove();
         if (!model) {
-          accSelectWithoutEvents($('.acc-item:eq(' + (state.getPreviousEditModel().isTower() ? 2 : 1) +  ' )'));
+          var prevModel = state.getPreviousEditModel();
+          var number = prevModel.is('point') ? 3 : prevModel.is('tower') ? 2 : 1;
+          accSelectWithoutEvents($('.acc-item:eq(' + number +  ' )'));
         } else {
           view = model.isTower() ? new TowerView({freqs:freqs, model:model}) : (model.is('location')? new LocationView({model:model}): null);
           view && view.renderAsync().done(function(){

@@ -14,7 +14,7 @@
       'click .list-el': function(e){
         var $el = $(e.currentTarget);
         var el = this.collection.get($el.data('cid'));
-        this.__setActive(el, $el);
+        this.__setActive(el, {$el:$el});
       },
       'click .add': function(e){
         var $el = $(e.currentTarget);
@@ -22,7 +22,7 @@
         var model = this._createModel();
         if (model){
           state.set('editModel', model);
-          this.__setActive(model);
+          this.__setActive(model, {add:true});
         }
         e.stopPropagation();
         return false;
@@ -40,7 +40,7 @@
         var $el = $(e.currentTarget);
         var model = this._getModel($el);
         state.set('editModel', model);
-        this.__setActive(model, $el)
+        this.__setActive(model, {$el:$el})
       },
 
       'mouseenter .list-el': function(e){
@@ -62,6 +62,14 @@
       }
     },
 
+    bindToEditModelChange: function(){
+      state.on('change:editModel', _.bind(function(state){
+        if (state.get('editModel') == null){
+          this.__dropActive();
+        }
+      }, this))
+    },
+
     renderAsync: function(){
       if (!this.collection) return;
       return this.templateP.done(_.bind(function(template){
@@ -70,6 +78,7 @@
         this.$el.html(html);
         this.$el.find('.acc-item-data').css('display', display);
         this._afterRender();
+        this.bindToEditModelChange();
         this.delegateEvents();
       }, this));
     },
@@ -96,13 +105,20 @@
       }
     },
 
-    __setActive: function(el, $el){
-      this.$el.find('li').removeClass('active');
-      if (!$el){
-        $el = this.$el.find('li[data-cid="'+ el.cid +'"]')
+    __setActive: function(el, opts){
+      this.__dropActive();
+      if (opts.add){
+        opts.$el = this.$el.find('.add')
       }
-      $el.addClass('active');
+      else if (!opts.$el){
+        opts.$el = this.$el.find('li[data-cid="'+ el.cid +'"]')
+      }
+      opts.$el.addClass('active');
       this._setActive(el)
+    },
+
+    __dropActive: function(){
+      this.$el.find('li').removeClass('active');
     },
 
     _setActive: function(el, $el){

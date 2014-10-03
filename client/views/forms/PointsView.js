@@ -10,9 +10,14 @@
       _.bindAll(this)
       this.name = options.name;
       this.templateP = getTemplate('list');
-      this.listenTo(window.state, 'change:tower', _.bind(function(){
-        var points = state.get('tower').getPoints();
-        this.setCollection(points)
+      this.listenTo(window.state, 'change:tower', _.bind(function(state, tower){
+        if (!tower.isNew()){
+          var points = tower.getPoints();
+          this.setCollection(points)
+          this.$el.show()
+        } else {
+          this.$el.hide()
+        }
       }, this));
     },
 
