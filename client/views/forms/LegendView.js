@@ -85,6 +85,7 @@
     },
 
     toggleAll: function(show){
+      state.set('showPoints', show)
       this.showAll = show;
       this.freqs.each(function(freq){
         freq.set({show:show})

@@ -26,14 +26,15 @@ $(function(){
       map = new ymaps.Map('map', {
         center: center || [56.8, 60.7],
         zoom: 10,
+        controls: ['searchControl', 'typeSelector',  'fullscreenControl', 'rulerControl'],
         behaviors: ['default', 'scrollZoom']
       });
       map.options.set('scrollZoomSpeed', 5);
       map.events.add('click', this.onClick, this);
       map.events.add('mousemove', _.throttle(this.onHover, 50), this);
       map.controls.add('zoomControl', { left: 5, bottom: 15 })
-          .add('typeSelector', {left: 150, bottom: 15}) // Список типов карты
-          .add('mapTools', { left: 35, bottom: 15 }); // Стандартный набор кнопок
+//      map.controls.add('typeSelector', {left: 150, bottom: 15}) // Список типов карты
+//      map.controls.add('mapTools', { left: 35, bottom: 15 }); // Стандартный набор кнопок
 //    вариант контролов сверху
 //      map.controls.add('zoomControl', { right: 5, top: 35 })
 //          .add('typeSelector', {right: 35, top: 65}) // Список типов карты
@@ -59,14 +60,18 @@ $(function(){
         this.removeLocation(model);
       }, this))
 
-      var duration = 500;
+      var duration = 300;
 
       state.on('click:object', _.bind(function(object){
         if (object && object.get('start')){
           map.panTo(object.get('start'),{delay:0, duration:duration});
-          if (object.isTower() && this.getTower(object.cid)){
-             this.getTower(object.cid).openBalloon();
-          }
+          setTimeout(_.bind(function(){
+            if (object.isTower() && this.getTower(object.cid)){
+              this.getTower(object.cid).openBalloon();
+            } else if (object.is('point')){
+              this.showPointHint(object)
+            }
+          }, this), duration + 50)
         }
       }, this))
 
@@ -201,7 +206,7 @@ $(function(){
       } else if (this.model.is('location')){
         this.object = this.drawLocation(this.model);
       } else {
-        this.object = this.drawPoint(this.model);
+        this.object = this.drawPoint(this.model, {edit: true});
       }
       this.object.render && this.object.render();
       if (previous){
@@ -302,14 +307,32 @@ $(function(){
       return result;
     },
 
-    drawPoint: function(model){
+    drawPoint: function(model, opts){
+      opts = opts || {}
       var result = this.createCircle(model, {
         fillColor: model.get('tower').get('color'),
         strokeColor: model.get('tower').get('color'),
-        strokeOpacity: 0.4
+        strokeOpacity: 0.4,
+        zIndex: 99999
       });
       this.pointsGeoObjects[model.cid] = result
+
+      if (!opts.edit){
+        result.data.modelCid = model.cid
+        result.data.events.add('mouseenter', _.bind(function (e) {
+          var cid = e.get('target').modelCid;
+          var point = state.get('tower').getPoints().get(cid)
+          this.showPointHint(point)
+        }, this))
+        .add('mouseleave', function (e) {
+            map.hint.close()
+        });
+      }
       return result;
+    },
+
+    showPointHint: function(point){
+      map.hint.open(point.get('start'), point.get('tower').get('name') + ' - ' + point.get('name'));
     },
 
     drawTowers: function(towers){
