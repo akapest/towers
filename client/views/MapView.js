@@ -37,12 +37,12 @@ $(function(){
 //    вариант контролов сверху
 //      map.controls.add('zoomControl', { right: 5, top: 35 })
 //          .add('typeSelector', {right: 35, top: 65}) // Список типов карты
-//          .add('mapTools', { right: 35, top: 35 }); // Стандартный набор кнопок
+//          .add('mapTools', { right: 35, top: 35 }); // Стандартный набор кнопок   ]
+      this.drawLocations()
     },
 
     bindEvents: function(){
       document.addEventListener('keyup', _.bind(this.keyUpListener, this));
-
 
       Backbone.on('update:location', _.bind(function(model){
         this.removeLocation(model)
@@ -92,10 +92,8 @@ $(function(){
         })
       }, this)
 
-      this.listenTo(state, 'change:showLocations', function(val){
-        setTimeout(_.bind(function(){
-          val ? this.drawLocations(state.get('locations')) : this.removeLocations();
-        }, this))
+      this.listenTo(state, 'change:showLocations', function(state,  val){
+       this.drawLocations()
       }, this);
 
       this.listenTo(state, 'change:showPoints', function(){
@@ -289,6 +287,7 @@ $(function(){
     },
 
     drawLocation: function(model){
+
       var result = this.createCircle(model, {
         fillColor: "rgb(0,0,0,0)",
         strokeColor: "#83h",
@@ -366,11 +365,14 @@ $(function(){
       return this.towersGeoObjects[tower.cid] || this.towersGeoObjects[tower.cid + '0']
     },
 
-    drawLocations: function(locations){
+    drawLocations: function(){
+      var show = state.get('showLocations')
       this.removeLocations();
-      locations.each(_.bind(function(loc){
-        this.drawLocation(loc);
-      }, this));
+      if (show){
+        state.get('locations').each(_.bind(function(loc){
+          this.drawLocation(loc);
+        }, this));
+      }
     },
 
     removeAll: function(){

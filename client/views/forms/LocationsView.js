@@ -27,6 +27,7 @@
       if (active){
         this.$el.find('li[data-cid="'+ active.cid +'"]').addClass('active');
       }
+      this.$('.show-locations').attr('checked', state.get('showLocations'))
     },
 
     _getType: function(){

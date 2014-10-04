@@ -46,10 +46,12 @@
       'mouseenter .list-el': function(e){
         $(e.currentTarget).find('.remove').show();
         $(e.currentTarget).find('.edit').show();
+        $(e.currentTarget).find('.freq').show();
       },
       'mouseleave .list-el': function(e){
         $(e.currentTarget).find('.remove').hide();
         $(e.currentTarget).find('.edit').hide();
+        $(e.currentTarget).find('.freq').hide();
       },
       'mousedown .add': function(e){
         var $el = $(e.currentTarget);
@@ -104,7 +106,8 @@
         return {
           name: el.get('name'),
           cid: el.cid,
-          freq: el.is('tower') ? el.get('freq') : ''
+          freq: el.is('tower') ? el.get('freq') : '',
+          color: el.is('tower') ? el.get('color') : ''
         }
       })
       return {
