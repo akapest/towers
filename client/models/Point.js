@@ -7,13 +7,20 @@
 
   window.Point = window.Location.extend({
 
-    initialize: function(){
-      this.set('name', '' + counter++);
-      localStorage['points'] = counter;
+    url: 'points',
+
+    initialize: function(attrs){
+      attrs = this.parse(attrs)
+      if (attrs && !attrs.name){
+        attrs.name = '' + counter
+        Point.setCounter(++counter)
+      }
+      this.set(attrs)
     },
 
-    isTower: function(){
-      return false;
+    getTower: function(){
+      var location = state.get('locations').get(this.get('locationId'))
+      return location.getTowers().get(this.get("towerId"))
     },
 
     is: function(type){
@@ -22,10 +29,17 @@
 
     validate: function(){
       return null;
+    }
+
+  }, {
+
+    setCounter: function(number){
+      counter = number;
+      localStorage['points'] = counter;
     },
 
-    save: function(){
-
+    getCounter: function(){
+      return counter;
     }
 
   })

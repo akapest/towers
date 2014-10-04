@@ -1,5 +1,6 @@
 /**
  * require(components/accordion)
+ * require(models/Point)
  * require(models/Tower)
  * require(models/Location)
  * require(models/Freq)
@@ -19,6 +20,7 @@
   var towers;
   var freqs;
   var locations;
+  var points;
 
   var mainView = null,
       map;
@@ -30,29 +32,22 @@
         return parseFloat(el.get('value'))
       }});
       locations = createCollection('locations', Location);
-      var startLocation = locations.first();
+      points = createCollection('points', Point);
       state.set({
         locations: locations,
         freqs: freqs,
-        location: startLocation
+        location: locations.first(),
+        points: points,
+        showLocations: true,
+        showPoints: true
       })
-
       this.views = {
         'towersList': new TowersView({el: '.acc-item.towers-list', name: 'Вышки'}),
         'locationsList': new LocationsView({el: '.acc-item.locations-list', collection: locations, name: 'Локации'}),
         'pointsList': new PointsView({el: '.acc-item.points-list', name: 'Точки'})
       }
       new LegendView({el: '.legend'})
-      ymaps.ready(_.bind(function(){
-        map = window.map = new MapView({
-          freqs: freqs,
-          locations: locations
-        });
-        if (startLocation){
-          state.trigger('change:location')
-        }
-        Backbone.trigger('show:locations', true)
-      }, this))
+
       var view = null;
       state.on('change:editModel', _.bind(function(state, model){
         view && view.remove();
@@ -61,31 +56,60 @@
           var number = prevModel.is('point') ? 3 : prevModel.is('tower') ? 2 : 1;
           accSelectWithoutEvents($('.acc-item:eq(' + number +  ' )'));
         } else {
-          view = model.isTower() ? new TowerView({freqs:freqs, model:model}) : (model.is('location')? new LocationView({model:model}): null);
+          view = model.is('tower') ? new TowerView({freqs:freqs, model:model}) : (model.is('location')? new LocationView({model:model}): null);
           view && view.renderAsync().done(function(){
             var $el = $('.item-view')
             $el.html(view.$el);
             accSelectWithoutEvents($el);
           });
+          var type = model.url.replace(/s$/, '');
+          state.set(type, model)
+          model.on('sync', function(){
+            state.trigger('sync:' + type, state, model)
+          })
         }
         map.setModel(model);
       }, this));
     },
 
     render: function(){
-      var self = this,
-          promises = [];
+      this.initViews();
+      this.initFreqs();
+    },
 
+    initViews: function(){
+      var maps = new $.Deferred();
+
+      var promises = []
+      ymaps.ready(function(){
+        maps.resolve()
+      })
+      promises.push(maps)
       _.each(this.views, function(view){
         if (view.render) view.render();
         if (view.renderAsync){
           promises.push(view.renderAsync());
         }
       });
-      $.when.apply($, promises).then(function(){
-        self.initAccordion();
-      })
 
+      $.when.apply($, promises).then(_.bind(function(){
+        map = window.map = new MapView({
+          freqs: freqs,
+          locations: locations
+        });
+
+        this.initAccordion();
+
+        var location = state.get('location');
+        if (location){
+          setTimeout(function(){
+            state.trigger('change:location', state, location)
+          })
+        }
+      }, this));
+    },
+
+    initFreqs: function(){
       freqs.on('change', function(freq, b, c){
         var towers = state.get('location').getTowers();
         var filtered = towers.filter(function(tower){

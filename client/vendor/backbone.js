@@ -536,7 +536,6 @@
     // using Backbone's restful methods, override this to change the endpoint
     // that will be called.
     url: function() {
-      debugger
       var base =
         _.result(this, 'urlRoot') ||
           _.result(this.collection, 'url') ||

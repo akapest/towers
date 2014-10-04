@@ -25,6 +25,11 @@
       return this.previous;
     }
 
+//    ,trigger: function(event){
+//      console.log(event)
+//      Backbone.Model.prototype.trigger.apply(this, arguments)
+//    }
+
   })
 
 

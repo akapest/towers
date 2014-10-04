@@ -10,7 +10,9 @@
   }
 
   window.Tower = Location.extend({
+
     url: 'towers',
+
     fields: [
       {name: 'angle',
         label: 'Угол'},
@@ -43,7 +45,6 @@
         }
         this.set(attrs)
       }
-      this.set('points', new Backbone.Collection());
       this.on('change:type', _.bind(function(){
         this.set('angle', angles[this.get('type')][0])
       }, this))
@@ -62,7 +63,11 @@
     },
 
     getPoints: function(){
-      return this.get('points')
+      var id = this.get('id')
+      var arr = state.get('points').filter(function(el){
+        return el.get('towerId') == id
+      })
+      return _(arr)
     },
 
     getFreq_: function(){

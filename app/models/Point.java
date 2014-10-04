@@ -7,6 +7,8 @@ import play.db.jpa.Model;
 import javax.persistence.Entity;
 
 /**
+ * "гео-точка"
+ *
  * @author kpestov
  */
 @Entity

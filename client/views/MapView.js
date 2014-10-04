@@ -15,7 +15,6 @@ $(function(){
       this.towersGeoObjects = {};
       this.locationGeoObjects = {};
       this.pointsGeoObjects = {};
-      this.showLocations = false;
       this.initMap();
       this.bindEvents();
     },
@@ -44,12 +43,6 @@ $(function(){
     bindEvents: function(){
       document.addEventListener('keyup', _.bind(this.keyUpListener, this));
 
-      Backbone.on('show:locations', _.bind(function(val){
-        this.showLocations = val;
-        setTimeout(_.bind(function(){
-          this.showLocations ? this.drawLocations(state.get('locations')) : this.removeLocations();
-        }, this))
-      }, this));
 
       Backbone.on('update:location', _.bind(function(model){
         this.removeLocation(model)
@@ -62,7 +55,7 @@ $(function(){
 
       var duration = 300;
 
-      state.on('click:object', _.bind(function(object){
+      this.listenTo(state, 'click:object', function(object){
         if (object && object.get('start')){
           map.panTo(object.get('start'),{delay:0, duration:duration});
           setTimeout(_.bind(function(){
@@ -72,10 +65,12 @@ $(function(){
               this.showPointHint(object)
             }
           }, this), duration + 50)
+        } else {
+          console.error('no object or no start!')
         }
-      }, this))
+      }, this)
 
-      state.on('change:location', _.bind(function(){
+      this.listenTo(state, 'change:location', function(){
         var active = state.get('location')
         if (!active) return;
         this.removeTowers();
@@ -92,24 +87,25 @@ $(function(){
           })
           setTimeout(function(){
             self.drawTowers(active.getTowers());
+            self.drawPoints();
           }, duration + 50)
         })
-      }, this))
+      }, this)
 
-      state.on('change:showPoints', _.bind(function(){
-        var self = this;
-        var value = state.get('showPoints');
-        if (value){
-          var towers = state.get('location').getTowers()
-          towers.each(function(tower){
-            tower.getPoints().each(function(point){
-              self.drawPoint(point)
-            })
-          });
-        } else {
-          this.removePoints()
-        }
-      }, this))
+      this.listenTo(state, 'change:showLocations', function(val){
+        setTimeout(_.bind(function(){
+          val ? this.drawLocations(state.get('locations')) : this.removeLocations();
+        }, this))
+      }, this);
+
+      this.listenTo(state, 'change:showPoints', function(){
+        this.drawPoints();
+      }, this)
+
+      this.listenTo(state.get('points'), 'destroy', function(model){
+        var object = self.pointsGeoObjects[model.cid];
+        if (object) object.remove();
+      }, this)
     },
 
     /**
@@ -154,7 +150,7 @@ $(function(){
         var start = point;
         if (model.isTower()){
           if (!this.fitsToLocation(start)){
-            alert('Данная точка не принадлежит текщей локации.')
+            alert('Данная точка не принадлежит текущей локации.')
             start = null;
           }
         }
@@ -162,9 +158,6 @@ $(function(){
 
       } else {
         if (model.isTower()){
-          model.set({
-            locationId: state.get('location').get('id')
-          });
           this.setEnd(point);
         }
         if (model.isValid()){
@@ -174,12 +167,12 @@ $(function(){
           if (model.isTower()){
             state.get('location').getTowers().add(model);
 
-          } else if (this.model.is('location')){
+          } else if (model.is('location')){
             state.set('location', model)
             state.get('locations').add(model);
 
           } else {
-            state.get('tower').getPoints().add(model);
+            state.get('points').add(model);
           }
           state.set('editModel', null)
         }
@@ -307,11 +300,25 @@ $(function(){
       return result;
     },
 
+    drawPoints: function(){
+      var value = state.get('showPoints'),
+          self = this;
+      if (value){
+        var points = state.get('location').getPoints()
+        points.each(function(point){
+          self.drawPoint(point)
+        });
+      } else {
+        this.removePoints()
+      }
+    },
+
     drawPoint: function(model, opts){
       opts = opts || {}
+      var tower = model.getTower();
       var result = this.createCircle(model, {
-        fillColor: model.get('tower').get('color'),
-        strokeColor: model.get('tower').get('color'),
+        fillColor: tower.get('color'),
+        strokeColor: tower.get('color'),
         strokeOpacity: 0.4,
         zIndex: 99999
       });
@@ -321,7 +328,7 @@ $(function(){
         result.data.modelCid = model.cid
         result.data.events.add('mouseenter', _.bind(function (e) {
           var cid = e.get('target').modelCid;
-          var point = state.get('tower').getPoints().get(cid)
+          var point = state.get('points').get(cid)
           this.showPointHint(point)
         }, this))
         .add('mouseleave', function (e) {
@@ -332,11 +339,10 @@ $(function(){
     },
 
     showPointHint: function(point){
-      map.hint.open(point.get('start'), point.get('tower').get('name') + ' - ' + point.get('name'));
+      map.hint.open(point.get('start'), point.getTower().get('name') + ' - ' + point.get('name'));
     },
 
     drawTowers: function(towers){
-      //this.removeTowers();
       towers.each(_.bind(function(tower){
         var freq = tower.getFreq_();
         if (freq.shouldShow()){
@@ -370,6 +376,7 @@ $(function(){
     removeAll: function(){
       this.removeLocations();
       this.removeTowers();
+      this.removePoints();
     },
 
     removeTowers: function(){
@@ -389,7 +396,7 @@ $(function(){
     },
 
     removePoints: function(){
-      _.forOwn(this.pointsGeoObjects, function(point){
+      _.each(this.pointsGeoObjects, function(point){
         point.remove();
       });
       this.pointsGeoObjects = {};

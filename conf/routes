@@ -29,6 +29,12 @@ POST    /rest/locations                         Locations.create
 PUT     /rest/locations                         Locations.edit
 DELETE  /rest/locations/{id}                    Locations.delete
 
+GET     /rest/points                            Points.all
+GET     /rest/points/{id}                       Points.byId
+POST    /rest/points                            Points.create
+PUT     /rest/points                            Points.edit
+DELETE  /rest/points/{id}                       Points.delete
+
 GET     /rest/templates/{name}                  Templates.get
 
 GET     /client/                                staticDir:client

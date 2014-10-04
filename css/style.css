@@ -134,8 +134,21 @@ span, input, label {
 	margin: 3px 0 3px 1px;
 }
 
-.acc-item span {
-	/*color: #fff;*/
+.list-more{
+    width: 200px;
+}
+
+.list-more input{
+    width: 35px;
+    color: #000;
+    height: 30px;
+    margin-right: 5px;
+}
+
+.acc-item span.freq {
+    display:inline-block;
+    float:right;
+    padding-right: 5px;
 }
 
 .map {

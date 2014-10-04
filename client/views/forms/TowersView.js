@@ -9,7 +9,7 @@
       _.bindAll(this)
       this.name = options.name;
       this.templateP = getTemplate('list');
-      this.listenTo(window.state, 'change:location', _.bind(function(){
+      state.on('change:location', _.bind(function(){
         var towers = state.get('location').getTowers();
         this.setCollection(towers)
       }, this));
@@ -20,11 +20,18 @@
     },
 
     _createModel : function(){
-      if (state.get('location') == null){
+      if (!state.get('location')){
         alert("Не выбрана локация");
         return false;
       }
-      return new Tower({type:'tower'});
+      if (!state.get('location').id){
+        alert('Локация еще не сохранена. Попробуйте еще раз')
+        return false;
+      }
+      return new Tower({
+        type:'tower', // по-умолчанию вышка - бывает еще точка-точка
+        locationId: state.get('location').id
+      });
     },
 
     _removeMsg: function(){

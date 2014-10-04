@@ -3,10 +3,10 @@
  */
 (function(){
 
-  window.createCollection = function(url, model, options, models){
-    models = models || getBootstrapData(url);
+  window.createCollection = function(name, model, options, models){
+
+    models = models || getBootstrapData(name);
     var collection = new (Backbone.Collection.extend({
-      url: 'rest/' + url,
       model: model
     }))(models, options)
     collection.fields = (new model()).fields;
@@ -21,9 +21,10 @@
     }
   }
 
-  window.Location = BaseModel.extend({
+    window.Location = BaseModel.extend({
 
     url: 'locations',
+
     fields: [
       {
         name: 'name',
@@ -47,7 +48,7 @@
     },
 
     isTower: function(){
-      return false;
+      return this.is('tower');
     },
 
     _toJSON: function(){
@@ -60,11 +61,11 @@
       }
       delete result._towers;
       delete result.towers;
-      delete result.points;
       return result;
     },
 
     parse: function(attrs){
+      if (!attrs) return
       if (attrs.start){
         attrs.start = pointToArray(attrs.start)
       }
@@ -112,6 +113,14 @@
         towers = this.get('_towers');
       }
       return towers;
+    },
+
+    getPoints: function(){
+      var id = this.get('id');
+      var arr = state.get('points').filter(function(el){
+        return el.get('locationId') == id
+      })
+      return _(arr)
     },
 
     getName: function(){

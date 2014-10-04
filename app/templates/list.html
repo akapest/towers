@@ -1,5 +1,6 @@
 <span class="acc-item-name main" data-model="name">!{name}</span>
 <div class="acc-item-data list" style="display:none;">
+    <ul class="list-more"></ul>
     <ul>
         <% _.each(list, function(el){ %>
             <li data-cid="!{el.cid}" class="list-el">
@@ -8,6 +9,9 @@
                 <span class="remove glyphicon glyphicon-remove" title="Удалить"></span>
                 <span class="edit glyphicon glyphicon-pencil" title="Редактировать"></span>
                 #{/if}
+                <% if (el.freq) { %>
+                    <span class="freq">!{el.freq} Mhz</span>
+                <% } %>
             </li>
         <% }); %>
         #{if isAdmin}
