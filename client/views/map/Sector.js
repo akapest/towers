@@ -3,12 +3,14 @@
  */
 (function(){
 
-  window.Sector = function(center, towerAttrs, map, geo, raw){
-    this.raw = raw;
+  window.Sector = function(center, towerAttrs, map, geo, opts){
+    this.raw = opts && opts.raw;
     this.center = center;
     this.sector = this.attrs = towerAttrs;
-    this.angle = parseAngle(this.sector.angle);
-    this.angleSteps = this.sector.type == 'highway' || this.raw ? 1 : Math.floor(this.angle * 6);
+    var angle = parseAngle(this.sector.angle);
+    this.angle = angle.rad;
+    console.log(angle.deg)
+    this.angleSteps = getSteps(this.sector.type, angle.deg, this.raw);
     this.gradientSteps = this.sector.type == 'highway' ? 1 : 5;
     this.geo = geo;
     this.map = map;
@@ -22,6 +24,13 @@
         this.openBalloon();
     }, this)
     this.base = null;
+    function getSteps(type, angle, raw){
+      if (type == 'highway'){
+        return 1;
+      } else {
+        return raw ? 1 : angle / 30
+      }
+    }
   }
 
   $.extend(Sector.prototype, {
@@ -184,10 +193,20 @@
       }
       throw new Error("Unit not found - " + unit)
     }
+    function convertToDegrees(value, unit){
+      if (unit == '°'){
+        return value;
+      } else {
+        return null;
+      }
+    }
 
-    var result = null;
+    var result = {};
     str.replace(anglePattern, function(m, value, unit){
-      result = convert(value, unit);
+      result = {
+        rad: convert(value, unit),
+        deg: convertToDegrees(value, unit)
+      };
     })
     return result;
   }

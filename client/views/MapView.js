@@ -193,7 +193,7 @@ $(function(){
       var previous = this.object;
 
       if (this.model.isTower()){
-        this.object = new Sector(this.model.get('start'), this.model.attributes, map, Geo, true);
+        this.object = new Sector(this.model.get('start'), this.model.attributes, map, Geo, {raw:true});
       } else if (this.model.is('location')){
         this.object = this.drawLocation(this.model);
       } else {
