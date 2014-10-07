@@ -151,6 +151,13 @@ $(function(){
           }
         }
         model.set({start: start});
+        if (model.is('point')){
+          model.setName()
+          model.save({validate: false});
+          this.draw(model)
+          state.get('points').add(model);
+          state.set('editModel', null)
+        }
 
       } else {
         if (model.isTower()){
@@ -166,9 +173,6 @@ $(function(){
           } else if (model.is('location')){
             state.set('location', model)
             state.get('locations').add(model);
-
-          } else {
-            state.get('points').add(model);
           }
           state.set('editModel', null)
         }
@@ -317,7 +321,8 @@ $(function(){
         fillColor: tower.get('color'),
         strokeColor: tower.get('color'),
         strokeOpacity: 0.4,
-        zIndex: 99999
+        zIndex: 99999,
+        opacity: model.is('point') ? 0.8 : 1
       });
       this.pointsGeoObjects[model.cid] = result
 

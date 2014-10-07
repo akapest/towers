@@ -116,7 +116,9 @@
         var filtered = towers.filter(function(tower){
           return tower.getFreq_().cid == freq.cid
         });
-        map.redrawTowers(_(filtered))
+        setTimeout(function(){
+          map.redrawTowers(_(filtered))
+        })
       })
     },
 

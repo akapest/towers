@@ -119,12 +119,18 @@ span.big {
   margin: 3px 0 3px 1px;
 }
 .list-more input {
-  width: 35px;
+  width: 135px;
   color: #000;
   height: 30px;
-  margin-right: 5px;
+  margin-left: 5px;
+  float: right;
 }
-.list .sort-wrapper {
+.list-more label {
+  font-weight: normal;
+  margin: 5px;
+}
+.list .sort-wrapper,
+.list .wrapper {
   overflow: hidden;
 }
 .list .sort {

@@ -37,35 +37,20 @@
       });
       return {
         name:this.name,
-        list: list.__wrapped__
+        list: list.__wrapped__,
+        sort: false
       }
     },
 
     _afterRender: function(){
-      //counter related stuff
       this.$('.list-more')
           .removeClass('hidden')
-          .html('<input type="number" class="points-counter"/><li class="counter-btn" title="Значение счетчика будет названием точки">Сбросить счетчик</li>')
-      this.$('.counter-btn')
-        .on('click', function(){
-          Point.setCounter(1)
-          $pointsCounter.val(Point.getCounter())
-        })
-        .on('mousedown', function(){
-          $(this).addClass('active')
-        })
-        .on('mouseup', function(){
-          $(this).removeClass('active')
-        });
-      var $pointsCounter = this.$('.points-counter');
-      $pointsCounter
-        .val(Point.getCounter())
+          .html('<div class="wrapper"><label title="Название следущей точки">Название</label><input type="text" class="point-name"/></div>')
+      var $pointName = this.$('.point-name');
+      $pointName
         .on('change', function(){
-          Point.setCounter(parseInt($(this).val()))
+          Point.setName($(this).val())
         })
-      this.listenTo(this.collection, 'add', _.bind(function(){
-        $pointsCounter.val(Point.getCounter())
-      }, this));
     },
 
     _getType: function(){

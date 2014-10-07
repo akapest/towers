@@ -3,19 +3,16 @@
  */
 (function(){
 
-  var counter = parseInt(localStorage['points'] || '0');
+  var name = ''
 
   window.Point = window.Location.extend({
 
     url: 'points',
 
     initialize: function(attrs){
-      attrs = this.parse(attrs)
-      if (attrs && !attrs.name){
-        attrs.name = '' + counter
-        Point.setCounter(++counter)
-      }
+      attrs = this.parse(attrs || {})
       this.set(attrs)
+      this.set({radius: Point.radius})
     },
 
     getTower: function(){
@@ -29,19 +26,18 @@
 
     validate: function(){
       return null;
+    },
+
+    setName: function(){
+      this.set({name: name || 'без имени'})
     }
 
   }, {
-
-    setCounter: function(number){
-      counter = number;
-      localStorage['points'] = counter;
-    },
-
-    getCounter: function(){
-      return counter;
+    setName: function(value){
+      name = value
     }
-
   })
+
+  window.Point.radius = 12;
 
 }());
