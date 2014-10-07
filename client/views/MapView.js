@@ -65,8 +65,6 @@ $(function(){
               this.showPointHint(object)
             }
           }, this), duration + 50)
-        } else {
-          console.error('no object or no start!')
         }
       }, this)
 

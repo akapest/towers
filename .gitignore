@@ -7,5 +7,6 @@ test-result/
 lib/
 tmp/
 modules/
+node-modules/
 .idea/
 *.iml
