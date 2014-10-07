@@ -34,9 +34,6 @@ span.acc-item:hover {
   float: right;
   color: #b8b8b8;
 }
-.acc-item .edit {
-  overflow: hidden;
-}
 .acc-item .edit .glyphicon {
   float: none;
 }

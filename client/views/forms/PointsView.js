@@ -74,12 +74,12 @@
       li.append($input)
       li.append($ok)
       li.append($cancel)
-      li.addClass('edit')
+      li.addClass('wrapper')
     },
 
     _finishEditing: function(model, li){
       model.collection.sort()
-      li.removeClass('edit')
+      li.removeClass('wrapper')
     },
 
     _getType: function(){
