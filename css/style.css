@@ -1,5 +1,5 @@
 .accordion {
-  min-width: 250px;
+  min-width: 300px;
   margin: 45px;
 }
 .accordion label,
@@ -232,6 +232,7 @@ div label.bind-color {
   z-index: 100;
   max-height: 600px;
   overflow-y: auto;
+  width: 180px;
 }
 .legend span {
   padding: 10px 10px 0;
