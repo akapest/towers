@@ -1,0 +1,70 @@
+.accordion{
+	min-width: 250px;
+	margin: 45px;
+}
+
+.accordion label, .accordion input, .accordion li{
+	color: #fff;
+}
+
+.accordion label, .accordion input{
+	float: left;
+}
+
+span.acc-item:hover {
+	border: 1px dotted black;
+}
+
+.acc-item.active .main {
+	color: #eee;
+}
+
+.acc-item.active > div > .remove{
+	color: rgb(184, 184, 184);
+	float:right;
+	cursor:pointer;
+	font-size: 17px;
+}
+.acc-item.active > div > .remove:hover{
+	color: #eee;
+}
+
+.acc-item-name, .action-name{
+	border-bottom: 1px dotted black;
+	color: black;
+	cursor: pointer;
+}
+
+.acc-item.active {
+	background: rgba(65, 65, 65, 0.85);
+}
+
+.acc-item {
+	padding: 5px 15px 20px;
+	-moz-user-select: -moz-none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+.acc-item.toggle {
+	/*float:right;*/
+}
+
+.acc-item:first-of-type {
+	cursor: pointer;
+}
+
+.acc-item .main {
+	color: black;
+}
+
+.acc-item-data{
+	margin-top: 5px;
+}
+
+.acc-item span.freq {
+	display:inline-block;
+	float:right;
+	padding-right: 5px;
+}

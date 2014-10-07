@@ -43,7 +43,9 @@
 
     _afterRender: function(){
       //counter related stuff
-      this.$('.list-more').html('<input type="number" class="points-counter"/><li class="counter-btn" title="Значение счетчика будет названием точки">Сбросить счетчик</li>')
+      this.$('.list-more')
+          .removeClass('hidden')
+          .html('<input type="number" class="points-counter"/><li class="counter-btn" title="Значение счетчика будет названием точки">Сбросить счетчик</li>')
       this.$('.counter-btn')
         .on('click', function(){
           Point.setCounter(1)

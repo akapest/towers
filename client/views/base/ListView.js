@@ -16,6 +16,10 @@
         var el = this.collection.get($el.data('cid'));
         this.__setActive(el, {$el:$el, click:true});
       },
+      'mousedown .add': function(e){
+        var $el = $(e.currentTarget);
+        $el.addClass('active')
+      },
       'click .add': function(e){
         var $el = $(e.currentTarget);
         $el.removeClass('active')
@@ -46,21 +50,28 @@
       'mouseenter .list-el': function(e){
         $(e.currentTarget).find('.remove').show();
         $(e.currentTarget).find('.edit').show();
-        $(e.currentTarget).find('.freq').show();
       },
       'mouseleave .list-el': function(e){
         $(e.currentTarget).find('.remove').hide();
         $(e.currentTarget).find('.edit').hide();
-        $(e.currentTarget).find('.freq').hide();
-      },
-      'mousedown .add': function(e){
-        var $el = $(e.currentTarget);
-        $el.addClass('active')
       },
 
       'change .show-locations': function(e){
         var $el = $(e.currentTarget);
         state.set('showLocations', $el.is(":checked"));
+      },
+
+      'mousedown .sort': function(e){
+        var $el = $(e.currentTarget);
+        $el.addClass('active');
+      },
+
+      'click .sort': function(e){
+        var $el = $(e.currentTarget);
+        var attr = $el.data('sort-attr');
+        this.collection.setSort({attr: attr})
+        this.collection.sort()
+        $el.removeClass('active')
       }
     },
 
@@ -97,7 +108,7 @@
         this.stopListening(this.collection)
       }
       this.collection = collection;
-      this.listenTo(this.collection, 'add remove reset change sync', this.renderAsync);
+      this.listenTo(this.collection, 'add remove reset change sync sort', this.renderAsync);
       this.renderAsync();
     },
 
@@ -111,8 +122,29 @@
         }
       })
       return {
-        name:this.name,
-        list: list
+        name: this.name,
+        type: this._getType(),
+        list: list,
+        sort: {
+          name: this.mapSortOpts('name'),
+          freq: this.mapSortOpts('freq')
+        }
+      }
+    },
+
+    mapSortOpts: function(attr){
+      var opts = this.collection.sortOpts
+
+      if (opts.attr == attr){
+        return {
+          dir: opts.dir == 'asc' ? 'down' : 'up',
+          active: 'active'
+        }
+      } else {
+        return {
+          dir: 'down',
+          active: ''
+        }
       }
     },
 

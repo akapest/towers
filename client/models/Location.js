@@ -3,24 +3,6 @@
  */
 (function(){
 
-  window.createCollection = function(name, model, options, models){
-
-    models = models || getBootstrapData(name);
-    var collection = new (Backbone.Collection.extend({
-      model: model
-    }))(models, options)
-    collection.fields = (new model()).fields;
-    return collection;
-
-    function getBootstrapData(name){
-      try {
-        return JSON.parse($('.data-holder.' + name).html())
-      } catch (e){
-        return [];
-      }
-    }
-  }
-
     window.Location = BaseModel.extend({
 
     url: 'locations',

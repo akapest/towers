@@ -2,70 +2,17 @@
 	clear: both;
 }
 
-span.acc-item:hover {
-	border: 1px dotted black;
-
-}
-
-.acc-item.active .main {
-	color: #eee;
-}
-
-.acc-item.active > div > .remove{
-    color: rgb(184, 184, 184);
-    float:right;
-    cursor:pointer;
-    font-size: 17px;
-}
-.acc-item.active > div > .remove:hover{
-    color: #eee;
-}
-
 form label{
 	color: #eee;
-}
-
-.acc-item-name, .action-name{
-	border-bottom: 1px dotted black;
-	color: black;
-	cursor: pointer;
-}
-
-.main {
-	font-size: 20px;
-	font-weight: bold;
 }
 
 span.big{
 	font-size:26px;
 }
 
-.acc-item.active {
-	background: rgba(0, 0, 0, 0.65);
-}
-
-.acc-item {
-	padding: 5px 15px 20px;
-	-moz-user-select: -moz-none;
-	-khtml-user-select: none;
-	-webkit-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-}
-.acc-item.toggle {
-	/*float:right;*/
-}
-
-.acc-item:first-of-type {
-	cursor: pointer;
-}
-
-.acc-item .main {
-	color: black;
-}
-
-.acc-item-data{
-    margin-top: 14px;
+.main {
+	font-size: 20px;
+	font-weight: bold;
 }
 
 .toggle span {
@@ -78,25 +25,6 @@ span.big{
 	position: relative;
 }
 
-.actions span, .actions form {
-}
-
-span, input, label {
-}
-
-.accordion{
-	min-width: 200px;
-	margin: 45px;
-}
-
-.accordion label, .accordion input, .accordion li{
-	color: #fff;
-}
-
-.accordion label, .accordion input{
-	float: left;
-}
-
 .list li{
 	margin-top: 2px;
 	padding: 5px;
@@ -107,11 +35,11 @@ span, input, label {
 	margin-top: 5px;
 }
 
-.list li:hover{
+.list li:hover, .list .sort:hover{
 	background-color: rgba(106, 107, 106, 0.9);
 }
 
-.list li.active {
+.list li.active, .list .sort.active {
 	background: rgba(106, 107, 106, 0.9);
 	box-shadow: inset 0 2px 5px 0 rgba(0, 0, 0, 0.9);
 }
@@ -134,21 +62,54 @@ span, input, label {
 	margin: 3px 0 3px 1px;
 }
 
-.list-more{
-    width: 200px;
-}
-
 .list-more input{
-    width: 35px;
-    color: #000;
-    height: 30px;
-    margin-right: 5px;
+	width: 35px;
+	color: #000;
+	height: 30px;
+	margin-right: 5px;
 }
 
-.acc-item span.freq {
-    display:inline-block;
-    float:right;
-    padding-right: 5px;
+.list .sort-wrapper{
+	overflow: hidden;
+}
+
+.list .sort{
+	cursor: pointer;
+	height:30px;
+	width: 50%;
+	padding: 12px 7px;
+	float: left;
+}
+
+.list .sort:last-of-type .arrow{
+	float:right;
+}
+
+.list .sort .arrow.up, .list .sort .arrow.down{
+	width: 0;
+	height: 0;
+	border-left: 7px solid transparent;
+	border-right: 7px solid transparent;
+}
+
+.list .sort .arrow.up{
+	border-bottom: 5px solid transparent;
+}
+
+.list .sort .arrow.up.active, .list .sort:hover .arrow.up{
+	border-bottom: 5px solid #fff;
+}
+
+.list .sort .arrow.down{
+	border-top: 5px solid transparent;
+}
+
+.list .sort .arrow.down.active, .list .sort:hover .arrow.down{
+	border-top: 5px solid #fff;
+}
+
+.list .sort:last-of-type{
+	text-align: right;
 }
 
 .map {
@@ -280,10 +241,10 @@ td input{
 }
 
 .glyphicon{
-    padding:3px;
+	padding:3px;
 }
 
 .touch-it{
-    padding: 7px;
-    margin: 0 0 0 -7px;
+	padding: 7px;
+	margin: 0 0 0 -7px;
 }

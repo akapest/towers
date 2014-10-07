@@ -1,5 +1,6 @@
 /**
  * require(components/accordion)
+ * require(models/BaseCollection)
  * require(models/Point)
  * require(models/Tower)
  * require(models/Location)

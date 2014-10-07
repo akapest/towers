@@ -1,6 +1,10 @@
 <span class="acc-item-name main" data-model="name">!{name}</span>
 <div class="acc-item-data list" style="display:none;">
-    <ul class="list-more"></ul>
+    <div class="sort-wrapper">
+        <div class="sort" data-sort-attr="name"><div class="arrow !{sort.name.dir} !{sort.name.active}"></div></div>
+        <div class="sort" data-sort-attr="freq"><div class="arrow !{sort.freq.dir} !{sort.freq.active}"></div></div>
+    </div>
+    <ul class="list-more hidden"></ul>
     <ul>
         <% _.each(list, function(el){ %>
             <li data-cid="!{el.cid}" class="list-el">

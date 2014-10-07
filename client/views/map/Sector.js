@@ -9,7 +9,6 @@
     this.sector = this.attrs = towerAttrs;
     var angle = parseAngle(this.sector.angle);
     this.angle = angle.rad;
-    console.log(angle.deg)
     this.angleSteps = getSteps(this.sector.type, angle.deg, this.raw);
     this.gradientSteps = this.sector.type == 'highway' ? 1 : 5;
     this.geo = geo;
