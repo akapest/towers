@@ -30,13 +30,21 @@ span.acc-item:hover {
 .acc-item .main {
   color: black;
 }
-.acc-item.active .remove {
-  color: #b8b8b8;
+.acc-item .glyphicon {
   float: right;
+  color: #b8b8b8;
+}
+.acc-item .edit {
+  overflow: hidden;
+}
+.acc-item .edit .glyphicon {
+  float: none;
+}
+.acc-item.active .glyphicon {
   cursor: pointer;
   font-size: 17px;
 }
-.acc-item.active .remove:hover {
+.acc-item.active .glyphicon:hover {
   color: #eee;
 }
 .acc-item.active .main {
@@ -46,6 +54,9 @@ span.acc-item:hover {
   display: inline-block;
   float: right;
   padding-right: 5px;
+}
+.acc-item .edit-point-name {
+  color: #000;
 }
 .acc-item-data {
   margin-top: 5px;
@@ -101,16 +112,6 @@ span.big {
   background: rgba(106, 107, 106, 0.9);
   box-shadow: inset 0 2px 5px 0 rgba(0, 0, 0, 0.9);
 }
-.list-el .remove,
-.list-el .edit {
-  float: right;
-  color: #b8b8b8;
-  display: none;
-}
-.list-el .remove:hover,
-.list-el .edit:hover {
-  color: #fff;
-}
 .list button {
   /*background-color:#eee;*/
   height: 25px;
@@ -123,6 +124,7 @@ span.big {
   color: #000;
   height: 30px;
   margin-left: 5px;
+  padding: 0 5px;
   float: right;
 }
 .list-more label {

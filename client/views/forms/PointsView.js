@@ -53,6 +53,35 @@
         })
     },
 
+    _editModel: function(model, $el){
+      var li = $el.parent();
+
+      var $input = $('<input class="edit-point-name" type="text"/>')
+      $input.val(model.get('name'))
+      var self = this
+
+      var $ok = $('<span class="ok glyphicon glyphicon-ok" title="Готово">').hide()
+        .on('click', function(){
+          model.set({name: $input.val()})
+          self._finishEditing(model, li)
+        });
+
+      var $cancel = $('<span class="cancel glyphicon glyphicon-remove" title="Отмена">').hide()
+        .on('click', function(){
+          self._finishEditing(model, li)
+        });
+      li.children().remove()
+      li.append($input)
+      li.append($ok)
+      li.append($cancel)
+      li.addClass('edit')
+    },
+
+    _finishEditing: function(model, li){
+      model.collection.sort()
+      li.removeClass('edit')
+    },
+
     _getType: function(){
       return 'point'
     },

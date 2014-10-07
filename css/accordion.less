@@ -29,10 +29,18 @@ span.acc-item:hover {
 	.main {
 		color: black;
 	}
+	.glyphicon {
+		float: right;
+		color: #b8b8b8;
+	}
+	.edit{
+		overflow: hidden;
+	}
+	.edit .glyphicon {
+		float: none;
+	}
 	&.active {
-		.remove{
-			color: rgb(184, 184, 184);
-			float:right;
+		.glyphicon{
 			cursor:pointer;
 			font-size: 17px;
 			&:hover{
@@ -48,9 +56,12 @@ span.acc-item:hover {
 		float:right;
 		padding-right: 5px;
 	}
+	.edit-point-name{
+		color: #000;
+	}
+
+
 }
-
-
 
 .acc-item-data{
 	margin-top: 5px;

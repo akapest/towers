@@ -43,17 +43,15 @@
       'click .edit': function(e){
         var $el = $(e.currentTarget);
         var model = this._getModel($el);
-        state.set('editModel', model);
+        this._editModel(model, $el)
         this.__setActive(model, {$el:$el, click:true})
       },
 
       'mouseenter .list-el': function(e){
-        $(e.currentTarget).find('.remove').show();
-        $(e.currentTarget).find('.edit').show();
+        $(e.currentTarget).find('.glyphicon').show();
       },
       'mouseleave .list-el': function(e){
-        $(e.currentTarget).find('.remove').hide();
-        $(e.currentTarget).find('.edit').hide();
+        $(e.currentTarget).find('.glyphicon').hide();
       },
 
       'change .show-locations': function(e){
@@ -97,6 +95,7 @@
         var html = template.execute(this._data())
         this.$el.html(html);
         this.$el.find('.acc-item-data').css('display', display);
+        this.$el.find('.glyphicon').hide()
         this._afterRender();
         this.bindToStateEvents();
         this.delegateEvents();
@@ -146,6 +145,11 @@
           active: ''
         }
       }
+    },
+
+    //to redefine in PointsView
+    _editModel: function(model){
+      state.set('editModel', model);
     },
 
     __setActive: function(el, opts){
