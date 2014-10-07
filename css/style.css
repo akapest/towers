@@ -21,6 +21,8 @@ span.acc-item:hover {
   -webkit-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  overflow-y: auto;
+  max-height: 700px;
 }
 .acc-item:first-of-type {
   cursor: pointer;
@@ -60,6 +62,9 @@ span.acc-item:hover {
 
 .clb {
   clear: both;
+}
+body {
+  overflow: hidden;
 }
 form label {
   color: #eee;
@@ -220,6 +225,12 @@ div label.bind-color {
   bottom: 50px;
   right: 20px;
   z-index: 100;
+  max-height: 600px;
+  overflow-y: auto;
+}
+.legend span {
+  padding: 10px 10px 0;
+  margin-bottom: 5px;
 }
 ul {
   list-style-type: none;
@@ -279,4 +290,31 @@ td input {
 .touch-it {
   padding: 7px;
   margin: 0 0 0 -7px;
+}
+@media screen and (max-height: 600px) {
+  .acc-item {
+    max-height: 400px;
+  }
+  .legend {
+    max-height: 400px;
+  }
+  .legend .form-body {
+    margin-top: 10px;
+  }
+}
+@media screen and (max-height: 500px) {
+  .acc-item {
+    max-height: 300px;
+  }
+  .legend {
+    max-height: 300px;
+  }
+}
+@media screen and (max-height: 400px) {
+  .acc-item {
+    max-height: 200px;
+  }
+  .legend {
+    max-height: 200px;
+  }
 }
