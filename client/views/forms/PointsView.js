@@ -63,6 +63,7 @@
       var $ok = $('<span class="ok glyphicon glyphicon-ok" title="Готово">').hide()
         .on('click', function(){
           model.set({name: $input.val()})
+          model.save()
           self._finishEditing(model, li)
         });
 
