@@ -70,6 +70,10 @@
       return _(arr)
     },
 
+    getColor: function(){
+      return this.getFreq_().get('color')
+    },
+
     getFreq_: function(){
       var freq = parseFloat(this.get('freq'));
       var result = state.get('freqs').findWhere({value: freq})

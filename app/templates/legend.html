@@ -1,24 +1,28 @@
 <span class="acc-item-name main toggle">Легенда</span>
 <div class="form-body">
     <ul>
+        <% function checked(flag){
+                return flag ? 'checked="checked"' : ''
+            }
+        %>
         <% if (freqs.length > 1){ %>
             <li class="freq list-item">
                 <label class="touch-it">
-                    <input type="checkbox" checked="!{showAll}" data-toggle-all="true"/>
+                    <input type="checkbox" !{checked(showAll)} data-toggle-all="true"/>
                     Все
                 </label>
             </li>
         <% } %>
         <li class="">
             <label class="touch-it">
-                <input type="checkbox" checked="!{showPoints}" data-toggle-points="true"/>
+                <input type="checkbox" !{checked(showPoints)} data-toggle-points="true"/>
                 Показать точки
             </label>
         </li>
         <% _(freqs).each(function(f){
              %> <li class="freq list-item">
                     <label class="touch-it">
-                        <input type="checkbox" checked="!{f.shouldShow()}" data-freq-cid="!{f.cid}"/>
+                        <input type="checkbox" !{checked(f.shouldShow())} data-freq-cid="!{f.cid}"/>
                         <input class="color" type="color" data-freq="!{f.get('value')}" value="!{f.get('color')}"/>
                         !{f.get('value')} Mhz
                     </label>

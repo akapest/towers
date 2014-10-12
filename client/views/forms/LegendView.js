@@ -30,9 +30,12 @@
 
     initialize: function(){
       _.bindAll(this)
-      this.showAll = true;
+      this.showAll = false;
       this.templatePromise = getTemplate('legend')
       this.freqs = state.get('freqs');
+      this.freqs.each(function(freq){
+        freq.set({show: false})
+      })
       if (!this.freqs.length){
         this.$el.hide();
       }

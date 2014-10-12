@@ -117,7 +117,7 @@
           name: el.get('name'),
           cid: el.cid,
           freq: el.is('tower') ? el.get('freq') : '',
-          color: el.is('tower') ? el.get('color') : ''
+          color: el.is('tower') ? el.getColor() : ''
         }
       })
       return {
