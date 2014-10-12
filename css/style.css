@@ -218,6 +218,7 @@ label {
 }
 .form-group {
   width: 250px;
+  overflow: hidden;
 }
 div label.bind-color {
   cursor: pointer;

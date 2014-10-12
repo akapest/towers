@@ -73,8 +73,8 @@
         });
       li.children().remove()
       li.append($input)
-      li.append($ok)
       li.append($cancel)
+      li.append($ok)
       li.addClass('wrapper')
     },
 
