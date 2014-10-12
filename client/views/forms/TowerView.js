@@ -20,6 +20,7 @@
       this.model = options.model;
       this.template = getTemplate('tower');
       this.listenTo(this.model, 'change:type', this.renderAsync)
+      this.listenTo(this.model, 'beforeSave', this.bindColor)
     },
 
     renderAsync: function(){
@@ -45,7 +46,7 @@
 
     afterRender: function(){
       var typeSelect = this.$('.type');
-      if (!this.model.isNew()){
+      if (!this.model.  isNew()){
         typeSelect.attr('disabled', 'disabled')
       }
     },

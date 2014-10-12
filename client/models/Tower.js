@@ -58,7 +58,7 @@
       }
     },
 
-    isNew: function(){
+    _isNew: function(){
       return !this.get('radius')
     },
 

@@ -92,6 +92,11 @@ span.big {
   z-index: 100;
   position: relative;
 }
+.select_ {
+  margin: 5px 0;
+  padding: 5px;
+  color: #000;
+}
 .list li {
   margin-top: 2px;
   padding: 5px;

@@ -12,7 +12,7 @@
       this.templateP = getTemplate('list');
       this.listenTo(state, 'change:tower', function(state, tower){
         this.tower = tower;
-        if (tower.isNew()){
+        if (tower._isNew()){
           this.$el.hide()
         } else {
           this.setCollection(state.get('points'))
@@ -62,8 +62,12 @@
 
       var $ok = $('<span class="ok glyphicon glyphicon-ok" title="Готово">').hide()
         .on('click', function(){
-          model.set({name: $input.val()})
+          model.set({
+            name: $input.val(),
+            towerId: $select.val()
+          })
           model.save()
+          state.trigger('redraw:point', model)
           self._finishEditing(model, li)
         });
 
@@ -71,11 +75,19 @@
         .on('click', function(){
           self._finishEditing(model, li)
         });
+      var $select = $('<select id="towerSelect" class=""></select>')
+      state.get('location').getTowers().each(function(t){
+        $select.append($('<option value="' + t.get('id') + '">' + t.get('name') + '</option>'))
+      })
+      $select.val(model.get('towerId'))
       li.children().remove()
-      li.append($input)
-      li.append($cancel)
-      li.append($ok)
-      li.addClass('wrapper')
+      var div = $('<div class="wrapper">')
+      div.append($input)
+      div.append($cancel)
+      div.append($ok)
+      li.append(div)
+      li.append($select)
+      $select.select2()
     },
 
     _finishEditing: function(model, li){

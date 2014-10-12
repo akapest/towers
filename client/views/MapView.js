@@ -99,8 +99,14 @@ $(function(){
       }, this)
 
       this.listenTo(state.get('points'), 'destroy', function(model){
-        var object = self.pointsGeoObjects[model.cid];
+        var object = this.pointsGeoObjects[model.cid];
         if (object) object.remove();
+      }, this)
+
+      this.listenTo(state, 'redraw:point', function(model){
+        var object = this.pointsGeoObjects[model.cid];
+        if (object) object.remove();
+        this.drawPoint(model)
       }, this)
     },
 
@@ -164,7 +170,7 @@ $(function(){
           this.setEnd(point);
         }
         if (model.isValid()){
-
+          model.trigger('beforeSave')
           model.save({validate: false});
           this.draw(model)
           if (model.isTower()){
@@ -221,7 +227,7 @@ $(function(){
 
     draw: function(model){
       if (model.isTower()){
-        if (!model.isNew()){ //если правка уже существующей вышки
+        if (!model._isNew()){ //если правка уже существующей вышки
           this.removeTower(model);
         }
         this.drawTower(model);
@@ -318,8 +324,8 @@ $(function(){
       opts = opts || {}
       var tower = model.getTower();
       var result = this.createCircle(model, {
-        fillColor: tower.get('color'),
-        strokeColor: tower.get('color'),
+        fillColor: tower.getColor(),
+        strokeColor: tower.getColor(),
         strokeOpacity: 0.4,
         zIndex: 99999,
         opacity: model.is('point') ? 0.8 : 1
