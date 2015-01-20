@@ -3,7 +3,7 @@ Towers
 
 Web app for telecom based on yandex maps, playframework and backbone.
 
-Run it
+~~Run it~~ (requires a lib that is not public)
 -------
  * Requires python2 to be found in the path
  * Unzip play to ${someDir} http://downloads.typesafe.com/play/1.2.7/play-1.2.7.zip
