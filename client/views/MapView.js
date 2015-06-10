@@ -297,7 +297,7 @@ $(function(){
     drawLocation: function(model){
 
       var result = this.createCircle(model, {
-        fillColor: "rgb(0,0,0,0)",
+        fillColor: "#0000",
         strokeColor: "#83h",
         strokeOpacity: 0.4,
         strokeWidth: 2
