@@ -1,0 +1,85 @@
+html body {
+    background: #fff;
+    font-family: 'Lucida grande', verdana, sans-serif;
+    height:auto;
+}
+
+#login {
+    width: 500px;
+    margin: 100px 300px;
+    text-align: center;
+}
+
+#login h1 {
+    font-weight: bold;
+    color: #111;
+}
+
+#login form {
+    border: 1px solid #ccc;
+    background: #efefef;
+    padding: 10px;
+    text-align: left;
+}
+#login form p {
+    margin: 15px 0;
+}
+
+#login #remember-field, #login #signin-field{
+    margin: 0 ;
+}
+
+#username-field {
+    margin-top: 10px !important;
+}
+
+#username-field label, #password-field label {
+    display: block;
+    width: 150px;
+    float: left;
+    text-align: right;
+    margin-right: 5px;
+    color: #333;
+    font-size: 15px;
+    padding-top: 7px;
+}
+
+#username-field input, #password-field input  {
+    width: 250px;
+    font-size: 15px;
+    margin: 0;
+}
+
+#remember-field input {
+    margin-left: 155px;
+}
+
+#remember-field {
+    font-size: 12px;
+    color: #666;
+}
+
+#remember-field label{
+	padding: 10px 0;
+}
+
+#signin-field input {
+    margin-left: 155px;
+    margin-top: 10px;
+}
+
+#login .error, #login .success  {
+    color: #fff;
+    font-size: 15px;
+    text-align: center;
+    margin: 10px 0 30px;
+    padding: 10px;
+}
+
+#login .error {
+    background: #c00 !important;
+}
+
+#login .success {
+    background: #368a55 !important;
+}
