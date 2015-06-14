@@ -1,9 +1,7 @@
-/**
- * require(vendor/backbone)
- */
-(function(){
 
-  window.State = Backbone.Model.extend({
+module.exports = (function(){
+
+  return State = Backbone.Model.extend({
 
     fields:[
       'locations',

@@ -1,13 +1,8 @@
 var BaseModel = require('models/BaseModel');
-var BaseCollection = require('models/BaseCollection');
-var GeoObject = require('models/GeoObject');
-var Tower = require('models/Tower');
 
 module.exports = (function(){
 
-  return GeoObject.extend({
-
-    url: 'locations',
+  return BaseModel.extend({
 
     fields: [
       {
@@ -25,14 +20,6 @@ module.exports = (function(){
         attrs = this.parse(attrs);
         this.set(attrs);
       }
-    },
-
-    is: function(type){
-      return type == 'location';
-    },
-
-    isTower: function(){
-      return this.is('tower');
     },
 
     _toJSON: function(){
@@ -77,28 +64,6 @@ module.exports = (function(){
           }
         }
       ])
-    },
-
-    getTowers: function(){
-      if (!this.get('_towers')){
-        var towers = BaseCollection.createCollection('towers', Tower, {}, this.get('towers'));
-        this.set({_towers:towers});
-      } else {
-        towers = this.get('_towers');
-      }
-      return towers;
-    },
-
-    getPoints: function(){
-      var id = this.get('id');
-      var arr = state.get('points').filter(function(el){
-        return el.get('locationId') == id
-      })
-      return _(arr)
-    },
-
-    getName: function(){
-      return this.get('name') || 'Новая локация'
     }
 
   });

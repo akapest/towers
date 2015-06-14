@@ -1,10 +1,11 @@
-/**
- * require(models/Freq)
- * require(views/base/View)
- */
-(function(){
+var Freq = require('models/Freq');
+var View = require('views/base/View');
+var Templates = require('models/Templates');
+var Tower = require('models/Tower');
 
-  window.TowerView = View.extend({
+module.exports = (function(){
+
+  return View.extend({
 
     events: {
       'click .bind-color': 'bindColor',
@@ -18,7 +19,7 @@
       _.bindAll(this);
       this.freq = null;
       this.model = options.model;
-      this.template = getTemplate('tower');
+      this.template = Templates.get('tower');
       this.listenTo(this.model, 'change:type', this.renderAsync)
       this.listenTo(this.model, 'beforeSave', this.bindColor)
     },

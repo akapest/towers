@@ -38,7 +38,6 @@ DELETE  /rest/points/{id}                       Points.delete
 GET     /rest/templates/{name}                  Templates.get
 
 GET     /client/                                staticDir:client
-GET     /public/                                staticDir:public
 GET     /css/                                   staticDir:css
 GET     /fonts/                                 staticDir:fonts
 

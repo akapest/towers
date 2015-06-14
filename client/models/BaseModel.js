@@ -1,9 +1,7 @@
-/**
- * require(vendor/backbone)
- */
-(function(){
 
-  window.BaseModel = Backbone.Model.extend({
+module.exports = (function(){
+
+  return Backbone.Model.extend({
 
     _getName: function(){
       return this.name || this.url.replace(/s$/, '');

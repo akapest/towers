@@ -1,18 +1,18 @@
-/**
- * require(models/Location)
- */
-(function(){
+var GeoObject = require('models/Location');
 
-  var name = ''
+module.exports = (function(){
 
-  window.Point = window.Location.extend({
+  var name = '',
+      pointRadius = 12;
+
+  return GeoObject.extend({
 
     url: 'points',
 
     initialize: function(attrs){
       attrs = this.parse(attrs || {})
       this.set(attrs)
-      this.set({radius: Point.radius})
+      this.set({radius: pointRadius})
     },
 
     getTower: function(){
@@ -37,7 +37,5 @@
       name = value
     }
   })
-
-  window.Point.radius = 12;
 
 }());

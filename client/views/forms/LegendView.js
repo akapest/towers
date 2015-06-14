@@ -1,11 +1,11 @@
-/**
- * require(views/base/View)
- */
-(function(){
+var View = require('views/base/View');
+var Templates = require('models/Templates');
+
+module.exports = (function(){
 
   var t = '<li class="freq list-item"><input class="color" type="color" data-freq="${value}" value="${color}"></div><label>${value} Mhz</label></li>'
 
-  window.LegendView = View.extend({
+  return View.extend({
 
     events:{
       'click .toggle': function(){
@@ -31,7 +31,7 @@
     initialize: function(){
       _.bindAll(this)
       this.showAll = false;
-      this.templatePromise = getTemplate('legend')
+      this.templatePromise = Templates.get('legend')
       this.freqs = state.get('freqs');
       this.freqs.each(function(freq){
         freq.set({show: false})

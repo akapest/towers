@@ -1,11 +1,11 @@
-/**
- * require(views/base/View)
- * require(views/base/FieldView)
- * require(models/Freq)
- */
-(function(){
+var View = require('views/base/View');
+var FieldView = require('views/base/FieldView');
+var Freq = require('models/Freq');
+var Templates = require('models/Templates');
 
-  window.TableView = View.extend({
+module.exports = (function(){
+
+  return View.extend({
 
     events: {
       'click .add': 'addModel',
@@ -17,8 +17,8 @@
       this.options = options;
       this.fields = this.collection.fields;
       this.collections = this.options.collections;
-      this.tableTemplate = getTemplate('table');
-      this.trTemplate = getTemplate('tr');
+      this.tableTemplate = Templates.get('table');
+      this.trTemplate = Templates.get('tr');
       _.bindAll(this, ['inputHandler', 'closeInput']);
       this.bindEvent($('body'), 'click', this.closeInput);
       this.save = true;

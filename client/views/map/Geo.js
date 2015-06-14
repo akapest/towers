@@ -1,26 +1,21 @@
-/**
- * require()
- */
-(function(){
+module.exports = (function(){
 
-  var geo;
+  var geo = function(){
+    return ymaps.coordSystem.geo;
+  }
 
-  ymaps.ready(function(){
-    geo = ymaps.coordSystem.geo;
-  });
-
-  window.Geo = {
+  return {
 
     getAzimuth: function(start, end){
-      return Geo.azimuthFromDelta(geo.solveInverseProblem(start, end).startDirection);
+      return this.azimuthFromDelta(geo().solveInverseProblem(start, end).startDirection);
     },
 
     getDistance: function(start, end){
-      return geo.getDistance(start, end)
+      return geo().getDistance(start, end)
     },
 
     endPoint:function(start, azimuth, distance){
-      return geo.solveDirectProblem(start, Geo.deltaFromAzimuth(azimuth), distance).endPoint;
+      return geo().solveDirectProblem(start, this.deltaFromAzimuth(azimuth), distance).endPoint;
     },
 
     azimuthFromDelta: function(delta){

@@ -1,14 +1,21 @@
-/**
- * require(models/Tower)
- * require(models/Location)
- * require(views/map/Sector)
- */
-$(function(){
+var Tower = require('models/Tower');
+var Location = require('models/Location');
+var Sector = require('views/map/Sector');
+var Geo = require('views/map/Geo');
+
+module.exports = (function(){
 
   var ymaps = window.ymaps;
   var map = null;
 
-  window.MapView = Backbone.View.extend({
+  var Circle = function(data){
+    this.data = data;
+  }
+  Circle.prototype.remove = function(){
+    map.geoObjects.remove(this.data);
+  }
+
+  return Backbone.View.extend({
 
     initialize: function(){
       this.model = null;
@@ -31,6 +38,7 @@ $(function(){
       map.options.set('scrollZoomSpeed', 5);
       map.events.add('click', this.onClick, this);
       map.events.add('mousemove', _.throttle(this.onHover, 50), this);
+      console.log(map.events)
       map.controls.add('zoomControl', { left: 5, bottom: 15 })
 //      map.controls.add('typeSelector', {left: 150, bottom: 15}) // Список типов карты
 //      map.controls.add('mapTools', { left: 35, bottom: 15 }); // Стандартный набор кнопок
@@ -145,6 +153,7 @@ $(function(){
     },
 
     onClick: function(e){
+      console.log('click')
       if (!this.model) return;
       var model = this.model;
       var point = e.get('coords');
@@ -187,6 +196,7 @@ $(function(){
     },
 
     onHover: function(e){
+      console.log('hover')
       if (!this.model) return;
       if (!this.model.get('start')) return;
       var end = e.get('coords'),
@@ -201,7 +211,7 @@ $(function(){
       var previous = this.object;
 
       if (this.model.isTower()){
-        this.object = new Sector(this.model.get('start'), this.model.attributes, map, Geo, {raw:true});
+        this.object = new Sector(this.model.get('start'), this.model.attributes, map, {raw:true});
       } else if (this.model.is('location')){
         this.object = this.drawLocation(this.model);
       } else {
@@ -267,13 +277,13 @@ $(function(){
 
     drawTower: function(tower){
       if (tower.is('highway')){
-        this.towersGeoObjects[tower.cid + '0'] = new Sector(tower.get('start'), tower.attributes, map, Geo).render();
+        this.towersGeoObjects[tower.cid + '0'] = new Sector(tower.get('start'), tower.attributes, map).render();
         var attrs = _.clone(tower.attributes),
             a = attrs.azimuth;
         attrs.azimuth = a > 0 ? a - Math.PI : Math.PI + a;
-        this.towersGeoObjects[tower.cid + '1'] = new Sector(tower.get('end'), attrs, map, Geo).render();
+        this.towersGeoObjects[tower.cid + '1'] = new Sector(tower.get('end'), attrs, map).render();
       } else {
-        this.towersGeoObjects[tower.cid] = new Sector(tower.get('start'), tower.attributes, map, Geo).render();
+        this.towersGeoObjects[tower.cid] = new Sector(tower.get('start'), tower.attributes, map).render();
       }
     },
 
@@ -295,7 +305,6 @@ $(function(){
     },
 
     drawLocation: function(model){
-
       var result = this.createCircle(model, {
         fillColor: "#0000",
         strokeColor: "#83h",
@@ -415,11 +424,4 @@ $(function(){
 
   });
 
-  var Circle = function(data){
-    this.data = data;
-  }
-  Circle.prototype.remove = function(){
-    map.geoObjects.remove(this.data);
-  }
-
-});
+}());

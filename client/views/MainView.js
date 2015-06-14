@@ -1,19 +1,21 @@
-/**
- * require(components/accordion)
- * require(models/BaseCollection)
- * require(models/Point)
- * require(models/Tower)
- * require(models/Location)
- * require(models/Freq)
- * require(views/forms/TowerView)
- * require(views/forms/LocationView)
- * require(views/forms/TowersView)
- * require(views/forms/LocationsView)
- * require(views/forms/PointsView)
- * require(views/forms/LegendView)
- * require(views/MapView)
- */
-(function(){
+var accordion = require('components/accordion');
+var BaseCollection = require('models/BaseCollection');
+var Point = require('models/Point');
+var Tower = require('models/Tower');
+var Location = require('models/Location');
+var Freq = require('models/Freq');
+var State = require('models/State');
+var View = require('views/base/View');
+var TowerView = require('views/forms/TowerView');
+var LocationView = require('views/forms/LocationView');
+var TowersView = require('views/forms/TowersView');
+var LocationsView = require('views/forms/LocationsView');
+var PointsView = require('views/forms/PointsView');
+var LegendView = require('views/forms/LegendView');
+var MapView = require('views/MapView');
+var createCollection = BaseCollection.createCollection;
+
+module.exports = (function(){
 
 
   var state = window.state = new State();
@@ -26,7 +28,7 @@
   var mainView = null,
       map;
 
-  window.MainView = View.extend({
+  var MainView = View.extend({
 
     initialize: function(){
       freqs = createCollection('freqs', Freq, { comparator: function(el){
@@ -132,11 +134,13 @@
 
   });
 
-  window.MainView.get = function(){
+  MainView.get = function(){
     if (!mainView)
       mainView = new MainView();
     return mainView;
   }
+
+  return MainView;
 
 
 }())

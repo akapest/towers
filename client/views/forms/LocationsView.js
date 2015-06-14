@@ -1,20 +1,20 @@
-/**
- * require(views/base/ListView)
- * require(models/Location)
- */
-(function(){
+var ListView = require('views/base/ListView');
+var Location = require('models/Location');
+var Templates = require('models/Templates');
+
+module.exports = (function(){
 
   var bottom = '<div role="form" style=" height: 30px; ">\
               <label>Показать границы</label>\
               <input type="checkbox" class="show-locations" checked="checked" style=" margin:9px 0 0 5px;"/>\
            </div>';
 
-  window.LocationsView = ListView.extend({
+  return ListView.extend({
 
     initialize: function(options){
       _.bindAll(this);
       this.name = options.name;
-      this.templateP = getTemplate('locations');
+      this.templateP = Templates.get('locations');
       this.listenTo(this.collection, 'add remove reset change', this.renderAsync);
     },
 

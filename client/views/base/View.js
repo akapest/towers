@@ -1,9 +1,7 @@
-/**
- * require(vendor/backbone)
- */
-(function(){
 
-  window.View = Backbone.View.extend({
+module.exports = (function(){
+
+  return Backbone.View.extend({
 
     fields: [],
 

@@ -1,7 +1,5 @@
-/**
- * require(vendor/backbone)
- */
-(function(){
+
+module.exports = (function(){
 
   function reverseString(input){
     var str = input.toLowerCase();
@@ -37,7 +35,7 @@
 
   })
 
-  window.createCollection = function(name, model, options, models){
+  BaseCollection.createCollection = function(name, model, options, models){
 
     models = models || getBootstrapData(name);
     var collection = new (BaseCollection.extend({
@@ -52,9 +50,12 @@
       try {
         return JSON.parse($('.data-holder.' + name).html())
       } catch (e){
+        console.warn('no data for collection "' + name + ' "found')
         return [];
       }
     }
   }
+
+  return BaseCollection;
 
 }());

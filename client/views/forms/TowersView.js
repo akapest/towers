@@ -1,14 +1,15 @@
-/**
- * require(views/base/ListView)
- */
-(function(){
+var ListView = require('views/base/ListView');
+var Templates = require('models/Templates');
+var Tower = require('models/Tower');
 
-  window.TowersView = ListView.extend({
+module.exports = (function(){
+
+  return ListView.extend({
 
     initialize: function(options){
       _.bindAll(this)
       this.name = options.name;
-      this.templateP = getTemplate('list');
+      this.templateP = Templates.get('list');
       state.on('change:location', _.bind(function(){
         var towers = state.get('location').getTowers();
         this.setCollection(towers)

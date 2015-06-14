@@ -1,15 +1,15 @@
-/**
- * require(views/base/ListView)
- * require(models/Point)
- */
-(function(){
+var ListView = require('views/base/ListView');
+var Point = require('models/Point');
+var Templates = require('models/Templates');
 
-  window.PointsView = ListView.extend({
+module.exports = (function(){
+
+  return ListView.extend({
 
     initialize: function(options){
       _.bindAll(this)
       this.name = options.name;
-      this.templateP = getTemplate('list');
+      this.templateP = Templates.get('list');
       this.listenTo(state, 'change:tower', function(state, tower){
         this.tower = tower;
         if (tower._isNew()){

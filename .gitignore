@@ -7,6 +7,10 @@ test-result/
 lib/
 tmp/
 modules/
-node-modules/
+node-modules/*
+!node_modules/components
+!node_modules/models
+!node_modules/vendor
+!node_modules/views
 .idea/
 *.iml

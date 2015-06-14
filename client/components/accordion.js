@@ -1,6 +1,4 @@
-/**
- * require()
- */
+
 $(function(){
   var events = Backbone;
   var acc = $('.accordion');

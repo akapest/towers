@@ -1,7 +1,5 @@
-/**
- * require(vendor/backbone)
- */
-(function(){
+
+module.exports = (function(){
 
   var Template = Backbone.Model.extend({
     execute: function(data){
@@ -9,7 +7,7 @@
     }
   })
 
-  window.getTemplate = function(name){
+  var get = function(name){
 
     return $.get('/rest/templates/' + name + '.html').pipe(function(src){
 
@@ -17,7 +15,9 @@
     });
   }
 
-  window.executeTemplate = function(template, data){
+  return {get: get};
+
+  function executeTemplate(template, data){
     return _.template(template, data, {interpolate: /\!\{(.+?)\}/g});
   }
 

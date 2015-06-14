@@ -1,0 +1,3 @@
+// used this regex for the operation,
+\/?\**\s*\*\s*require\(([^\/)]*(/([^\/\)]*))*)\)(\s*\**\/)?
+var $3 = require('$1');\n

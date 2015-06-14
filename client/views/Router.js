@@ -1,10 +1,9 @@
-/**
- * require(views/MainView)
- * require(views/base/TableView)
- */
-(function(){
+var MainView = require('views/MainView');
+var TableView = require('views/base/TableView');
 
-  window.Router = Backbone.Router.extend({
+module.exports = (function(){
+
+  var Router = Backbone.Router.extend({
 
     routes: {
       '': 'main',
@@ -21,14 +20,13 @@
       $users.show();
       new TableView({
         el: $users,
-        collection: createCollection('users', User),
+        collection: BaseCollection.createCollection('users', User),
         collections: {
-          locations: createCollection("locations", Location)
+          locations: BaseCollection.createCollection("locations", Location)
         }
       }).show();
+      $('.user, .legend').hide();
 
-      $('.user').hide();
-      $('.legend').hide();
       $('.acc-item.toggle').click(function(){
         window.location.href = '/';
       })
@@ -36,9 +34,27 @@
 
   })
 
-  $(function(){
-    var router = new Router();
+  var init = function(){
+    new Router();
     Backbone.history.start({pushState: true});
+  }
+
+  var deps = [],
+      resolveDependency = function(name){
+        deps.push(name);
+        if (deps.length == 2){
+          init();
+        }
+      }
+
+  ymaps.ready(function(){
+    resolveDependency('yandex maps');
   })
+
+  $(function(){
+    resolveDependency('dom');
+  })
+
+  return {};
 
 }());

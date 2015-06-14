@@ -1,8 +1,5 @@
-/**
- * require(vendor/backbone)
- * require(vendor/select2)
- */
-(function(){
+
+module.exports = (function(){
 
   window.FieldView = Backbone.View.extend({
 

@@ -1,17 +1,15 @@
-/**
- * require(views/map/Geo)
- */
-(function(){
+var Geo = require('views/map/Geo');
 
-  window.Sector = function(center, towerAttrs, map, geo, opts){
+module.exports = (function(){
+
+  var Sector = function(center, towerAttrs, map, opts){
     this.raw = opts && opts.raw;
     this.center = center;
     this.sector = this.attrs = towerAttrs;
     var angle = parseAngle(this.sector.angle);
     this.angle = angle.rad;
     this.angleSteps = getSteps(this.sector.type, angle.deg, this.raw);
-    this.gradientSteps = this.sector.type == 'highway' ? 1 : 5;
-    this.geo = geo;
+    this.gradientSteps = this.sector.type == 'highway' ? 1 : 15;
     this.map = map;
     this.geoObjects = map.geoObjects;
     this.text = this.sector.name + '<br>' + (this.sector.comment ? " " + this.sector.comment : '');
@@ -123,7 +121,7 @@
 
     createPolygon: function(points,step){
       if (this.sector.color){
-        opacity = 17 - step * 15 / this.gradientSteps;
+        opacity = 16 - step * 15 / this.gradientSteps;
         yColor = this.sector.color + digitToLetter(opacity) + '0';
 
       } else {
@@ -176,7 +174,7 @@
   }
 
 
-  var parseAngle = function(str){
+  function parseAngle(str){
     var anglePattern = /(\d+)([^\d]*)/;
     if (!str || !_.isString(str)){
       throw new Error('Invalid angle')
@@ -210,10 +208,12 @@
     return result;
   }
 
-  var limit = function(angle){
+  function limit(angle){
     if (angle < 0.003) return 0.003;
     else return angle;
   }
+
+  return Sector;
 
 
 }());

@@ -1,9 +1,9 @@
-/**
- * require(views/base/View)
- */
-(function(){
+var View = require('views/base/View');
+var Templates = require('models/Templates');
 
-  window.LocationView = View.extend({
+module.exports = (function(){
+
+  return View.extend({
 
     events: {
       'click .remove': function(){
@@ -21,7 +21,7 @@
       _.bindAll(this);
       this.options = options;
       this.locations = options.locations;
-      this.template = getTemplate('location');
+      this.template = Templates.get('location');
     },
 
     renderAsync: function(){

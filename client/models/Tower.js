@@ -1,15 +1,14 @@
-/**
- * require(models/Location)
- * require(models/Point)
- */
-(function(){
+var GeoObject = require('models/GeoObject');
+var Point = require('models/Point');
+
+module.exports = (function(){
 
   var angles = {
     tower: ['60°', '90°', '120°', '360°'],
     highway: ["15'", "20'", "30'"]
   }
 
-  window.Tower = Location.extend({
+  var Tower = GeoObject.extend({
 
     url: 'towers',
 
@@ -109,5 +108,7 @@
   })
 
   Tower.angles = angles;
+
+  return Tower;
 
 }());

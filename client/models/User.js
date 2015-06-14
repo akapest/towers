@@ -1,9 +1,8 @@
-/**
- * require(models/BaseModel)
- */
-(function(){
+var BaseModel = require('models/BaseModel');
 
-  window.User = BaseModel.extend({
+module.exports = (function(){
+
+  return BaseModel.extend({
     url: 'users',
     fields: [
       {

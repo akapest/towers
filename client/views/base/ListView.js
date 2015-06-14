@@ -1,9 +1,8 @@
-/**
- * require(views/base/View)
- */
-(function(){
+var View = require('views/base/View');
 
-  window.ListView = View.extend({
+module.exports = (function(){
+
+  return View.extend({
 
     _getModel: function($el){
       var cid = $el.parent('li').data('cid');
