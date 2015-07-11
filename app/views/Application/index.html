@@ -11,10 +11,6 @@
 	<script src="http://api-maps.yandex.ru/2.1/?load=package.full&lang=ru-RU" type="text/javascript"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js" type="text/javascript"></script>
 
-	<script src="@{'/client/vendor/select2.js'}"></script>
-	<script src="@{'/client/vendor/lodash.js'}"></script>
-	<script src="@{'/client/vendor/backbone.js'}"></script>
-	<script src="@{'/client/build.js'}"></script>
 
 </head>
 <body>
@@ -52,5 +48,20 @@
 		<div class="data-holder points">${points}</div>
 	</div>
 
+	#{if play.Play.mode.isProd() }
+		<div class="templates" style="display:none;">
+			#{list items:controllers.Templates.getAll(), as:'name'}
+				<script id="template-${name.replace('.html', '')}" type="text/template">
+					#{include 'templates/' + name /}
+				</script>
+			#{/list}
+		</div>
+	#{/if}
+
+
+	<script src="@{'/client/vendor/select2.js'}"></script>
+	<script src="@{'/client/vendor/lodash.js'}"></script>
+	<script src="@{'/client/vendor/backbone.js'}"></script>
+	<script src="@{'/client/build.js'}"></script>
 </body>
 </html>

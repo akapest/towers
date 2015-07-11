@@ -17,10 +17,11 @@ public class Application extends BaseController {
         String locations = toJsonString(userLocations(), Location.class);
         String points = toJsonString(TowerPoint.<TowerPoint>findAll(), TowerPoint.class);
         String username = Secure.Security.connected();
+        Boolean isAdmin = isAdmin();
         if (isNull(username)){
             renderTemplate("Application/stub.html");
         } else {
-            renderTemplate("Application/index.html", username, freqs, locations, points);
+            renderTemplate("Application/index.html", username, freqs, locations, points, isAdmin);
         }
     }
 

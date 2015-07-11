@@ -196,7 +196,7 @@ module.exports = (function(){
     },
 
     onHover: function(e){
-      console.log('hover')
+      //console.log('hover')
       if (!this.model) return;
       if (!this.model.get('start')) return;
       var end = e.get('coords'),

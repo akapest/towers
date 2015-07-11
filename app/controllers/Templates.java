@@ -1,6 +1,7 @@
 package controllers;
 
 import play.Play;
+import play.Logger;
 import play.exceptions.UnexpectedException;
 import play.mvc.Controller;
 import play.mvc.Http;
@@ -27,11 +28,24 @@ import java.util.HashMap;
 public class Templates extends BaseController {
 
     public static void get(String name) {
-        Template template = TemplateLoader.load("app/templates/"  + name);
+        Template template = TemplateLoader.load("app/views/templates/"  + name);
         HashMap<String, Object> params = new HashMap<String, Object>(0);
         params.put("isAdmin", isAdmin());
         String result = new RenderTemplate(template, params).getContent();
         throw new RenderText(result);
+    }
+
+    private static String getTemplate(String name){
+        Template template = TemplateLoader.load("app/views/templates/"  + name);
+        HashMap<String, Object> params = new HashMap<String, Object>(0);
+        params.put("isAdmin", isAdmin());
+        String result = new RenderTemplate(template, params).getContent();
+        return result;
+    }
+
+    public static String[] getAll() {
+        String[] list = Play.getFile("app/views/templates").list();
+        return list;
     }
 
 }
