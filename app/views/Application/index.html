@@ -4,64 +4,40 @@
 	<title>Вышки</title>
 	<meta charset="${_response_encoding}">
 	<meta name=viewport content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" media="screen" href="@{'/css/style.css'}">
-	<link rel="stylesheet" media="screen" href="@{'/css/bootstrap.css'}">
-	<link rel="stylesheet" media="screen" href="@{'/css/select2.css'}">
+	<link rel="stylesheet" media="screen" href="@{'/build/css/vendor.css'}">
+	<link rel="stylesheet" media="screen" href="@{'/build/css/app.css'}">
 	#{get 'moreStyles' /}
-	<script src="http://api-maps.yandex.ru/2.1/?load=package.full&lang=ru-RU" type="text/javascript"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js" type="text/javascript"></script>
-
+		<script src="http://api-maps.yandex.ru/2.1/?load=package.full&lang=ru-RU" type="text/javascript"></script>
 
 </head>
-<body>
-	<div class="user">
-		#{if username != null}
-			<span>${username}</span>
-			<a href="/logout" class="action-name">Выйти</a>
-		#{/if}
-	</div>
-	<div class="actions accordion">
-		<div class="acc-item toggle">
-			<span class="view acc-item-name main big" data-action="view">▷</span>
+	<body>
+		<!-- APP LAYOUT -->
+		#{include './layout.html'/}
+
+		<!-- DATA -->
+		<div style="display:none">
+			<div class="data-holder freqs">${freqs}</div>
+			<div class="data-holder towers">${towers}</div>
+			<div class="data-holder locations">${locations}</div>
+			<div class="data-holder points">${points}</div>
 		</div>
-		<div class="clb"></div>
-		<div class="acc-item locations-list" data-type="locationsList" style="display:none;"></div>
-		<div class="clb"></div>
-		<div class="acc-item towers-list" data-type="towersList" style="display:none;"></div>
-		<div class="acc-item points-list" data-type="pointsList" style="display:none;"></div>
-		<div class="acc-item item-view"></div>
-		#{if username == 'admin'}
+
+
+		<!-- TEMPLATES -->
+		#{if play.Play.mode.isProd() }
+			<div class="templates" style="display:none;">
+				#{list items:controllers.Templates.getAll(), as:'name'}
+					<script id="template-${name.replace('.html', '')}" type="text/template">
+						#{include 'templates/' + name /}
+					</script>
+				#{/list}
+			</div>
 		#{/if}
-	</div>
-	<div id="users-list" style="display:none;">
-		#{if username != 'admin'}
-			Недостаточно прав для просмотра раздела.
-		#{/if}
-	</div>
-	<div id="map" class="map edit"></div>
-	<div class="legend"></div>
-
-	<div style="display:none">
-		<div class="data-holder freqs">${freqs}</div>
-		<div class="data-holder towers">${towers}</div>
-		<div class="data-holder locations">${locations}</div>
-		<div class="data-holder points">${points}</div>
-	</div>
-
-	#{if play.Play.mode.isProd() }
-		<div class="templates" style="display:none;">
-			#{list items:controllers.Templates.getAll(), as:'name'}
-				<script id="template-${name.replace('.html', '')}" type="text/template">
-					#{include 'templates/' + name /}
-				</script>
-			#{/list}
-		</div>
-	#{/if}
 
 
-	<script src="@{'/client/vendor/select2.js'}"></script>
-	<script src="@{'/client/vendor/lodash.js'}"></script>
-	<script src="@{'/client/vendor/backbone.js'}"></script>
-	<script src="@{'/client/build.js'}"></script>
-</body>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js" type="text/javascript"></script>
+		<script src="@{'/build/js/vendor.js'}"></script>
+		<script src="@{'/build/js/app.js'}"></script>
+	</body>
 </html>

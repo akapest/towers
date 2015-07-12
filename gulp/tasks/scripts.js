@@ -6,20 +6,11 @@ var gutil        = require('gulp-util');
 var source       = require('vinyl-source-stream');
 var sourcemaps   = require('gulp-sourcemaps');
 var buffer       = require('vinyl-buffer');
-var streamify    = require('gulp-streamify');
 var watchify     = require('watchify');
 var browserify   = require('browserify');
-var uglify       = require('gulp-uglify');
-var handleErrors = require('../util/handleErrors');
-
-var config = {
-  'entries'   : ['./client/views/Router.js'],
-
-  'dest': 'client',
-  'bundleName': 'build.js',
-
-  'sourcemap' : true
-}
+var uglify       = require('../_uglify');
+var handleErrors = require('../_handleErrors');
+var config       = require('../config').scripts
 
 // Based on: http://blog.avisi.nl/2014/04/25/how-to-keep-a-fast-build-with-browserify-and-reactjs/
 function buildScript(file) {
@@ -30,6 +21,7 @@ function buildScript(file) {
     cache: {},
     packageCache: {},
     fullPaths: true
+
   }, watchify.args);
 
   if (!global.isProd) {
@@ -58,9 +50,7 @@ function buildScript(file) {
         .pipe(source(file))
         .pipe(gulpif(createSourcemap, buffer()))
         .pipe(gulpif(createSourcemap, sourcemaps.init()))
-        .pipe(gulpif(global.isProd, streamify(uglify({
-          compress: { drop_console: true }
-        }))))
+        .pipe(uglify())
         .pipe(gulpif(createSourcemap, sourcemaps.write('./')))
         .pipe(gulp.dest(config.dest))
         .on('end', function(){ gutil.log('Rebundled'); });        
@@ -70,7 +60,7 @@ function buildScript(file) {
 
 }
 
-gulp.task('browserify', function() {
+gulp.task('application-scripts', function() {
 
   return buildScript(config.bundleName);
 

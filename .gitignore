@@ -1,7 +1,4 @@
-bin/
-data/
-db/
-dist/
+build/
 logs/
 test-result/
 lib/

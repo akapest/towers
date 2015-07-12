@@ -1,0 +1,29 @@
+<!-- USER CONTROLS -->
+<div class="user">
+		#{if username != null}
+			<span>${username}</span>
+			<a href="/logout" class="action-name">Выйти</a>
+		#{/if}
+</div>
+
+<!-- ACCORDION -->
+<div class="actions accordion">
+  <div class="acc-item toggle">
+    <span class="view acc-item-name main big" data-action="view">▷</span>
+  </div>
+  <div class="clb"></div>
+  <div class="acc-item locations-list" data-type="locationsList" style="display:none;"></div>
+  <div class="clb"></div>
+  <div class="acc-item towers-list" data-type="towersList" style="display:none;"></div>
+  <div class="acc-item points-list" data-type="pointsList" style="display:none;"></div>
+  <div class="acc-item item-view"></div>
+  #{if username == 'admin'}
+  #{/if}
+</div>
+
+<!-- AREAS -->
+<div id="users-list" style="display:none;">
+  #{if username != 'admin'} Недостаточно прав для просмотра раздела. #{/if}
+</div>
+<div id="map" class="map edit"></div>
+<div class="legend"></div>
