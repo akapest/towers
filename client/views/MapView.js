@@ -38,7 +38,6 @@ module.exports = (function(){
       map.options.set('scrollZoomSpeed', 5);
       map.events.add('click', this.onClick, this);
       map.events.add('mousemove', _.throttle(this.onHover, 50), this);
-      console.log(map.events)
       map.controls.add('zoomControl', { left: 5, bottom: 15 })
 //      map.controls.add('typeSelector', {left: 150, bottom: 15}) // Список типов карты
 //      map.controls.add('mapTools', { left: 35, bottom: 15 }); // Стандартный набор кнопок
@@ -153,7 +152,6 @@ module.exports = (function(){
     },
 
     onClick: function(e){
-      console.log('click')
       if (!this.model) return;
       var model = this.model;
       var point = e.get('coords');
@@ -196,7 +194,6 @@ module.exports = (function(){
     },
 
     onHover: function(e){
-      //console.log('hover')
       if (!this.model) return;
       if (!this.model.get('start')) return;
       var end = e.get('coords'),

@@ -87,7 +87,6 @@ module.exports = (function(){
       div.append($ok)
       li.append(div)
       li.append($select)
-      $select.select2()
     },
 
     _finishEditing: function(model, li){

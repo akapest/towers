@@ -116,6 +116,7 @@ module.exports = (function(){
           break;
         }
         case 'select-multiple':{
+          debugger
           if (!this.collections || !this.collections[field]) throw new Error('Collection for field ' + field + ' not defined')
           input = $('<select>')
           input.attr('multiple', 'multiple')
@@ -125,12 +126,12 @@ module.exports = (function(){
             opt.html(el.get('name'))
             input.append(opt);
           })
-          setTimeout(function(){
-            input.select2({
-              allowClear:true,
-              width: '200px'
-            })
-          })
+          //setTimeout(function(){
+          //  input.select2({
+          //    allowClear:true,
+          //    width: '200px'
+          //  })
+          //})
 
           break;
         }
