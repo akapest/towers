@@ -1,1 +1,1 @@
-web: npm install && play run --http.port=$PORT
+web: cp conf/prod.application.conf conf/application.conf && play run --http.port=$PORT
