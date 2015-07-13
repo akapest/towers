@@ -1,4 +1,4 @@
-build/
+build/**/*.map
 logs/
 test-result/
 lib/
