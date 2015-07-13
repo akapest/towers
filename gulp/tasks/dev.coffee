@@ -2,8 +2,8 @@ gulp         = require 'gulp'
 gutil        = require 'gulp-util'
 gulpif       = require 'gulp-if'
 
-gulp.task 'default',
+gulp.task 'dev',
 
   [ 'vendor',
     'styles',
-    'application-scripts' ]
+    'watch' ]

@@ -6,25 +6,9 @@ handleErrors = require '../_handleErrors'
 concat = require 'gulp-concat'
 
 gulp.task 'vendor',
-  [ 'vendor-css',
-    'vendor-images'
-    'vendor-scripts' ]
+  [ 'vendor-scripts' ]
 
 
-
-gulp.task 'vendor-css', () ->
-
-  gulp.src(config.css.src)
-      .on('error', handleErrors)
-      .pipe(concat(config.css.name))
-      .pipe(gulp.dest config.css.dest)
-
-
-gulp.task 'vendor-images', () ->
-
-  gulp.src(config.images.src)
-      .on('error', handleErrors)
-      .pipe(gulp.dest config.images.dest)
 
 gulp.task 'vendor-scripts', () ->
 
