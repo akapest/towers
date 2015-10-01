@@ -6,6 +6,7 @@ Web app for telecom based on yandex maps, playframework and backbone.
 Dependencies
 -----
 * Python2
+* Java6 or higher
 * PlayFramework (uses Python)
 * Node.js for packaging 
 
